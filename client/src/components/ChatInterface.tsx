@@ -37,7 +37,7 @@ export default function ChatInterface() {
 
   return (
     <div className="flex-1 flex flex-col bg-neutral-900 overflow-hidden">
-      <div className="flex-1 overflow-y-auto p-4 bg-neutral-800" ref={chatMessagesRef} id="chat-messages">
+      <div className="flex-1 overflow-y-auto p-4 bg-[#222222]" ref={chatMessagesRef} id="chat-messages">
         {/* Welcome message if no messages */}
         {chatState.currentChat.length === 0 && (
           <div className="mb-4">
