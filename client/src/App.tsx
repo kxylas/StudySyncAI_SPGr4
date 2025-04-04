@@ -10,6 +10,13 @@ import Home from "@/pages/Home";
 import History from "@/pages/History";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/not-found";
+import ProgramOverview from "@/pages/ProgramOverview";
+import Curriculum from "@/pages/Curriculum";
+import Requirements from "@/pages/Requirements";
+import Internships from "@/pages/Internships";
+import StudyGroups from "@/pages/StudyGroups";
+import CreateStudyGroup from "@/pages/CreateStudyGroup";
+import Advisors from "@/pages/Advisors";
 
 function Router() {
   return (
@@ -17,6 +24,13 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/history" component={History} />
       <Route path="/settings" component={Settings} />
+      <Route path="/program-overview" component={ProgramOverview} />
+      <Route path="/curriculum" component={Curriculum} />
+      <Route path="/requirements" component={Requirements} />
+      <Route path="/internships" component={Internships} />
+      <Route path="/study-groups" component={StudyGroups} />
+      <Route path="/create-study-group" component={CreateStudyGroup} />
+      <Route path="/advisors" component={Advisors} />
       <Route component={NotFound} />
     </Switch>
   );
