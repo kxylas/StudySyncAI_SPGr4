@@ -31,6 +31,60 @@ export const csProgram = pgTable("cs_program", {
   content: text("content").notNull(),
 });
 
+// New table for detailed course information
+export const courses = pgTable("courses", {
+  id: serial("id").primaryKey(),
+  courseCode: text("course_code").notNull().unique(), // e.g., "COSC 111"
+  title: text("title").notNull(), // e.g., "Introduction to Computer Science I" 
+  credits: integer("credits").notNull(), // e.g., 4
+  description: text("description").notNull(),
+  prerequisites: text("prerequisites"), // Can be null if no prerequisites
+  category: text("category").notNull(), // e.g., "Core", "Group A Elective", etc.
+  level: text("level").notNull(), // e.g., "Undergraduate", "Graduate"
+  syllabus: text("syllabus"), // Optional detailed syllabus
+});
+
+// New table for faculty information
+export const faculty = pgTable("faculty", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  title: text("title").notNull(), // e.g., "Professor", "Associate Professor", etc.
+  email: text("email").notNull().unique(),
+  phone: text("phone"),
+  office: text("office"),
+  bio: text("bio"),
+  imageUrl: text("image_url"),
+  researchInterests: text("research_interests"),
+  role: text("role"), // e.g., "Chair", "Associate Chair", "Faculty", etc.
+});
+
+// Table for research areas
+export const researchAreas = pgTable("research_areas", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(), // e.g., "Artificial Intelligence"
+  description: text("description").notNull(),
+  imageUrl: text("image_url"),
+  websiteUrl: text("website_url"),
+});
+
+// Junction table for faculty and research areas (many-to-many)
+export const facultyResearchAreas = pgTable("faculty_research_areas", {
+  id: serial("id").primaryKey(),
+  facultyId: integer("faculty_id").references(() => faculty.id).notNull(),
+  researchAreaId: integer("research_area_id").references(() => researchAreas.id).notNull(),
+});
+
+// Table for graduate programs
+export const graduatePrograms = pgTable("graduate_programs", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  degree: text("degree").notNull(), // e.g., "M.S.", "Ph.D."
+  description: text("description").notNull(),
+  requirements: text("requirements").notNull(),
+  applicationInfo: text("application_info"),
+  contactInfo: text("contact_info"),
+});
+
 // Define relations
 export const usersRelations = relations(users, ({ many }) => ({
   chats: many(chats),
@@ -51,6 +105,26 @@ export const messagesRelations = relations(messages, ({ one }) => ({
   }),
 }));
 
+export const facultyRelations = relations(faculty, ({ many }) => ({
+  researchAreas: many(facultyResearchAreas),
+}));
+
+export const researchAreasRelations = relations(researchAreas, ({ many }) => ({
+  faculty: many(facultyResearchAreas),
+}));
+
+export const facultyResearchAreasRelations = relations(facultyResearchAreas, ({ one }) => ({
+  faculty: one(faculty, {
+    fields: [facultyResearchAreas.facultyId],
+    references: [faculty.id],
+  }),
+  researchArea: one(researchAreas, {
+    fields: [facultyResearchAreas.researchAreaId],
+    references: [researchAreas.id],
+  }),
+}));
+
+// Schemas for inserting data
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -73,6 +147,51 @@ export const insertProgramInfoSchema = createInsertSchema(csProgram).pick({
   content: true,
 });
 
+export const insertCourseSchema = createInsertSchema(courses).pick({
+  courseCode: true,
+  title: true,
+  credits: true,
+  description: true,
+  prerequisites: true,
+  category: true,
+  level: true,
+  syllabus: true,
+});
+
+export const insertFacultySchema = createInsertSchema(faculty).pick({
+  name: true,
+  title: true,
+  email: true,
+  phone: true,
+  office: true,
+  bio: true,
+  imageUrl: true,
+  researchInterests: true,
+  role: true,
+});
+
+export const insertResearchAreaSchema = createInsertSchema(researchAreas).pick({
+  name: true,
+  description: true,
+  imageUrl: true,
+  websiteUrl: true,
+});
+
+export const insertGraduateProgramSchema = createInsertSchema(graduatePrograms).pick({
+  name: true,
+  degree: true,
+  description: true,
+  requirements: true,
+  applicationInfo: true,
+  contactInfo: true,
+});
+
+export const insertFacultyResearchAreaSchema = createInsertSchema(facultyResearchAreas).pick({
+  facultyId: true,
+  researchAreaId: true,
+});
+
+// Export types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 
@@ -84,3 +203,18 @@ export type Message = typeof messages.$inferSelect;
 
 export type InsertProgramInfo = z.infer<typeof insertProgramInfoSchema>;
 export type ProgramInfo = typeof csProgram.$inferSelect;
+
+export type InsertCourse = z.infer<typeof insertCourseSchema>;
+export type Course = typeof courses.$inferSelect;
+
+export type InsertFaculty = z.infer<typeof insertFacultySchema>;
+export type Faculty = typeof faculty.$inferSelect;
+
+export type InsertResearchArea = z.infer<typeof insertResearchAreaSchema>;
+export type ResearchArea = typeof researchAreas.$inferSelect;
+
+export type InsertGraduateProgram = z.infer<typeof insertGraduateProgramSchema>;
+export type GraduateProgram = typeof graduatePrograms.$inferSelect;
+
+export type InsertFacultyResearchArea = z.infer<typeof insertFacultyResearchAreaSchema>;
+export type FacultyResearchArea = typeof facultyResearchAreas.$inferSelect;

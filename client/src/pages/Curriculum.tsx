@@ -3,10 +3,27 @@ import AppContainer from '@/components/AppContainer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { useQuery } from '@tanstack/react-query';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Loader2 } from 'lucide-react';
+import type { Course } from '@shared/schema';
 
 export default function Curriculum() {
   const [yearTab, setYearTab] = useState("first-year");
   const [semesterTab, setSemesterTab] = useState("fall");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  
+  // Fetch courses from the API
+  const { data: courses, isLoading, error } = useQuery<Course[]>({
+    queryKey: ['/api/courses'],
+    queryFn: async () => {
+      const response = await fetch('/api/courses');
+      if (!response.ok) {
+        throw new Error('Failed to fetch courses');
+      }
+      return response.json();
+    }
+  });
 
   return (
     <AppContainer>
@@ -413,6 +430,91 @@ export default function Curriculum() {
                   </Tabs>
                 </TabsContent>
               </Tabs>
+            </CardContent>
+          </Card>
+          <Card className="bg-neutral-800 border-neutral-700 shadow-md">
+            <CardHeader>
+              <CardTitle className="text-[#F5A623]">Course Catalog</CardTitle>
+              <CardDescription className="text-[#003366]">
+                Explore detailed information about all Computer Science courses
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-4">
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <Badge 
+                    onClick={() => setCategoryFilter("all")} 
+                    className={`cursor-pointer ${categoryFilter === "all" ? "bg-[#F5A623] text-[#003366]" : "bg-[#003366] text-[#F5A623]"}`}
+                  >
+                    All Courses
+                  </Badge>
+                  <Badge 
+                    onClick={() => setCategoryFilter("Core")} 
+                    className={`cursor-pointer ${categoryFilter === "Core" ? "bg-[#F5A623] text-[#003366]" : "bg-[#003366] text-[#F5A623]"}`}
+                  >
+                    Core Courses
+                  </Badge>
+                  <Badge 
+                    onClick={() => setCategoryFilter("Group A Elective")} 
+                    className={`cursor-pointer ${categoryFilter === "Group A Elective" ? "bg-[#F5A623] text-[#003366]" : "bg-[#003366] text-[#F5A623]"}`}
+                  >
+                    Group A Electives
+                  </Badge>
+                </div>
+              </div>
+              
+              {isLoading ? (
+                <div className="flex justify-center items-center p-8">
+                  <Loader2 className="h-8 w-8 animate-spin text-[#F5A623]" />
+                </div>
+              ) : error ? (
+                <div className="bg-red-900/20 p-4 rounded-md text-red-500">
+                  Error loading courses. Please try again later.
+                </div>
+              ) : (
+                <Accordion type="single" collapsible className="w-full">
+                  {courses?.filter(course => categoryFilter === "all" || course.category === categoryFilter)
+                    .map((course) => (
+                      <AccordionItem key={course.id} value={`course-${course.id}`} className="border-b border-neutral-700">
+                        <AccordionTrigger className="hover:bg-neutral-700 px-4 py-2 rounded-md text-left">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full">
+                            <div>
+                              <span className="text-[#F5A623] font-semibold">{course.courseCode}</span>
+                              <span className="text-white ml-2">{course.title}</span>
+                            </div>
+                            <Badge className="hidden sm:inline-flex bg-[#003366] text-[#F5A623] mt-2 sm:mt-0">
+                              {course.credits} {course.credits === 1 ? 'credit' : 'credits'}
+                            </Badge>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="bg-neutral-700 rounded-b-md px-4 pb-4 pt-2">
+                          <div className="space-y-3 text-[#003366]">
+                            <div>
+                              <h4 className="text-white font-medium">Description</h4>
+                              <p>{course.description}</p>
+                            </div>
+                            {course.prerequisites && (
+                              <div>
+                                <h4 className="text-white font-medium">Prerequisites</h4>
+                                <p>{course.prerequisites}</p>
+                              </div>
+                            )}
+                            <div>
+                              <h4 className="text-white font-medium">Category</h4>
+                              <p>{course.category}</p>
+                            </div>
+                            {course.syllabus && (
+                              <div>
+                                <h4 className="text-white font-medium">Syllabus</h4>
+                                <p>{course.syllabus}</p>
+                              </div>
+                            )}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                </Accordion>
+              )}
             </CardContent>
           </Card>
         </div>
