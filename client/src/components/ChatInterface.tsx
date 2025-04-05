@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useChat } from '@/contexts/ChatContext';
 import { format } from 'date-fns';
-import { Send, Paperclip } from 'lucide-react';
+import { Send, Paperclip, Calendar } from 'lucide-react';
+import StudyScheduleForm from './StudyScheduleForm';
 
 export default function ChatInterface() {
   const { chatState, sendMessage } = useChat();
@@ -32,7 +33,8 @@ export default function ChatInterface() {
     "Program objectives",
     "Group A electives",
     "Internship opportunities",
-    "Graduation requirements"
+    "Graduation requirements",
+    "Help me create a study schedule"
   ];
 
   return (
@@ -50,7 +52,7 @@ export default function ChatInterface() {
               <div className="ml-3">
                 <div className="bg-[#003366] p-3 rounded-lg rounded-tl-none shadow-sm max-w-2xl">
                   <p className="text-sm text-[#F5A623] font-medium">
-                    Hello! I'm msuStudySyncAI, your Morgan State University Computer Science program assistant. I can help with program information, course details, requirements, and more. What would you like to know about today?
+                    Hello! I'm msuStudySyncAI, your Morgan State University Computer Science program assistant. I can help with program information, course details, requirements, and create personalized study schedules based on your deadlines. What would you like to know about today?
                   </p>
                 </div>
                 <span className="text-xs text-neutral-400 mt-1 inline-block">{formatTime(new Date())}</span>
@@ -122,6 +124,8 @@ export default function ChatInterface() {
       {/* Quick suggestions */}
       <div className="bg-neutral-900 border-t border-neutral-700 p-3">
         <div className="flex flex-wrap gap-2 mb-3">
+          <StudyScheduleForm />
+          
           {quickSuggestions.map((suggestion, index) => (
             <Button 
               key={index} 
