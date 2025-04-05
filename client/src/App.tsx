@@ -17,6 +17,7 @@ import Internships from "@/pages/Internships";
 import StudyGroups from "@/pages/StudyGroups";
 import CreateStudyGroup from "@/pages/CreateStudyGroup";
 import Advisors from "@/pages/Advisors";
+import CareerResources from "@/pages/CareerResources";
 
 // Error boundary to catch and handle React errors
 interface ErrorBoundaryProps {
@@ -80,6 +81,7 @@ function Router() {
       <Route path="/study-groups" component={StudyGroups} />
       <Route path="/create-study-group" component={CreateStudyGroup} />
       <Route path="/advisors" component={Advisors} />
+      <Route path="/career-resources" component={CareerResources} />
       <Route component={NotFound} />
     </Switch>
   );
