@@ -1,14 +1,22 @@
+import { useState } from 'react';
 import { User, Mail, Phone, Award, Clock, Calendar, BookOpen, Building } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from '@/hooks/use-toast';
 import AppContainer from '@/components/AppContainer';
 
 export default function Profile() {
-  // Normally this would come from an API call or auth context
-  const userProfile = {
+  // State for edit profile dialog
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  
+  // Profile data state
+  const [userProfile, setUserProfile] = useState({
     name: "Morgan Student",
     email: "student@morgan.edu",
     studentId: "MS123456",
@@ -59,6 +67,59 @@ export default function Profile() {
       "Academic Excellence Scholarship Recipient",
       "Google Student Developer Club Member"
     ]
+  });
+
+  // Form data for editing
+  const [formData, setFormData] = useState({
+    name: userProfile.name,
+    email: userProfile.email,
+    phoneNumber: userProfile.phoneNumber,
+    advisor: userProfile.advisor,
+    office: userProfile.office,
+    officeHours: userProfile.officeHours
+  });
+
+  // Handle dialog open
+  const handleOpenDialog = () => {
+    setFormData({
+      name: userProfile.name,
+      email: userProfile.email,
+      phoneNumber: userProfile.phoneNumber,
+      advisor: userProfile.advisor,
+      office: userProfile.office,
+      officeHours: userProfile.officeHours
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  // Handle form input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
+
+  // Handle save changes
+  const handleSaveChanges = () => {
+    setUserProfile(prev => ({
+      ...prev,
+      name: formData.name,
+      email: formData.email,
+      phoneNumber: formData.phoneNumber,
+      advisor: formData.advisor,
+      office: formData.office,
+      officeHours: formData.officeHours
+    }));
+    
+    setIsEditDialogOpen(false);
+    
+    toast({
+      title: "Profile Updated",
+      description: "Your profile has been updated successfully.",
+      variant: "default",
+    });
   };
 
   // Calculate progress towards degree
@@ -159,7 +220,10 @@ export default function Profile() {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center pt-2">
-                <Button className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]">
+                <Button 
+                  className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]"
+                  onClick={handleOpenDialog}
+                >
                   Edit Profile
                 </Button>
               </CardFooter>
@@ -382,6 +446,94 @@ export default function Profile() {
           </div>
         </div>
       </main>
+      
+      {/* Edit Profile Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="bg-neutral-800 border-neutral-700 text-white max-w-md mx-auto">
+          <DialogHeader>
+            <DialogTitle className="text-[#F5A623] text-xl">Edit Profile</DialogTitle>
+            <DialogDescription className="text-[#003366]">
+              Update your personal information below.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="name" className="text-[#F5A623]">Name</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                className="bg-neutral-700 border-neutral-600 text-white"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="email" className="text-[#F5A623]">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="bg-neutral-700 border-neutral-600 text-white"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="phoneNumber" className="text-[#F5A623]">Phone Number</Label>
+              <Input
+                id="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleInputChange}
+                className="bg-neutral-700 border-neutral-600 text-white"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="advisor" className="text-[#F5A623]">Advisor</Label>
+              <Input
+                id="advisor"
+                value={formData.advisor}
+                onChange={handleInputChange}
+                className="bg-neutral-700 border-neutral-600 text-white"
+                disabled
+              />
+              <p className="text-xs text-neutral-400">Contact department to change advisor</p>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="office" className="text-[#F5A623]">Office</Label>
+              <Input
+                id="office"
+                value={formData.office}
+                onChange={handleInputChange}
+                className="bg-neutral-700 border-neutral-600 text-white"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="officeHours" className="text-[#F5A623]">Office Hours</Label>
+              <Input
+                id="officeHours"
+                value={formData.officeHours}
+                onChange={handleInputChange}
+                className="bg-neutral-700 border-neutral-600 text-white"
+              />
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsEditDialogOpen(false)}
+              className="border-[#F5A623] text-[#F5A623] hover:bg-neutral-700"
+            >
+              Cancel
+            </Button>
+            <Button 
+              className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]"
+              onClick={handleSaveChanges}
+            >
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AppContainer>
   );
 }
