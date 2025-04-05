@@ -183,7 +183,12 @@ function generateLocalResponse(
     ],
     faculty: [
       "faculty", "professor", "teacher", "instructor", "staff", "department chair",
-      "who teaches", "contact", "adviser", "advisor", "counselor", "chair", "director"
+      "who teaches", "contact", "chair", "director"
+    ],
+    advisors: [
+      "adviser", "advisor", "counselor", "academic advisor", "academic adviser", 
+      "find advisor", "find my advisor", "who is my advisor", "advising", "schedule advising", 
+      "advising appointment", "meet with advisor"
     ],
     internships: [
       "internship", "career", "job", "employment", "work", "industry", "opportunity",
@@ -496,6 +501,31 @@ Director of Undergraduate Studies:
   Phone: (443) 885-3371
 
 For academic advising, you can find your assigned advisor on DegreeWorks or on the department's website. The department has a team of qualified faculty with expertise in various areas of computer science who are dedicated to student success.`);
+  }
+  
+  // Check for advisor-specific questions
+  if (matchesTopic(topicMatches.advisors) || 
+      prompt.includes("advising appointment") || 
+      prompt.includes("find my advisor") || 
+      (prompt.includes("advisor") && prompt.includes("how"))) {
+    return formatResponse(`Finding Your Academic Advisor:
+
+Your academic advisor is determined by your major and classification. Here's how to locate your advisor:
+
+1. Check DegreeWorks - Your assigned advisor should be listed there
+2. Visit the official academic advisers page at: https://www.morgan.edu/computer-science/current-students/academic-advisers
+
+Academic advisors are assigned as follows:
+- Freshmen: Usually assigned to a specific advisor for first-year students
+- Sophomores: Assigned based on program track
+- Juniors/Seniors: Assigned based on specialization area
+
+To schedule an advising appointment:
+1. Visit: https://www.morgan.edu/computer-science/current-students/schedule-an-appointment
+2. Contact your advisor directly via email
+3. Visit the department office in McMechen Hall
+
+Your advisor can help with course selection, degree progress tracking, and career planning. It's recommended to meet with your advisor at least once per semester.`);
   }
   
   // Check for research questions
