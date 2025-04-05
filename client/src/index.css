@@ -83,3 +83,24 @@
   background-color: #003366;
   color: #F5A623;
 }
+
+/* Calendar popup positioning for mobile */
+@media (max-width: 640px) {
+  .calendar-wrapper {
+    max-width: 280px;
+  }
+  
+  [data-side="right"] .calendar-wrapper {
+    transform: translateX(-15%);
+  }
+}
+
+/* Utility to hide scrollbars but maintain scroll functionality */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
