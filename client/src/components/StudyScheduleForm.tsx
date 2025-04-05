@@ -162,8 +162,8 @@ Please create a day-by-day schedule that breaks down study sessions by subject, 
                                 }}
                                 initialFocus
                                 components={{
-                                  IconLeft: () => <div className="calendar-nav">←</div>,
-                                  IconRight: () => <div className="calendar-nav">→</div>,
+                                  IconLeft: () => <>←</>,
+                                  IconRight: () => <>→</>,
                                 }}
                               />
                             </div>
