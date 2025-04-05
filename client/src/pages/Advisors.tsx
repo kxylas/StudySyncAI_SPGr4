@@ -493,7 +493,7 @@ export default function Advisors() {
           
           <DialogFooter className="sm:justify-between">
             <div className="hidden sm:flex items-center text-sm text-[#003366]">
-              <Mail className="mr-2 h-4 w-4 text-[#F5A623]" />
+              <MailIcon className="mr-2 h-4 w-4 text-[#F5A623]" />
               <span>Copy will be sent to your email</span>
             </div>
             <div className="flex gap-2">
