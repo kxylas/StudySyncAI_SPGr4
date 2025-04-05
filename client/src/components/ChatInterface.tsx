@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useChat } from '@/contexts/ChatContext';
 import { format } from 'date-fns';
-import { Send, Paperclip, Calendar } from 'lucide-react';
-import StudyScheduleForm from './StudyScheduleForm';
+import { Send, Paperclip } from 'lucide-react';
+import ChatInterfaceStudyButton from './ChatInterfaceStudyButton';
 
 export default function ChatInterface() {
   const { chatState, sendMessage } = useChat();
@@ -124,7 +124,7 @@ export default function ChatInterface() {
       {/* Quick suggestions */}
       <div className="bg-neutral-900 border-t border-neutral-700 p-2 sm:p-3">
         <div className="flex flex-wrap gap-1 sm:gap-2 mb-2 sm:mb-3 max-w-full overflow-x-auto pb-1 no-scrollbar">
-          <StudyScheduleForm />
+          <ChatInterfaceStudyButton />
           
           {quickSuggestions.map((suggestion, index) => (
             <Button 
