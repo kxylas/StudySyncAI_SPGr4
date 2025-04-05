@@ -130,43 +130,15 @@ Please create a day-by-day schedule that breaks down study sessions by subject, 
                         
                         <div>
                           <Label htmlFor={`deadline-${index}`} className="text-xs sm:text-sm">Deadline</Label>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <div 
-                                className={cn(
-                                  "flex h-8 sm:h-10 w-full rounded-md border border-input bg-background px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm ring-offset-background cursor-pointer",
-                                  !course.deadline && "text-muted-foreground"
-                                )}
-                              >
-                                <span className="flex items-center truncate">
-                                  <CalendarIcon className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                                  <span className="truncate">
-                                    {course.deadline ? format(course.deadline, "PPP") : <span>Pick a date</span>}
-                                  </span>
-                                </span>
-                              </div>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0" align="center" side="bottom" sideOffset={5}>
-                              <div className="calendar-wrapper">
-                                <Calendar
-                                  mode="single"
-                                  selected={course.deadline}
-                                  onSelect={(date) => {
-                                    updateCourse(course.id, 'deadline', date);
-                                    // Close the popover after selection on mobile
-                                    if (window.innerWidth < 640) {
-                                      const closeEvent = new MouseEvent('click', {
-                                        bubbles: true,
-                                        cancelable: true,
-                                      });
-                                      document.dispatchEvent(closeEvent);
-                                    }
-                                  }}
-                                  initialFocus
-                                />
-                              </div>
-                            </PopoverContent>
-                          </Popover>
+                          <Input
+                            type="date"
+                            value={course.deadline ? format(course.deadline, "yyyy-MM-dd") : ""}
+                            onChange={(e) => {
+                              const date = e.target.value ? new Date(e.target.value) : undefined;
+                              updateCourse(course.id, 'deadline', date);
+                            }}
+                            className="h-8 sm:h-10 text-xs sm:text-sm"
+                          />
                         </div>
                       </div>
                       

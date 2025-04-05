@@ -2,13 +2,17 @@ import { Link } from 'wouter';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import StudyScheduleForm from './StudyScheduleForm';
-import { Calendar } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar } from '@/components/ui/calendar';
+import { useState } from 'react';
 
 interface MobileMenuProps {
   isOpen: boolean;
 }
 
 export default function MobileMenu({ isOpen }: MobileMenuProps) {
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  
   if (!isOpen) return null;
 
   return (
@@ -51,10 +55,26 @@ export default function MobileMenu({ isOpen }: MobileMenuProps) {
           </span>
         </Link>
         
+        {/* Calendar */}
+        <div className="text-primary block px-3 py-2 rounded-md text-base font-medium">
+          <span className="flex items-center mb-2">
+            <span className="material-icons mr-2 text-sm">calendar_month</span>
+            Calendar
+          </span>
+          <div className="mobile-calendar-container bg-[#222222] rounded-lg p-2 border border-[#003366]">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              className="mobile-calendar"
+            />
+          </div>
+        </div>
+        
         {/* Study Schedule Generator button */}
         <div className="text-primary block px-3 py-2 rounded-md text-base font-medium hover:bg-neutral-100">
           <span className="flex items-center">
-            <Calendar className="mr-2 h-5 w-5" />
+            <CalendarIcon className="mr-2 h-5 w-5" />
             <div className="flex-1">
               <StudyScheduleForm />
             </div>
