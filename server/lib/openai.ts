@@ -449,26 +449,19 @@ This structure ensures students receive a well-rounded education with both depth
   }
   
   // Check for graduate program questions
-  if (matchesTopic(topicMatches.graduate) || prompt.includes("masters") || prompt.includes("phd program")) {
-    return formatResponse(`Morgan State offers these graduate programs in computing:
+  if (matchesTopic(topicMatches.graduate) || prompt.includes("masters") || prompt.includes("phd program") || 
+      (prompt.includes("morgan") && prompt.includes("offer") && prompt.includes("graduate")) ||
+      (prompt.includes("does") && prompt.includes("morgan") && prompt.includes("graduate")) ||
+      prompt.includes("what graduate programs")) {
+    return formatResponse(`Yes, Morgan State offers these graduate programs in computing:
 
-**Computer Science Department:**
-* **MS in Advanced Computing:** Focus on Cybersecurity, AI, Data Science, Cloud Computing. Available online/onsite.
-  https://www.morgan.edu/advanced-computing-ms
+**MS in Advanced Computing:** Cybersecurity, AI, Data Science focus (online/onsite)
+**MS in Bioinformatics:** Computing with biological research focus
+**PhD in Advanced and Equitable Computing:** Research-focused doctoral program
 
-* **PhD in Advanced and Equitable Computing:** Research in Quantum Cryptography, Algorithms, Cybersecurity, AI/ML, Data Analytics.
-  https://www.morgan.edu/advanced-and-equitable-computing-phd
+Related programs: MS in Data Analytics, MS in Electrical Engineering
 
-* **MS in Bioinformatics:** Combines computing with biological research.
-
-**Related Programs:**
-* PhD in Interdisciplinary Engineering
-* MS in Data Analytics and Visualization
-* MS in Electrical Engineering
-
-For complete information: https://www.morgan.edu/computer-science/degrees-and-programs
-
-Would you like more details about any specific program?`);
+For more details: https://www.morgan.edu/computer-science/degrees-and-programs`);
   }
   
   // Check for faculty questions
@@ -627,27 +620,16 @@ For further assistance, please contact the Morgan Computer Science Department di
   // Check for specific questions about graduate programs based on interests
   if ((prompt.includes("graduate") || prompt.includes("grad")) && 
       (prompt.includes("interest") || prompt.includes("recommend") || prompt.includes("for me") || prompt.includes("which") || prompt.includes("what") || prompt.includes("best") || prompt.includes("fit"))) {
-    return formatResponse(`Based on your interests as a CS student, Morgan State offers:
+    return formatResponse(`Based on your interests, Morgan State offers:
 
-**For Cybersecurity, AI, Data Science interests:**
-* MS in Advanced Computing (online/onsite options)
-  https://www.morgan.edu/advanced-computing-ms
+Cybersecurity/AI/Data Science: MS in Advanced Computing
+Research/Quantum Computing: PhD in Advanced and Equitable Computing
+Computational Biology: MS in Bioinformatics
+Other options: MS in Data Analytics, MS in Electrical Engineering
 
-**For research in Quantum Computing, Algorithms, AI:**
-* PhD in Advanced and Equitable Computing
-  https://www.morgan.edu/advanced-and-equitable-computing-phd
+For specific program details: https://www.morgan.edu/computer-science/degrees-and-programs
 
-**For computational biology interests:**
-* MS in Bioinformatics
-
-**Other specialized options:**
-* MS in Data Analytics and Visualization (Mathematics Dept)
-* PhD in Interdisciplinary Engineering
-* MS in Electrical Engineering (hardware focus)
-
-All programs: https://www.morgan.edu/computer-science/degrees-and-programs
-
-What specific CS areas interest you most? I can provide targeted recommendations.`);
+What CS areas interest you most?`);
   }
 
   // Check for simple greetings or introductions
