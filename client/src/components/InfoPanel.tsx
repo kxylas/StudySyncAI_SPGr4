@@ -1,23 +1,24 @@
-import { useState } from 'react';
+import * as React from 'react';
 import { 
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion';
+import { Building, Mail, Phone } from 'lucide-react';
 
 export default function InfoPanel() {
   return (
-    <aside className="hidden lg:block w-80 bg-white border-l border-neutral-200 overflow-y-auto">
+    <aside className="hidden lg:block w-80 bg-[#1c1c1c] border-l border-[#333333] overflow-y-auto h-full">
       <div className="px-4 py-5">
-        <h2 className="text-lg font-heading font-semibold text-neutral-900 mb-4">Program Information</h2>
+        <h2 className="text-lg font-heading font-semibold text-[#F5A623] mb-4">Program Information</h2>
         
-        <Accordion type="single" collapsible className="space-y-4">
-          <AccordionItem value="overview" className="border border-neutral-200 rounded-md mb-4">
-            <AccordionTrigger className="px-4 py-3 bg-neutral-50 text-left">
-              <span className="font-medium text-sm text-neutral-900">Program Overview</span>
+        <Accordion type="single" collapsible defaultValue="overview" className="space-y-4">
+          <AccordionItem value="overview" className="border border-[#333333] rounded-md mb-4">
+            <AccordionTrigger className="px-4 py-3 bg-[#262626] text-left">
+              <span className="font-medium text-sm text-[#F5A623]">Program Overview</span>
             </AccordionTrigger>
-            <AccordionContent className="px-4 py-3 text-sm text-neutral-700">
+            <AccordionContent className="px-4 py-3 text-sm text-gray-300">
               <p className="mb-2">
                 The Computer Science Program provides students with fundamental computer science knowledge and training, and prepares them to apply their knowledge and training to produce solutions to specific problems.
               </p>
@@ -27,11 +28,11 @@ export default function InfoPanel() {
             </AccordionContent>
           </AccordionItem>
           
-          <AccordionItem value="outcomes" className="border border-neutral-200 rounded-md mb-4">
-            <AccordionTrigger className="px-4 py-3 bg-neutral-50 text-left">
-              <span className="font-medium text-sm text-neutral-900">Learning Outcomes</span>
+          <AccordionItem value="outcomes" className="border border-[#333333] rounded-md mb-4">
+            <AccordionTrigger className="px-4 py-3 bg-[#262626] text-left">
+              <span className="font-medium text-sm text-[#F5A623]">Learning Outcomes</span>
             </AccordionTrigger>
-            <AccordionContent className="px-4 py-3 text-sm text-neutral-700">
+            <AccordionContent className="px-4 py-3 text-sm text-gray-300">
               <ul className="list-disc pl-5 space-y-1">
                 <li>Analyze complex computing problems and apply principles of computing to identify solutions.</li>
                 <li>Design, implement, and evaluate computing-based solutions to meet requirements.</li>
@@ -43,11 +44,11 @@ export default function InfoPanel() {
             </AccordionContent>
           </AccordionItem>
           
-          <AccordionItem value="focus" className="border border-neutral-200 rounded-md mb-4">
-            <AccordionTrigger className="px-4 py-3 bg-neutral-50 text-left">
-              <span className="font-medium text-sm text-neutral-900">Areas of Learning Focus</span>
+          <AccordionItem value="focus" className="border border-[#333333] rounded-md mb-4">
+            <AccordionTrigger className="px-4 py-3 bg-[#262626] text-left">
+              <span className="font-medium text-sm text-[#F5A623]">Areas of Learning Focus</span>
             </AccordionTrigger>
-            <AccordionContent className="px-4 py-3 text-sm text-neutral-700">
+            <AccordionContent className="px-4 py-3 text-sm text-gray-300">
               <ul className="list-disc pl-5">
                 <li>Software Engineering</li>
                 <li>Cybersecurity</li>
@@ -63,24 +64,24 @@ export default function InfoPanel() {
         </Accordion>
         
         {/* Contact info */}
-        <div className="border border-neutral-200 rounded-md">
-          <div className="px-4 py-3 bg-neutral-50">
-            <span className="font-medium text-sm text-neutral-900">Contact Information</span>
+        <div className="border border-[#333333] rounded-md bg-[#262626]">
+          <div className="px-4 py-3 bg-[#262626]">
+            <span className="font-medium text-sm text-[#F5A623]">Contact Information</span>
           </div>
-          <div className="px-4 py-3 text-sm text-neutral-700">
+          <div className="px-4 py-3 text-sm text-gray-300">
             <div className="flex items-start mb-2">
-              <span className="material-icons text-neutral-500 mr-2 text-base">school</span>
+              <Building className="text-[#F5A623] mr-2 h-5 w-5" />
               <div>
                 <p>Department of Computer Science</p>
                 <p>Morgan State University</p>
               </div>
             </div>
             <div className="flex items-center mb-2">
-              <span className="material-icons text-neutral-500 mr-2 text-base">email</span>
-              <a href="mailto:cs@morgan.edu" className="text-primary hover:underline">cs@morgan.edu</a>
+              <Mail className="text-[#F5A623] mr-2 h-5 w-5" />
+              <a href="mailto:cs@morgan.edu" className="text-[#F5A623] hover:underline">cs@morgan.edu</a>
             </div>
             <div className="flex items-center">
-              <span className="material-icons text-neutral-500 mr-2 text-base">phone</span>
+              <Phone className="text-[#F5A623] mr-2 h-5 w-5" />
               <p>(443) 885-3000</p>
             </div>
           </div>
