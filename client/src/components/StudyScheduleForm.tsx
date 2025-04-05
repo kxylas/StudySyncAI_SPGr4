@@ -129,24 +129,31 @@ Please create a day-by-day schedule that breaks down study sessions by subject, 
                         <Label htmlFor={`deadline-${index}`}>Deadline</Label>
                         <Popover>
                           <PopoverTrigger asChild>
-                            <Button
-                              variant={"outline"}
+                            <div 
                               className={cn(
-                                "w-full justify-start text-left font-normal",
+                                "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background cursor-pointer",
                                 !course.deadline && "text-muted-foreground"
                               )}
                             >
-                              <CalendarIcon className="mr-2 h-4 w-4" />
-                              {course.deadline ? format(course.deadline, "PPP") : <span>Pick a date</span>}
-                            </Button>
+                              <span className="flex items-center">
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {course.deadline ? format(course.deadline, "PPP") : <span>Pick a date</span>}
+                              </span>
+                            </div>
                           </PopoverTrigger>
                           <PopoverContent className="w-auto p-0">
-                            <Calendar
-                              mode="single"
-                              selected={course.deadline}
-                              onSelect={(date) => updateCourse(course.id, 'deadline', date)}
-                              initialFocus
-                            />
+                            <div className="calendar-wrapper">
+                              <Calendar
+                                mode="single"
+                                selected={course.deadline}
+                                onSelect={(date) => updateCourse(course.id, 'deadline', date)}
+                                initialFocus
+                                components={{
+                                  IconLeft: () => <span className="calendar-nav">←</span>,
+                                  IconRight: () => <span className="calendar-nav">→</span>,
+                                }}
+                              />
+                            </div>
                           </PopoverContent>
                         </Popover>
                       </div>
