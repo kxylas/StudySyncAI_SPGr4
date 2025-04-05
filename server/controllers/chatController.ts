@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { queryOpenAI } from "../lib/openai";
+import { queryOpenAI } from "../lib/openai-fixed";
 import { nanoid } from "nanoid";
 import { Message } from "@shared/schema";
 

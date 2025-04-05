@@ -1,18 +1,30 @@
 import OpenAI from "openai";
 import { Message } from "@shared/schema";
-import fs from "fs";
-import path from "path";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 
 // The newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
 
-// Load the CS program data
-const programDataPath = path.join(process.cwd(), "attached_assets", "Pasted-About-the-Computer-Science-Program-The-Computer-Science-Program-provides-students-with-funda-1743800063769.txt");
-const programData = fs.readFileSync(programDataPath, "utf-8");
+// Hardcoded program data for fallback
+const programData = `About the Computer Science Program:
+The Computer Science Program provides students with fundamental computer science knowledge and training, and prepares them to apply their knowledge and training to produce solutions to specific problems. Students learn to define a problem clearly, determine its feasibility and choose an appropriate solution strategy.
 
-// Parse the program data into sections for local fallback processing
-const programSections = parseProgramData(programData);
+Primary Objective of the Computer Science Curriculum:
+- Provide practical knowledge that will be of immediate use in the profession.
+- Provide a solid foundation in theoretical computer science, so that graduates will have the fundamentals necessary to acquire knowledge in a rapidly evolving discipline.
+
+Bachelor of Computer Science degree students learning outcomes:
+- Analyze a complex computing problem and apply principles of computing to identify solutions.
+- Design, implement, and evaluate computing-based solutions for specific requirements.
+- Communicate effectively in professional contexts.
+- Recognize professional responsibilities and make informed judgments based on legal and ethical principles.
+- Function effectively as a member or leader of a team.
+- Apply computer science theory and software development fundamentals.
+
+Areas of Learning Focus:
+Software Engineering, Cybersecurity, Artificial Intelligence, Quantum Cryptography, Data Science, Game/Robotics, Quantum Computing, Cloud Computing.`;
+
+// We're skipping the file loading and going straight to using the embedded data
 
 const systemPrompt = `
 You are StudySyncAI, an intelligent assistant designed to help Morgan State University computer science students.
@@ -118,9 +130,98 @@ function generateLocalResponse(
 ): string {
   const prompt = userPrompt.toLowerCase();
   
-  // Check for common question patterns and return the appropriate information
-  if (prompt.includes("program objectives") || prompt.includes("objective") || 
-      prompt.includes("goal") || prompt.includes("aim")) {
+  // Extract context from chat history
+  const context = getContextFromHistory(chatHistory);
+  
+  // Check for broad topics first
+  const topicMatches = {
+    program: [
+      "program", "degree", "bachelor", "bs", "b.s.", "computer science", "cs", "major", 
+      "what's the program", "tell me about", "overview"
+    ],
+    objectives: [
+      "objectives", "goal", "aim", "purpose", "why study", "outcome", "learning",
+      "focus", "what will i learn", "skills", "knowledge", "benefit"
+    ],
+    electives: [
+      "elective", "course", "class", "option", "choose", "select", "group", "pick",
+      "what classes", "what courses", "subject"
+    ],
+    groupA: [
+      "group a", "a elective", "238", "239", "243", "251", "261", "object", "java", "data science"
+    ],
+    groupB: [
+      "group b", "b elective", "320", "323", "332", "338", "383", "385", "386", "313", "317",
+      "algorithm", "game", "mobile", "cryptography"
+    ],
+    groupC: [
+      "group c", "c elective", "470", "472", "460", "480", "486", "491", "498", "499", "471",
+      "ai", "artificial", "machine", "graphics", "image", "quantum", "internship"
+    ],
+    groupD: [
+      "group d", "d elective", "391", "494", "481", "483", "security"
+    ],
+    requirements: [
+      "requirement", "graduate", "graduation", "credit", "gpa", "grade", "pass", "need to", 
+      "have to", "required", "finish", "complete", "degree requirement", "how many"
+    ],
+    faculty: [
+      "faculty", "professor", "teacher", "instructor", "staff", "department chair",
+      "who teaches", "contact", "adviser", "advisor", "counselor", "chair", "director"
+    ],
+    internships: [
+      "internship", "career", "job", "employment", "work", "industry", "opportunity",
+      "practical", "experience", "company", "corporate", "position", "hire", "hiring"
+    ],
+    research: [
+      "research", "project", "study", "investigation", "area", "field", "topic", "interest",
+      "focus area", "specialization", "lab", "laboratory", "grant", "funding"
+    ],
+    curriculum: [
+      "curriculum", "schedule", "sequence", "plan", "path", "roadmap", "year", "semester", 
+      "freshman", "sophomore", "junior", "senior", "first year", "second year", "third year", "fourth year"
+    ],
+    credits: [
+      "credit", "hour", "120", "how many", "units", "total"
+    ]
+  };
+  
+  // Function to check if a prompt matches any of the topic keywords
+  const matchesTopic = (topicKeywords: string[]) => {
+    return topicKeywords.some(keyword => prompt.includes(keyword));
+  };
+  
+  // Check for multi-topic questions or contextual questions
+  if ((matchesTopic(topicMatches.program) && matchesTopic(topicMatches.objectives)) || 
+      prompt.includes("what is the program about") || 
+      prompt.includes("tell me about the program") ||
+      prompt.includes("what's cs program") ||
+      prompt.includes("about morgan") ||
+      (prompt.length < 15 && (prompt.includes("about") || prompt.includes("info")))) {
+    return formatResponse(`The Computer Science Program at Morgan State University provides students with fundamental computer science knowledge and training. The program has two primary objectives:
+
+1. Provide practical knowledge that is immediately useful in the profession
+2. Build a solid foundation in theoretical computer science for continued learning in this rapidly evolving field
+
+The program prepares students to define problems clearly, determine feasibility, and develop appropriate solution strategies. Students learn to:
+- Apply computing principles to solve complex problems
+- Design and evaluate computing-based solutions
+- Communicate effectively in professional contexts
+- Make informed judgments based on legal and ethical principles
+- Function effectively in team environments
+- Apply computer science theory and software development fundamentals
+
+The program focuses on several key areas including Software Engineering, Cybersecurity, Artificial Intelligence, Quantum Computing, Data Science, Game Development, Robotics, and Cloud Computing.
+
+To graduate, students need to complete 120 credit hours, maintain a GPA of 2.0 or better, and pass a comprehensive examination.`);
+  }
+
+  // Check for questions about general program objectives
+  if (matchesTopic(topicMatches.objectives) || 
+      prompt.includes("what do students learn") || 
+      prompt.includes("what will i learn") ||
+      prompt.includes("what's the purpose") ||
+      (context.includes("objectives") && (prompt.includes("what") || prompt.includes("tell me more")))) {
     return formatResponse(`The primary objectives of the Computer Science Program at Morgan State University are:
 
 1. Provide practical knowledge that will be of immediate use in the profession.
@@ -128,14 +229,52 @@ function generateLocalResponse(
 
 The program prepares students to:
 - Apply principles of computing to identify solutions to complex problems
-- Design, implement, and evaluate computing solutions
+- Design, implement, and evaluate computing-based solutions
 - Communicate effectively in professional contexts
 - Make informed judgments based on legal and ethical principles
 - Function effectively in teams
-- Apply computer science theory and software development fundamentals`);
+- Apply computer science theory and software development fundamentals
+
+These objectives are designed to ensure students can work in the industry immediately upon graduation, while also having the theoretical foundation necessary to adapt to changes in technology throughout their careers.`);
   }
   
-  if (prompt.includes("elective") && prompt.includes("group a")) {
+  // Check for questions about focus areas
+  if (prompt.includes("focus area") || prompt.includes("specialization") || 
+      (matchesTopic(topicMatches.program) && (prompt.includes("focus") || prompt.includes("specialize")))) {
+    return formatResponse(`The Morgan State University Computer Science program offers various areas of learning focus, including:
+
+1. Software Engineering - Developing and maintaining software systems
+2. Cybersecurity - Protecting computer systems and networks
+3. Artificial Intelligence - Creating systems that can perform tasks requiring human intelligence
+4. Quantum Cryptography - Applying quantum mechanics to secure communications
+5. Data Science - Extracting insights from complex data
+6. Game Development & Robotics - Creating interactive experiences and physical systems
+7. Quantum Computing - Computing using quantum mechanics principles
+8. Cloud Computing - Utilizing internet-based computing resources
+
+Students can choose electives that allow them to concentrate in these areas based on their interests and career goals.`);
+  }
+  
+  // Enhanced checking for elective groups - check for electives generally first
+  if (matchesTopic(topicMatches.electives) && 
+     !(prompt.includes("group a") || prompt.includes("group b") || 
+       prompt.includes("group c") || prompt.includes("group d"))) {
+    return formatResponse(`The Computer Science program at Morgan State University organizes electives into four groups:
+
+Group A - Foundation courses like Object-Oriented Programming, Java, Computer Architecture, and Data Science (students take 3 courses)
+
+Group B - Advanced theory and specialized areas including Algorithm Design, Cryptography, Game Design, Mobile App Development, and Quantum Computing (students take 2 courses)
+
+Group C - Applied specialized fields like AI, Machine Learning, Graphics, Image Processing, Internships, and Research (students take 4 courses)
+
+Group D - Security-focused courses including Network Security and Risk Management (students take 1 course)
+
+These electives allow students to customize their education based on their interests and career goals. Would you like details about a specific group of electives?`);
+  }
+  
+  // Now check for specific elective groups
+  if (matchesTopic(topicMatches.groupA) || 
+      (context.includes("elective") && prompt.includes("group a"))) {
     return formatResponse(`Group A Electives in the Computer Science program include:
 
 - COSC 238 - Object Oriented Programming (4 credits)
@@ -144,10 +283,11 @@ The program prepares students to:
 - COSC 251 - Introduction to Data Science (3 credits)
 - CLCO 261 - Introduction to Cloud Computing (3 credits)
 
-Students need to take three courses from Group A electives as part of their degree requirements.`);
+Students need to take three courses from Group A electives as part of their degree requirements. These courses provide a foundation in essential programming paradigms and platforms.`);
   }
   
-  if (prompt.includes("elective") && prompt.includes("group b")) {
+  if (matchesTopic(topicMatches.groupB) || 
+      (context.includes("elective") && prompt.includes("group b"))) {
     return formatResponse(`Group B Electives in the Computer Science program include:
 
 - COSC 320 - Algorithm Design and Analysis (3 credits)
@@ -160,10 +300,11 @@ Students need to take three courses from Group A electives as part of their degr
 - MATH 313 - Linear Algebra II (3 credits)
 - EEGR 317 - Electronic Circuits (4 credits)
 
-Students need to take two courses from Group B electives as part of their degree requirements.`);
+Students need to take two courses from Group B electives as part of their degree requirements. These courses build on the foundation courses and introduce students to more specialized areas of computer science.`);
   }
   
-  if (prompt.includes("elective") && prompt.includes("group c")) {
+  if (matchesTopic(topicMatches.groupC) || 
+      (context.includes("elective") && prompt.includes("group c"))) {
     return formatResponse(`Group C Electives in the Computer Science program include:
 
 - COSC 470 - Artificial Intelligence (3 credits) OR COSC 472 - Introduction to Machine Learning (3 credits)
@@ -175,10 +316,11 @@ Students need to take two courses from Group B electives as part of their degree
 - COSC 499 - Senior Research or Teaching/Tutorial Assistantship (3 credits)
 - CLCO 471 - Data Analytics in Cloud (3 credits)
 
-Students need to take four courses from Group C electives as part of their degree requirements.`);
+Students need to take four courses from Group C electives as part of their degree requirements. These advanced courses allow students to delve deeper into specialized areas of computer science and gain practical experience.`);
   }
   
-  if (prompt.includes("elective") && prompt.includes("group d")) {
+  if (matchesTopic(topicMatches.groupD) || 
+      (context.includes("elective") && prompt.includes("group d"))) {
     return formatResponse(`Group D Electives in the Computer Science program include:
 
 - INSS 391 - IT Infrastructure and Security (3 credits)
@@ -187,13 +329,14 @@ Students need to take four courses from Group C electives as part of their degre
 - EEGR 483 - Introduction to Security Management (3 credits)
 - Any 300-400 level COSC Course not previously taken (3 credits)
 
-Students need to take one course from Group D electives as part of their degree requirements.`);
+Students need to take one course from Group D electives as part of their degree requirements. These courses focus on cybersecurity aspects, which is an increasingly important area in computer science.`);
   }
   
-  if (prompt.includes("internship") || prompt.includes("career") || prompt.includes("job")) {
+  // Check for internship questions
+  if (matchesTopic(topicMatches.internships) || prompt.includes("where can i work")) {
     return formatResponse(`Internship Opportunities at Morgan State University:
 
-The Computer Science department has collaborations with many leading companies and organizations to provide internships and career opportunities for students, including:
+The Computer Science department has established collaborations with many leading companies and organizations to provide valuable internships and career opportunities for students, including:
 
 - Google
 - Facebook
@@ -203,13 +346,20 @@ The Computer Science department has collaborations with many leading companies a
 - Lockheed Martin
 - And many other public and private organizations
 
+These internships help students gain practical experience, build professional networks, and often lead to full-time employment opportunities after graduation.
+
 For the most up-to-date information on internship opportunities:
 1. Visit the Internship Opportunities Page on the Morgan CS website
 2. Check the CS Twitter account: @Morgan_CompSci
-3. Speak with your academic advisor about internship opportunities related to your specific interests`);
+3. Speak with your academic advisor about internship opportunities related to your specific interests
+
+Students can also earn credit through COSC 498 - Senior Internship (3 credits), which is a Group C elective.`);
   }
   
-  if (prompt.includes("graduation") || prompt.includes("requirement") || prompt.includes("graduate")) {
+  // Check for graduation requirement questions
+  if (matchesTopic(topicMatches.requirements) || 
+      prompt.includes("what do i need") || 
+      prompt.includes("how do i graduate")) {
     return formatResponse(`Graduation Requirements for the B.S. Degree in Computer Science:
 
 1. Complete General Education Requirements.
@@ -224,10 +374,38 @@ Credit Distribution:
 - Required Courses for the Computer Science Major: 65 credits
 - Total Credits Required: 120 credits
 
+Required courses include Introduction to Computer Science I & II, Data Structures and Algorithms, Computer Systems, Cybersecurity, Computer Networks, Database Design, Software Engineering, and others.
+
 For more detailed information about specific course requirements, please check the curriculum sequence or speak with your academic advisor.`);
   }
   
-  if (prompt.includes("advisor") || prompt.includes("adviser") || prompt.includes("faculty")) {
+  // Check for credit hour questions
+  if (matchesTopic(topicMatches.credits) || prompt.includes("class count") || prompt.includes("course count")) {
+    return formatResponse(`Credit Hour Requirements for the Computer Science B.S. Degree:
+
+A minimum of 120 credit hours are required to graduate with a B.S. in Computer Science. These credit hours are distributed as follows:
+
+- General Education and University Requirements: 44 credits
+  (Includes English, Mathematics, Humanities, Social/Behavioral Sciences, etc.)
+
+- Supporting Courses: 11 credits
+  (Includes Calculus I & II, Linear Algebra, Applied Probability and Statistics)
+
+- Required Courses for the Computer Science Major: 65 credits
+  (Includes core Computer Science courses and electives)
+
+The 65 credits for the major include:
+- Core required CS courses
+- Three Group A electives
+- Two Group B electives
+- Four Group C electives
+- One Group D elective
+
+This structure ensures students receive a well-rounded education with both depth in computer science and breadth in related disciplines.`);
+  }
+  
+  // Check for faculty questions
+  if (matchesTopic(topicMatches.faculty) || prompt.includes("who runs") || prompt.includes("in charge")) {
     return formatResponse(`Faculty and Department Leadership:
 
 Department Chair:
@@ -257,53 +435,185 @@ Director of Undergraduate Studies:
   Email: guobin.xu@morgan.edu
   Phone: (443) 885-3371
 
-For academic advising, you can find your assigned advisor on DegreeWorks or on the department's website.`);
+For academic advising, you can find your assigned advisor on DegreeWorks or on the department's website. The department has a team of qualified faculty with expertise in various areas of computer science who are dedicated to student success.`);
   }
   
-  if (prompt.includes("research") || prompt.includes("area")) {
+  // Check for research questions
+  if (matchesTopic(topicMatches.research)) {
     return formatResponse(`Research Areas in the Computer Science Department:
 
 The department has active research in the following areas:
 
 1. Artificial Intelligence / Machine Learning / Deep Learning
+   Research in AI techniques, neural networks, and intelligent systems
+
 2. Quantum Computing and Quantum Cryptography
+   Exploring the next generation of computing technology and secure communications
+
 3. Cybersecurity
+   Investigating methods to protect systems, networks, and data from attacks
+
 4. Data Science / Big Data Analytics
+   Developing techniques to extract insights from large and complex datasets
+
 5. Human Computer Interactions
+   Studying how people interact with computers and designing better interfaces
+
 6. Cloud Computing
+   Research on distributed computing systems and services delivered over the internet
+
 7. Robotics / Gaming
+   Work on autonomous systems, game design, and interactive technologies
 
 Recent research achievements include:
 - Microsoft Award: $200,000 gift for cloud computing and emerging technologies research
 - NSF Award in Quantum Computing and Quantum Cryptography
 - Google Gift on Machine Learning and AI
 
-For the latest research activities and opportunities, follow the CS department on Twitter: @Morgan_CompSci`);
+Students interested in research can take COSC 499 - Senior Research as a Group C elective. For the latest research activities and opportunities, follow the CS department on Twitter: @Morgan_CompSci`);
   }
   
-  // If no specific match, provide a general response
-  return formatResponse(`Thank you for your question about "${userPrompt}".
+  // Check for curriculum/course sequence questions
+  if (matchesTopic(topicMatches.curriculum) || prompt.includes("course order") || prompt.includes("what to take")) {
+    return formatResponse(`Suggested Curriculum Sequence for Computer Science B.S.:
 
-As your Morgan State University CS program assistant, I provide information about:
-- Program objectives and learning outcomes
+First Year:
+- Semester 1: COSC 111 (Intro to CS I), ENGL 101, MATH 241 (Calculus I), General Education
+- Semester 2: COSC 112 (Intro to CS II), ENGL 102, MATH 242 (Calculus II), General Education
+
+Second Year:
+- Semester 1: COSC 220 (Data Structures), COSC 241 (Systems & Logic), Group A Elective, General Education
+- Semester 2: COSC 281 (Discrete Structure), Group A Electives (2 courses), MATH 312 (Linear Algebra)
+
+Third Year:
+- Semester 1: COSC 349 (Networks), COSC 351 (Cybersecurity), COSC 352 (Programming Languages), Group B Elective
+- Semester 2: COSC 354 (Operating Systems), MATH 331 (Statistics), Group B Elective, General Education
+
+Fourth Year:
+- Semester 1: COSC 458 (Software Engineering), COSC 459 (Database), COSC 490 (Senior Project), Group C Elective
+- Semester 2: Group C Electives (3 courses), Group D Elective, General Education
+
+This sequence is designed to build knowledge progressively, with foundational courses in early years and more specialized courses in later years.
+
+For the complete and most current curriculum sequence, visit: https://catalog.morgan.edu/preview_program.php?catoid=11&poid=2205`);
+  }
+  
+  // Multiple patterns for more general questions about the CS program
+  if ((prompt.includes("what") && prompt.includes("cs")) || 
+      (prompt.includes("tell") && prompt.includes("about") && (prompt.includes("cs") || prompt.includes("computer"))) ||
+      (prompt.includes("what") && prompt.includes("computer science")) ||
+      prompt.includes("describe the program") ||
+      prompt === "cs" || 
+      prompt === "tell me more") {
+    return formatResponse(`The Computer Science Program at Morgan State University is a comprehensive bachelor's degree program that prepares students for careers in the computing industry as well as advanced study in computer science.
+
+Key aspects of the program:
+
+1. Curriculum: A 120-credit program that combines theoretical foundations with practical skills
+   - 44 credits of general education and university requirements
+   - 11 credits of supporting courses (mathematics)
+   - 65 credits of computer science major requirements including electives
+
+2. Learning Focus: The program emphasizes core areas like software engineering, cybersecurity, artificial intelligence, data science, and emerging fields like quantum computing
+
+3. Objectives: Students develop skills in problem-solving, software development, communication, teamwork, and ethical decision-making in computing contexts
+
+4. Opportunities: Students have access to internships with major companies like Google, Facebook, NASA, and JP Morgan Chase
+
+5. Faculty: The department has experienced faculty leading research in cutting-edge areas
+
+6. Flexibility: Through elective options, students can specialize in areas matching their interests and career goals
+
+7. Practical Experience: Senior projects, internships, and research opportunities provide hands-on experience
+
+The program provides both immediately applicable skills and a foundation for adapting to the continuously evolving field of computer science.`);
+  }
+  
+  // Check for application/admission questions
+  if (prompt.includes("how to apply") || prompt.includes("admission") || prompt.includes("requirements to get in")) {
+    return formatResponse(`How to Apply for the Bachelor of Science (B.S.) in Computer Science:
+
+To apply to Morgan State University's Computer Science program, you should:
+
+1. Visit the Office of Undergraduate Admission & Recruitment website: 
+   http://www.morgan.edu/undergradadmissions
+
+2. Start your application process at:
+   http://www.morgan.edu/applynow.html
+
+3. Complete the general university application requirements, which typically include:
+   - High school transcripts
+   - Standardized test scores (if required)
+   - Application essay
+   - Application fee
+
+4. For specific information about Computer Science department requirements or questions, contact:
+   Computer Science Department
+   McMechen Hall 507
+   Phone: (443) 885-3962
+
+The admission process evaluates your academic record, particularly your performance in mathematics and science courses, as these are important foundations for success in computer science.
+
+For further assistance, please contact the Morgan Computer Science Department directly.`);
+  }
+  
+  // Check for simple greetings or introductions
+  if (prompt === "hello" || prompt === "hi" || prompt === "hey" || prompt.includes("how are you")) {
+    return formatResponse(`Hello! I'm StudySyncAI, your Morgan State University Computer Science program assistant. I'm here to provide information about:
+
+- Program overview and objectives
 - Course requirements and electives
 - Graduation requirements
 - Internship opportunities
 - Faculty and advisors
 - Research areas
 
-Please try asking a more specific question about the CS program, such as:
-- What are the Group A electives?
-- What are the graduation requirements?
-- Who are the faculty advisors?
-- What research areas are available?
+How can I help you with information about the CS program today?`);
+  }
+  
+  // Check for thank you messages
+  if (prompt.includes("thank") || prompt.includes("thanks") || prompt === "ty") {
+    return formatResponse(`You're welcome! I'm happy to help with any information about the Morgan State University Computer Science program. If you have any other questions about courses, requirements, faculty, research areas, or anything else related to the program, please feel free to ask.`);
+  }
+  
+  // If no patterns match, provide a more helpful general response
+  return formatResponse(`Thank you for your question about "${userPrompt}".
 
-I'm here to help with any information about the Morgan State University Computer Science program!`);
+I can provide you with information about the Morgan State University Computer Science program including:
+
+- Program overview and objectives
+- Curriculum structure and course requirements
+- Elective options in different focus areas
+- Graduation requirements and credit hours
+- Faculty members and department leadership
+- Internship and career opportunities
+- Research areas and achievements
+- Application and admission process
+
+Based on your question, it seems you're interested in learning more about the CS program. Could you please let me know which specific aspect you'd like more information about? For example:
+
+- What are the main objectives of the CS program?
+- How is the curriculum structured?
+- What career opportunities are available to CS graduates?
+- What are the graduation requirements?
+- Who are the faculty members?
+
+I'm here to help with any specific details you need.`);
 }
 
+// Helper function to extract context from chat history
+function getContextFromHistory(chatHistory: { role: string; content: string }[]): string {
+  // Extract the last 3 exchanges to provide context
+  const recentMessages = chatHistory.slice(-6);
+  
+  // Join messages into a single string for context analysis
+  return recentMessages.map(msg => msg.content.toLowerCase()).join(" ");
+}
+
+// Helper to format response text
 function formatResponse(text: string): string {
-  // Ensure the text is properly formatted
-  return text.trim();
+  // Clean up the text, ensure paragraphs are separated properly
+  return text.replace(/\n{3,}/g, "\n\n").trim();
 }
 
 export { queryOpenAI };
