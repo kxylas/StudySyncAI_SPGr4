@@ -161,10 +161,6 @@ Please create a day-by-day schedule that breaks down study sessions by subject, 
                                   }
                                 }}
                                 initialFocus
-                                components={{
-                                  IconLeft: () => <>←</>,
-                                  IconRight: () => <>→</>,
-                                }}
                               />
                             </div>
                           </PopoverContent>

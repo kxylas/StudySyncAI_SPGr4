@@ -1,9 +1,16 @@
 import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { DayPicker } from "react-day-picker"
+import { DayPicker, CaptionProps } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
+
+// Custom components interface to allow for our Navigation component
+interface CustomNavigation {
+  currentMonth: Date;
+  onPreviousClick: () => void;
+  onNextClick: () => void;
+}
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
@@ -23,10 +30,7 @@ function Calendar({
         caption: "flex justify-center pt-1 relative items-center",
         caption_label: "text-sm font-medium",
         nav: "space-x-1 flex items-center",
-        nav_button: cn(
-          buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 text-[#F5A623] hover:text-[#F5A623] hover:bg-[#003366]/10 border-0"
-        ),
+        nav_button: "h-7 w-7 bg-transparent p-0 text-[#F5A623] hover:bg-[#003366]/10 rounded-md border-0 flex items-center justify-center cursor-pointer",
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
         table: "w-full border-collapse space-y-1",
@@ -52,8 +56,13 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
-        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
+        IconLeft: () => <div className="flex items-center justify-center"><ChevronLeft className="h-4 w-4" /></div>,
+        IconRight: () => <div className="flex items-center justify-center"><ChevronRight className="h-4 w-4" /></div>,
+        CaptionLabel: (props: CaptionProps) => (
+          <div className="text-sm font-medium">
+            {new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(props.displayMonth)}
+          </div>
+        )
       }}
       {...props}
     />

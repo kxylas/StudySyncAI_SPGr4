@@ -1,4 +1,4 @@
-import { DayPicker } from "react-day-picker"
+import { DayPicker, CaptionProps } from "react-day-picker"
 import { cn } from "@/lib/utils"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
@@ -20,9 +20,9 @@ function Calendar({
         caption: "flex justify-center pt-1 relative items-center",
         caption_label: "text-sm font-medium",
         nav: "space-x-1 flex items-center",
-        nav_button: "calendar-nav",
-        nav_button_previous: "calendar-nav",
-        nav_button_next: "calendar-nav",
+        nav_button: "h-7 w-7 bg-transparent p-0 text-[#F5A623] rounded-md border-0 flex items-center justify-center cursor-pointer",
+        nav_button_previous: "h-7 w-7 bg-transparent p-0 text-[#F5A623] rounded-md border-0 flex items-center justify-center cursor-pointer",
+        nav_button_next: "h-7 w-7 bg-transparent p-0 text-[#F5A623] rounded-md border-0 flex items-center justify-center cursor-pointer",
         table: "w-full border-collapse space-y-1",
         head_row: "flex",
         head_cell:
@@ -34,8 +34,8 @@ function Calendar({
         ),
         day_range_end: "day-range-end",
         day_selected:
-          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-        day_today: "bg-accent text-accent-foreground",
+          "bg-[#F5A623] text-[#003366] hover:bg-[#F5A623] hover:text-[#003366] focus:bg-[#F5A623] focus:text-[#003366]",
+        day_today: "bg-[#003366]/20 text-[#F5A623]",
         day_outside:
           "day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30",
         day_disabled: "text-muted-foreground opacity-50",
@@ -45,12 +45,21 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ ...props }) => (
-          <ChevronLeft className="h-4 w-4" />
+        IconLeft: () => (
+          <div className="flex items-center justify-center">
+            <ChevronLeft className="h-4 w-4" />
+          </div>
         ),
-        IconRight: ({ ...props }) => (
-          <ChevronRight className="h-4 w-4" />
+        IconRight: () => (
+          <div className="flex items-center justify-center">
+            <ChevronRight className="h-4 w-4" />
+          </div>
         ),
+        CaptionLabel: (props: CaptionProps) => (
+          <div className="text-sm font-medium">
+            {new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(props.displayMonth)}
+          </div>
+        )
       }}
       {...props}
     />
