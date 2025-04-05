@@ -17,13 +17,13 @@ export default function Curriculum() {
           <Card className="bg-neutral-800 border-neutral-700 shadow-md">
             <CardHeader>
               <CardTitle className="text-[#F5A623]">Bachelor of Science (B.S.) in Computer Science</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-[#003366]">
                 The undergraduate program in Computer Science prepares students for entry into 
                 the computing profession, for graduate study in computer, computational, and data sciences, 
                 and for the many challenges that will confront them in their professional and personal life.
               </CardDescription>
             </CardHeader>
-            <CardContent className="text-gray-300">
+            <CardContent className="text-[#003366]">
               <div className="max-w-3xl">
                 <p className="mb-4">
                   The Computer Science program prepares students to apply their knowledge and training to produce solutions 
@@ -38,7 +38,7 @@ export default function Curriculum() {
           <Card className="bg-neutral-800 border-neutral-700 shadow-md">
             <CardHeader>
               <CardTitle className="text-[#F5A623]">Curriculum Sequence</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-[#003366]">
                 Suggested sequence of courses by semester
               </CardDescription>
             </CardHeader>
@@ -76,21 +76,21 @@ export default function Curriculum() {
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">COSC 111</span>
-                            <span className="text-gray-300 ml-2">- Introduction to Computer Science I</span>
+                            <span className="text-[#003366] ml-2">- Introduction to Computer Science I</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">4 credits (IM)</Badge>
                         </li>
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">ENGL 101</span>
-                            <span className="text-gray-300 ml-2">- Freshman Composition I</span>
+                            <span className="text-[#003366] ml-2">- Freshman Composition I</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">3 credits (EC)</Badge>
                         </li>
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">MATH 241</span>
-                            <span className="text-gray-300 ml-2">- Calculus I</span>
+                            <span className="text-[#003366] ml-2">- Calculus I</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">4 credits (MQ)</Badge>
                         </li>
@@ -103,7 +103,7 @@ export default function Curriculum() {
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">ORNS 106</span>
-                            <span className="text-gray-300 ml-2">- Freshman Orientation</span>
+                            <span className="text-[#003366] ml-2">- Freshman Orientation</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">1 credit</Badge>
                         </li>
@@ -116,7 +116,7 @@ export default function Curriculum() {
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">ENGL 102</span>
-                            <span className="text-gray-300 ml-2">- Freshman Composition II</span>
+                            <span className="text-[#003366] ml-2">- Freshman Composition II</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">3 credits (EC)</Badge>
                         </li>
@@ -129,21 +129,21 @@ export default function Curriculum() {
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">Phys. ED. Activity</span>
-                            <span className="text-gray-300 ml-2">- or FIN 101 or MIND 101 or DSVG 101 or FACS 102</span>
+                            <span className="text-[#003366] ml-2">- or FIN 101 or MIND 101 or DSVG 101 or FACS 102</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">1 credit</Badge>
                         </li>
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">COSC 112</span>
-                            <span className="text-gray-300 ml-2">- Introduction to Computer Science II</span>
+                            <span className="text-[#003366] ml-2">- Introduction to Computer Science II</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">4 credits</Badge>
                         </li>
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">MATH 242</span>
-                            <span className="text-gray-300 ml-2">- Calculus II</span>
+                            <span className="text-[#003366] ml-2">- Calculus II</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">4 credits</Badge>
                         </li>
@@ -169,14 +169,14 @@ export default function Curriculum() {
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">COSC 220</span>
-                            <span className="text-gray-300 ml-2">- Data Structures and Algorithms</span>
+                            <span className="text-[#003366] ml-2">- Data Structures and Algorithms</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">4 credits</Badge>
                         </li>
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">COSC 241</span>
-                            <span className="text-gray-300 ml-2">- Computer Systems and Digital Logic</span>
+                            <span className="text-[#003366] ml-2">- Computer Systems and Digital Logic</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">3 credits</Badge>
                         </li>
@@ -201,7 +201,7 @@ export default function Curriculum() {
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">COSC 281</span>
-                            <span className="text-gray-300 ml-2">- Discrete Structure</span>
+                            <span className="text-[#003366] ml-2">- Discrete Structure</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">3 credits</Badge>
                         </li>
@@ -220,7 +220,7 @@ export default function Curriculum() {
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">MATH 312</span>
-                            <span className="text-gray-300 ml-2">- Linear Algebra I</span>
+                            <span className="text-[#003366] ml-2">- Linear Algebra I</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">3 credits</Badge>
                         </li>
@@ -252,21 +252,21 @@ export default function Curriculum() {
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">COSC 349</span>
-                            <span className="text-gray-300 ml-2">- Computer Networks</span>
+                            <span className="text-[#003366] ml-2">- Computer Networks</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">3 credits</Badge>
                         </li>
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">COSC 351</span>
-                            <span className="text-gray-300 ml-2">- Cybersecurity</span>
+                            <span className="text-[#003366] ml-2">- Cybersecurity</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">3 credits</Badge>
                         </li>
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">COSC 352</span>
-                            <span className="text-gray-300 ml-2">- Organization of Programming Languages</span>
+                            <span className="text-[#003366] ml-2">- Organization of Programming Languages</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">3 credits</Badge>
                         </li>
@@ -291,14 +291,14 @@ export default function Curriculum() {
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">COSC 354</span>
-                            <span className="text-gray-300 ml-2">- Operating Systems</span>
+                            <span className="text-[#003366] ml-2">- Operating Systems</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">3 credits</Badge>
                         </li>
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">MATH 331</span>
-                            <span className="text-gray-300 ml-2">- Applied Probability and Statistics</span>
+                            <span className="text-[#003366] ml-2">- Applied Probability and Statistics</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">3 credits</Badge>
                         </li>
@@ -342,21 +342,21 @@ export default function Curriculum() {
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">COSC 458</span>
-                            <span className="text-gray-300 ml-2">- Software Engineering</span>
+                            <span className="text-[#003366] ml-2">- Software Engineering</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">3 credits</Badge>
                         </li>
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">COSC 459</span>
-                            <span className="text-gray-300 ml-2">- Database Design</span>
+                            <span className="text-[#003366] ml-2">- Database Design</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">3 credits</Badge>
                         </li>
                         <li className="flex justify-between items-center p-2 bg-neutral-600 rounded-lg">
                           <div>
                             <span className="text-white font-medium">COSC 490</span>
-                            <span className="text-gray-300 ml-2">- Senior Project</span>
+                            <span className="text-[#003366] ml-2">- Senior Project</span>
                           </div>
                           <Badge className="bg-[#003366] text-[#F5A623]">3 credits</Badge>
                         </li>

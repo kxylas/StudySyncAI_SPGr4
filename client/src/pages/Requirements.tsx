@@ -13,11 +13,11 @@ export default function Requirements() {
           <Card className="bg-neutral-800 border-neutral-700 shadow-md">
             <CardHeader>
               <CardTitle className="text-[#F5A623]">Degree Requirements Overview</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-[#003366]">
                 Bachelor of Science (B.S.) in Computer Science
               </CardDescription>
             </CardHeader>
-            <CardContent className="text-gray-300">
+            <CardContent className="text-[#003366]">
               <p className="mb-6">
                 A minimum of 120 credit hours are required to graduate with a B.S. in Computer Science.
                 These credit hours are distributed as follows:
@@ -84,41 +84,41 @@ export default function Requirements() {
               <Card className="bg-neutral-800 border-neutral-700 shadow-md">
                 <CardHeader>
                   <CardTitle className="text-[#F5A623]">School-wide Requirements</CardTitle>
-                  <CardDescription className="text-gray-400">
+                  <CardDescription className="text-[#003366]">
                     Requirements for all majors in the School of Computer, Mathematical and Natural Sciences
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="text-gray-300">
+                <CardContent className="text-[#003366]">
                   <ul className="list-disc pl-6 space-y-4">
                     <li>
                       <span className="font-medium block mb-1">General Education Requirements</span>
-                      <p className="text-gray-400 text-sm pl-4">
+                      <p className="text-[#003366] text-sm pl-4">
                         Complete all general education requirements as specified by the university.
                       </p>
                     </li>
                     <li>
                       <span className="font-medium block mb-1">Complementary Studies Program</span>
-                      <p className="text-gray-400 text-sm pl-4">
+                      <p className="text-[#003366] text-sm pl-4">
                         Earn six (6) credits in the Complementary Studies Program required for all majors in the School 
                         of Computer, Mathematical and Natural Sciences.
                       </p>
                     </li>
                     <li>
                       <span className="font-medium block mb-1">Senior Departmental Comprehensive Examination</span>
-                      <p className="text-gray-400 text-sm pl-4">
+                      <p className="text-[#003366] text-sm pl-4">
                         Pass the Senior Departmental Comprehensive Examination.
                       </p>
                     </li>
                     <li>
                       <span className="font-medium block mb-1">Junior and Senior-level Requirements</span>
-                      <p className="text-gray-400 text-sm pl-4">
+                      <p className="text-[#003366] text-sm pl-4">
                         Take all junior and senior-level requirements in the major at Morgan State University
                         (unless granted prior written permission by the Dean to take courses elsewhere).
                       </p>
                     </li>
                     <li>
                       <span className="font-medium block mb-1">GPA Requirements</span>
-                      <p className="text-gray-400 text-sm pl-4">
+                      <p className="text-[#003366] text-sm pl-4">
                         Earn a cumulative average of 2.0 or better and a major average of 2.0 or better, with no outstanding 
                         grades below "C" in the major (which includes all courses required for the major and required 
                         supporting courses).
@@ -133,11 +133,11 @@ export default function Requirements() {
               <Card className="bg-neutral-800 border-neutral-700 shadow-md">
                 <CardHeader>
                   <CardTitle className="text-[#F5A623]">Program-specific Requirements</CardTitle>
-                  <CardDescription className="text-gray-400">
+                  <CardDescription className="text-[#003366]">
                     Required courses for the Computer Science major
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="text-gray-300">
+                <CardContent className="text-[#003366]">
                   <div className="space-y-6">
                     <div>
                       <h3 className="text-lg font-medium text-[#F5A623] mb-3">Core Courses</h3>
@@ -186,11 +186,11 @@ export default function Requirements() {
               <Card className="bg-neutral-800 border-neutral-700 shadow-md">
                 <CardHeader>
                   <CardTitle className="text-[#F5A623]">Computer Science Electives</CardTitle>
-                  <CardDescription className="text-gray-400">
+                  <CardDescription className="text-[#003366]">
                     Elective courses grouped by category
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="text-gray-300">
+                <CardContent className="text-[#003366]">
                   <div className="space-y-6">
                     <div>
                       <h3 className="text-lg font-medium text-[#F5A623] mb-3">Group A Electives</h3>

@@ -15,11 +15,11 @@ export default function Internships() {
           <Card className="bg-neutral-800 border-neutral-700 shadow-md">
             <CardHeader>
               <CardTitle className="text-[#F5A623]">About Internship Opportunities</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-[#003366]">
                 The Computer Science department has collaborations with many organizations
               </CardDescription>
             </CardHeader>
-            <CardContent className="text-gray-300">
+            <CardContent className="text-[#003366]">
               <p className="mb-4">
                 The department has collaborations with Google, Facebook, JP Morgan Chase, NASA, NSA, 
                 Lockheed Martin, and many other public and private organizations to provide internships 
@@ -58,24 +58,24 @@ export default function Internships() {
                       <CardTitle className="text-[#F5A623]">Google Summer of Code</CardTitle>
                       <Badge className="bg-[#003366] text-[#F5A623]">Remote</Badge>
                     </div>
-                    <CardDescription className="text-gray-400">Software Engineering Intern</CardDescription>
+                    <CardDescription className="text-[#003366]">Software Engineering Intern</CardDescription>
                   </CardHeader>
-                  <CardContent className="text-gray-300 pt-2">
+                  <CardContent className="text-[#003366] pt-2">
                     <div className="space-y-4">
                       <p>
                         Build open source projects as part of this global program focused on 
                         bringing student developers into open source development.
                       </p>
                       <div className="flex flex-wrap gap-2 text-sm">
-                        <div className="flex items-center text-gray-400">
+                        <div className="flex items-center text-[#003366]">
                           <BuildingIcon className="mr-1 h-4 w-4" />
                           <span>Google</span>
                         </div>
-                        <div className="flex items-center text-gray-400">
+                        <div className="flex items-center text-[#003366]">
                           <ClockIcon className="mr-1 h-4 w-4" />
                           <span>Full-time</span>
                         </div>
-                        <div className="flex items-center text-gray-400">
+                        <div className="flex items-center text-[#003366]">
                           <CalendarIcon className="mr-1 h-4 w-4" />
                           <span>Summer 2025</span>
                         </div>
@@ -93,24 +93,24 @@ export default function Internships() {
                       <CardTitle className="text-[#F5A623]">NASA Internship Program</CardTitle>
                       <Badge className="bg-[#003366] text-[#F5A623]">Hybrid</Badge>
                     </div>
-                    <CardDescription className="text-gray-400">Data Science Intern</CardDescription>
+                    <CardDescription className="text-[#003366]">Data Science Intern</CardDescription>
                   </CardHeader>
-                  <CardContent className="text-gray-300 pt-2">
+                  <CardContent className="text-[#003366] pt-2">
                     <div className="space-y-4">
                       <p>
                         Work with NASA scientists and engineers on projects involving machine learning, 
                         data visualization, and analysis of space mission data.
                       </p>
                       <div className="flex flex-wrap gap-2 text-sm">
-                        <div className="flex items-center text-gray-400">
+                        <div className="flex items-center text-[#003366]">
                           <BuildingIcon className="mr-1 h-4 w-4" />
                           <span>NASA</span>
                         </div>
-                        <div className="flex items-center text-gray-400">
+                        <div className="flex items-center text-[#003366]">
                           <MapPinIcon className="mr-1 h-4 w-4" />
                           <span>Goddard Space Flight Center</span>
                         </div>
-                        <div className="flex items-center text-gray-400">
+                        <div className="flex items-center text-[#003366]">
                           <CalendarIcon className="mr-1 h-4 w-4" />
                           <span>Fall 2024</span>
                         </div>
@@ -128,24 +128,24 @@ export default function Internships() {
                       <CardTitle className="text-[#F5A623]">JP Morgan Chase Technology Program</CardTitle>
                       <Badge className="bg-[#003366] text-[#F5A623]">On-site</Badge>
                     </div>
-                    <CardDescription className="text-gray-400">Software Development Intern</CardDescription>
+                    <CardDescription className="text-[#003366]">Software Development Intern</CardDescription>
                   </CardHeader>
-                  <CardContent className="text-gray-300 pt-2">
+                  <CardContent className="text-[#003366] pt-2">
                     <div className="space-y-4">
                       <p>
                         Join the global technology team to develop innovative solutions for financial 
                         services using cutting-edge technologies.
                       </p>
                       <div className="flex flex-wrap gap-2 text-sm">
-                        <div className="flex items-center text-gray-400">
+                        <div className="flex items-center text-[#003366]">
                           <BuildingIcon className="mr-1 h-4 w-4" />
                           <span>JP Morgan Chase</span>
                         </div>
-                        <div className="flex items-center text-gray-400">
+                        <div className="flex items-center text-[#003366]">
                           <MapPinIcon className="mr-1 h-4 w-4" />
                           <span>New York, NY</span>
                         </div>
-                        <div className="flex items-center text-gray-400">
+                        <div className="flex items-center text-[#003366]">
                           <CalendarIcon className="mr-1 h-4 w-4" />
                           <span>Summer 2025</span>
                         </div>
@@ -163,24 +163,24 @@ export default function Internships() {
                       <CardTitle className="text-[#F5A623]">NSA CACI Program</CardTitle>
                       <Badge className="bg-[#003366] text-[#F5A623]">On-site</Badge>
                     </div>
-                    <CardDescription className="text-gray-400">Cybersecurity Intern</CardDescription>
+                    <CardDescription className="text-[#003366]">Cybersecurity Intern</CardDescription>
                   </CardHeader>
-                  <CardContent className="text-gray-300 pt-2">
+                  <CardContent className="text-[#003366] pt-2">
                     <div className="space-y-4">
                       <p>
                         Work on national security projects focusing on cybersecurity, 
                         cryptography, and secure systems development.
                       </p>
                       <div className="flex flex-wrap gap-2 text-sm">
-                        <div className="flex items-center text-gray-400">
+                        <div className="flex items-center text-[#003366]">
                           <BuildingIcon className="mr-1 h-4 w-4" />
                           <span>National Security Agency</span>
                         </div>
-                        <div className="flex items-center text-gray-400">
+                        <div className="flex items-center text-[#003366]">
                           <MapPinIcon className="mr-1 h-4 w-4" />
                           <span>Fort Meade, MD</span>
                         </div>
-                        <div className="flex items-center text-gray-400">
+                        <div className="flex items-center text-[#003366]">
                           <CalendarIcon className="mr-1 h-4 w-4" />
                           <span>Spring 2025</span>
                         </div>
@@ -198,7 +198,7 @@ export default function Internships() {
               <Card className="bg-neutral-800 border-neutral-700 shadow-md">
                 <CardHeader>
                   <CardTitle className="text-[#F5A623]">Upcoming Application Deadlines</CardTitle>
-                  <CardDescription className="text-gray-400">
+                  <CardDescription className="text-[#003366]">
                     Don't miss these important dates for summer 2025 internships
                   </CardDescription>
                 </CardHeader>
@@ -209,9 +209,9 @@ export default function Internships() {
                         <span className="font-medium text-[#F5A623]">Meta University Program</span>
                         <Badge className="bg-red-900 text-red-100">2 days left</Badge>
                       </div>
-                      <p className="text-gray-300 mb-2">Engineering internship for underrepresented students in tech</p>
+                      <p className="text-[#003366] mb-2">Engineering internship for underrepresented students in tech</p>
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">Deadline: April 6, 2025</span>
+                        <span className="text-[#003366]">Deadline: April 6, 2025</span>
                         <Button variant="link" className="text-[#F5A623] p-0 h-auto">Apply Now</Button>
                       </div>
                     </li>
@@ -221,9 +221,9 @@ export default function Internships() {
                         <span className="font-medium text-[#F5A623]">Microsoft Explore</span>
                         <Badge className="bg-yellow-900 text-yellow-100">1 week left</Badge>
                       </div>
-                      <p className="text-gray-300 mb-2">12-week summer internship for first and second-year students</p>
+                      <p className="text-[#003366] mb-2">12-week summer internship for first and second-year students</p>
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">Deadline: April 11, 2025</span>
+                        <span className="text-[#003366]">Deadline: April 11, 2025</span>
                         <Button variant="link" className="text-[#F5A623] p-0 h-auto">Apply Now</Button>
                       </div>
                     </li>
@@ -233,9 +233,9 @@ export default function Internships() {
                         <span className="font-medium text-[#F5A623]">Amazon Future Engineer</span>
                         <Badge className="bg-green-900 text-green-100">2 weeks left</Badge>
                       </div>
-                      <p className="text-gray-300 mb-2">Software development internship with focus on AWS</p>
+                      <p className="text-[#003366] mb-2">Software development internship with focus on AWS</p>
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">Deadline: April 18, 2025</span>
+                        <span className="text-[#003366]">Deadline: April 18, 2025</span>
                         <Button variant="link" className="text-[#F5A623] p-0 h-auto">Apply Now</Button>
                       </div>
                     </li>
@@ -245,9 +245,9 @@ export default function Internships() {
                         <span className="font-medium text-[#F5A623]">IBM Accelerate</span>
                         <Badge className="bg-blue-900 text-blue-100">1 month left</Badge>
                       </div>
-                      <p className="text-gray-300 mb-2">Software engineering internship focused on AI and quantum computing</p>
+                      <p className="text-[#003366] mb-2">Software engineering internship focused on AI and quantum computing</p>
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">Deadline: May 5, 2025</span>
+                        <span className="text-[#003366]">Deadline: May 5, 2025</span>
                         <Button variant="link" className="text-[#F5A623] p-0 h-auto">Apply Now</Button>
                       </div>
                     </li>
@@ -260,7 +260,7 @@ export default function Internships() {
               <Card className="bg-neutral-800 border-neutral-700 shadow-md">
                 <CardHeader>
                   <CardTitle className="text-[#F5A623]">Success Stories</CardTitle>
-                  <CardDescription className="text-gray-400">
+                  <CardDescription className="text-[#003366]">
                     Morgan State Computer Science students who completed prestigious internships
                   </CardDescription>
                 </CardHeader>
@@ -273,8 +273,8 @@ export default function Internships() {
                         </div>
                         <div>
                           <h3 className="text-lg font-medium text-[#F5A623] mb-1">James Davis</h3>
-                          <p className="text-sm text-gray-400 mb-3">Class of 2023</p>
-                          <p className="text-gray-300 mb-2">
+                          <p className="text-sm text-[#003366] mb-3">Class of 2023</p>
+                          <p className="text-[#003366] mb-2">
                             Interned at Google as a Software Engineering Intern during Summer 2022,
                             working on Google Cloud Platform services.
                           </p>
@@ -290,8 +290,8 @@ export default function Internships() {
                         </div>
                         <div>
                           <h3 className="text-lg font-medium text-[#F5A623] mb-1">Kimberly Williams</h3>
-                          <p className="text-sm text-gray-400 mb-3">Class of 2024</p>
-                          <p className="text-gray-300 mb-2">
+                          <p className="text-sm text-[#003366] mb-3">Class of 2024</p>
+                          <p className="text-[#003366] mb-2">
                             Completed a Data Science internship at NASA Goddard Space Flight Center,
                             analyzing satellite data for climate research.
                           </p>
@@ -307,8 +307,8 @@ export default function Internships() {
                         </div>
                         <div>
                           <h3 className="text-lg font-medium text-[#F5A623] mb-1">Marcus Johnson</h3>
-                          <p className="text-sm text-gray-400 mb-3">Class of 2023</p>
-                          <p className="text-gray-300 mb-2">
+                          <p className="text-sm text-[#003366] mb-3">Class of 2023</p>
+                          <p className="text-[#003366] mb-2">
                             Interned at Microsoft as part of the Azure Cloud team, focusing on
                             infrastructure security and reliability.
                           </p>
@@ -324,8 +324,8 @@ export default function Internships() {
                         </div>
                         <div>
                           <h3 className="text-lg font-medium text-[#F5A623] mb-1">Tiffany Jones</h3>
-                          <p className="text-sm text-gray-400 mb-3">Class of 2022</p>
-                          <p className="text-gray-300 mb-2">
+                          <p className="text-sm text-[#003366] mb-3">Class of 2022</p>
+                          <p className="text-[#003366] mb-2">
                             Completed a cybersecurity internship at NSA, working on
                             encryption algorithms and security protocols.
                           </p>
@@ -341,7 +341,7 @@ export default function Internships() {
           
           <div className="mt-8 text-center">
             <h2 className="text-xl font-bold text-[#F5A623] mb-4">Need Help With Your Internship Application?</h2>
-            <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+            <p className="text-[#003366] mb-6 max-w-2xl mx-auto">
               The Computer Science department offers resume reviews, interview preparation, and application 
               assistance for students applying to internships. Contact your academic advisor for more information.
             </p>
