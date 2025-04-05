@@ -29,7 +29,7 @@ export default function Internships() {
                 For the most up-to-date information, please check out CS Twitter: <a href="https://twitter.com/Morgan_CompSci" target="_blank" rel="noopener noreferrer" className="text-[#F5A623] hover:underline">@Morgan_CompSci</a>
               </p>
               <div className="mt-6">
-                <Button className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]">
+                <Button className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]" onClick={() => window.open('https://www.morgan.edu/career-center/students/career-resources', '_blank')}>
                   <ExternalLinkIcon className="mr-2 h-4 w-4" />
                   Visit Internship Opportunities Page
                 </Button>
@@ -81,7 +81,12 @@ export default function Internships() {
                         </div>
                       </div>
                       <div className="pt-2">
-                        <Button className="w-full bg-[#003366] text-[#F5A623] hover:bg-[#004488]">Apply Now</Button>
+                        <Button 
+                          className="w-full bg-[#003366] text-[#F5A623] hover:bg-[#004488]"
+                          onClick={() => window.open('https://summerofcode.withgoogle.com/', '_blank')}
+                        >
+                          Apply Now
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -116,7 +121,12 @@ export default function Internships() {
                         </div>
                       </div>
                       <div className="pt-2">
-                        <Button className="w-full bg-[#003366] text-[#F5A623] hover:bg-[#004488]">Apply Now</Button>
+                        <Button 
+                          className="w-full bg-[#003366] text-[#F5A623] hover:bg-[#004488]"
+                          onClick={() => window.open('https://intern.nasa.gov/', '_blank')}
+                        >
+                          Apply Now
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -151,7 +161,12 @@ export default function Internships() {
                         </div>
                       </div>
                       <div className="pt-2">
-                        <Button className="w-full bg-[#003366] text-[#F5A623] hover:bg-[#004488]">Apply Now</Button>
+                        <Button 
+                          className="w-full bg-[#003366] text-[#F5A623] hover:bg-[#004488]" 
+                          onClick={() => window.open('https://careers.jpmorgan.com/us/en/students/programs', '_blank')}
+                        >
+                          Apply Now
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -186,7 +201,12 @@ export default function Internships() {
                         </div>
                       </div>
                       <div className="pt-2">
-                        <Button className="w-full bg-[#003366] text-[#F5A623] hover:bg-[#004488]">Apply Now</Button>
+                        <Button 
+                          className="w-full bg-[#003366] text-[#F5A623] hover:bg-[#004488]"
+                          onClick={() => window.open('https://www.intelligencecareers.gov/nsa/nsastudents.html', '_blank')}
+                        >
+                          Apply Now
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -212,7 +232,13 @@ export default function Internships() {
                       <p className="text-[#003366] mb-2">Engineering internship for underrepresented students in tech</p>
                       <div className="flex justify-between text-sm">
                         <span className="text-[#003366]">Deadline: April 6, 2025</span>
-                        <Button variant="link" className="text-[#F5A623] p-0 h-auto">Apply Now</Button>
+                        <Button 
+                          variant="link" 
+                          className="text-[#F5A623] p-0 h-auto"
+                          onClick={() => window.open('https://www.metacareers.com/jobs/university-program/', '_blank')}
+                        >
+                          Apply Now
+                        </Button>
                       </div>
                     </li>
                     
@@ -224,7 +250,13 @@ export default function Internships() {
                       <p className="text-[#003366] mb-2">12-week summer internship for first and second-year students</p>
                       <div className="flex justify-between text-sm">
                         <span className="text-[#003366]">Deadline: April 11, 2025</span>
-                        <Button variant="link" className="text-[#F5A623] p-0 h-auto">Apply Now</Button>
+                        <Button 
+                          variant="link" 
+                          className="text-[#F5A623] p-0 h-auto"
+                          onClick={() => window.open('https://careers.microsoft.com/students/us/en/explore-program', '_blank')}
+                        >
+                          Apply Now
+                        </Button>
                       </div>
                     </li>
                     
@@ -236,7 +268,13 @@ export default function Internships() {
                       <p className="text-[#003366] mb-2">Software development internship with focus on AWS</p>
                       <div className="flex justify-between text-sm">
                         <span className="text-[#003366]">Deadline: April 18, 2025</span>
-                        <Button variant="link" className="text-[#F5A623] p-0 h-auto">Apply Now</Button>
+                        <Button 
+                          variant="link" 
+                          className="text-[#F5A623] p-0 h-auto"
+                          onClick={() => window.open('https://www.amazonfutureengineer.com/scholarships', '_blank')}
+                        >
+                          Apply Now
+                        </Button>
                       </div>
                     </li>
                     
@@ -248,7 +286,13 @@ export default function Internships() {
                       <p className="text-[#003366] mb-2">Software engineering internship focused on AI and quantum computing</p>
                       <div className="flex justify-between text-sm">
                         <span className="text-[#003366]">Deadline: May 5, 2025</span>
-                        <Button variant="link" className="text-[#F5A623] p-0 h-auto">Apply Now</Button>
+                        <Button 
+                          variant="link" 
+                          className="text-[#F5A623] p-0 h-auto"
+                          onClick={() => window.open('https://www.ibm.com/us-en/employment/entrylevel/', '_blank')}
+                        >
+                          Apply Now
+                        </Button>
                       </div>
                     </li>
                   </ul>
@@ -345,7 +389,10 @@ export default function Internships() {
               The Computer Science department offers resume reviews, interview preparation, and application 
               assistance for students applying to internships. Contact your academic advisor for more information.
             </p>
-            <Button className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]">
+            <Button 
+              className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]"
+              onClick={() => window.open('https://www.morgan.edu/school-of-computer-mathematical-and-natural-sciences/departments/computer-science/advising', '_blank')}
+            >
               Schedule Advising Appointment
             </Button>
           </div>
