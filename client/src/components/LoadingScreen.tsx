@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 // Using a direct relative path to the assets folder in src
-import logoPath from '../assets/StudySyncAILogo.png';
+import logoPath from '../assets/msuStudySyncAILogo.png';
 
 export default function LoadingScreen() {
   const [progress, setProgress] = useState(0);
@@ -26,11 +26,11 @@ export default function LoadingScreen() {
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-neutral-900">
       <div className="flex flex-col items-center justify-center space-y-6">
         <div className="w-48 h-48 relative mb-4">
-          <img src={logoPath} alt="StudySyncAI Logo" className="w-full h-full" />
+          <img src={logoPath} alt="msuStudySyncAI Logo" className="w-full h-full" />
         </div>
         
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-[#F5A623] mb-2">StudySyncAI</h1>
+          <h1 className="text-2xl font-bold text-[#F5A623] mb-2">msuStudySyncAI</h1>
           <p className="text-gray-300 mb-4">Morgan State University CS Program Assistant</p>
         </div>
         

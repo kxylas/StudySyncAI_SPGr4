@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Moon, User } from 'lucide-react';
-import studySyncLogo from '@assets/StudySyncAILogo.png';
+import studySyncLogo from '../assets/msuStudySyncAILogo.png';
 
 interface HeaderProps {
   toggleMobileMenu: () => void;
@@ -18,7 +18,7 @@ export default function Header({ toggleMobileMenu }: HeaderProps) {
             <Link href="/" className="flex items-center">
               <img 
                 src={studySyncLogo} 
-                alt="StudySyncAI Logo" 
+                alt="msuStudySyncAI Logo" 
                 className="h-12 w-auto mr-2" 
               />
             </Link>
