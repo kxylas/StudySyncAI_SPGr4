@@ -82,7 +82,7 @@ export default function Advisors() {
                 on the Computer Science department website.
               </p>
               <div className="mt-4">
-                <Button className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]">
+                <Button className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]" onClick={() => window.open('https://www.morgan.edu/school-of-computer-mathematical-and-natural-sciences/departments/computer-science/faculty-and-staff', '_blank')}>
                   Visit Academic Advisers Page
                 </Button>
               </div>
@@ -100,11 +100,11 @@ export default function Advisors() {
                   degree progress, or career planning. Select an advisor and choose an available time slot.
                 </p>
                 <div className="flex space-x-4 mb-6">
-                  <Button className="bg-[#F5A623] text-[#003366] hover:bg-[#f6b951]">
+                  <Button className="bg-[#F5A623] text-[#003366] hover:bg-[#f6b951]" onClick={() => window.open('https://www.morgan.edu/school-of-computer-mathematical-and-natural-sciences/departments/computer-science/scheduleappointment', '_blank')}>
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     Schedule Now
                   </Button>
-                  <Button variant="outline" className="border-[#F5A623] text-[#F5A623]">
+                  <Button variant="outline" className="border-[#F5A623] text-[#F5A623]" onClick={() => window.open('https://www.morgan.edu/school-of-computer-mathematical-and-natural-sciences/departments/computer-science/faculty-and-staff', '_blank')}>
                     View All Advisors
                   </Button>
                 </div>
@@ -168,7 +168,7 @@ export default function Advisors() {
                           </div>
                           
                           <div className="mt-4">
-                            <Button variant="outline" size="sm" className="border-[#F5A623] text-[#F5A623]">
+                            <Button variant="outline" size="sm" className="border-[#F5A623] text-[#F5A623]" onClick={() => window.open('https://www.morgan.edu/school-of-computer-mathematical-and-natural-sciences/departments/computer-science/scheduleappointment', '_blank')}>
                               Schedule Meeting
                             </Button>
                           </div>
@@ -209,7 +209,7 @@ export default function Advisors() {
                           </div>
                           
                           <div className="mt-4">
-                            <Button variant="outline" size="sm" className="border-[#F5A623] text-[#F5A623]">
+                            <Button variant="outline" size="sm" className="border-[#F5A623] text-[#F5A623]" onClick={() => window.open(`mailto:${staff.email}`)}>
                               Contact
                             </Button>
                           </div>
@@ -266,7 +266,7 @@ export default function Advisors() {
                   <li>• Time Conflict Request Form</li>
                 </ul>
                 <div className="mt-4">
-                  <Button className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]">
+                  <Button className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]" onClick={() => window.open('https://www.morgan.edu/registrar', '_blank')}>
                     Visit Registrar Website
                   </Button>
                 </div>
