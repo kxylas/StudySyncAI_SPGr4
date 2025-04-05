@@ -6,7 +6,10 @@ import type { ChatCompletionMessageParam } from "openai/resources/chat/completio
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
 
 // Hardcoded program data for fallback
-const programData = `About the Computer Science Program:
+const programData = `About Morgan State University:
+Morgan State University is a historically Black research university (HBCU) located in Baltimore, Maryland. Founded in 1867 as the Centenary Biblical Institute, it was initially established to train young men for ministry. The institution was renamed Morgan College in 1890 in honor of Reverend Lyttleton Morgan, the first chairman of its Board of Trustees. Morgan State awarded its first baccalaureate degree in 1895. It became a public institution in 1939 when the state of Maryland purchased it to provide greater educational opportunities for Black citizens. In 1975, Morgan State achieved university status and was authorized to offer doctoral programs. Notable alumni include Mo'Nique (actress), Earl G. Graves Sr. (founder of Black Enterprise magazine), and Kweisi Mfume (former President of the NAACP and U.S. Congressman).
+
+About the Computer Science Program:
 The Computer Science Program provides students with fundamental computer science knowledge and training, and prepares them to apply their knowledge and training to produce solutions to specific problems. Students learn to define a problem clearly, determine its feasibility and choose an appropriate solution strategy.
 
 Primary Objective of the Computer Science Curriculum:
@@ -88,6 +91,7 @@ function parseProgramData(data: string): Record<string, string> {
   
   // Define major sections to look for
   const sectionHeaders = [
+    "About Morgan State University",
     "About the Computer Science Program",
     "Primary Objective of the Computer Science Curriculum",
     "Bachelor of Computer Science degree students learning outcomes",
@@ -145,6 +149,10 @@ Please ask about any specific area like course requirements, faculty, internship
   
   // Check for broad topics first
   const topicMatches = {
+    university: [
+      "university", "morgan state", "morgan", "hbcu", "history", "founded", "school", "location", 
+      "baltimore", "maryland", "when was", "where is", "alumni", "notable"
+    ],
     program: [
       "program", "degree", "bachelor", "bs", "b.s.", "computer science", "cs", "major", 
       "what's the program", "tell me about", "overview"
@@ -195,12 +203,36 @@ I'm here to help you with information about:
 How can I assist you with the MSU Computer Science program today?`);
   }
   
+  // University history and information
+  if (matchesTopic(topicMatches.university) || 
+      prompt.includes("tell me about morgan") ||
+      prompt.includes("morgan state history") ||
+      prompt.includes("where is morgan") ||
+      prompt.includes("when was morgan founded") ||
+      prompt.includes("who are famous alumni")) {
+    return formatResponse(`Morgan State University is a historically Black research university (HBCU) located in Baltimore, Maryland. Here are key facts about its history and legacy:
+
+Founded: 1867 as the Centenary Biblical Institute by the Baltimore Conference of the Methodist Episcopal Church
+Original Purpose: Initially established to train young men for ministry
+Renaming: Renamed Morgan College in 1890 in honor of Reverend Lyttleton Morgan, first chairman of its Board of Trustees
+First Degree: Awarded its first baccalaureate degree in 1895
+Public Institution: Became a public institution in 1939 when the state of Maryland purchased it
+University Status: Achieved university status in 1975 and was authorized to offer doctoral programs
+
+Morgan State University is recognized as Maryland's Preeminent Public Urban Research University and has produced many notable alumni including:
+- Mo'Nique (Academy Award-winning actress)
+- Earl G. Graves Sr. (founder of Black Enterprise magazine)
+- Kweisi Mfume (former President of the NAACP and U.S. Congressman)
+- And many other leaders in arts, politics, education, and business
+
+The university continues to be a vital institution serving a diverse student body while maintaining its rich heritage as an HBCU.`);
+  }
+  
   // Program overview questions
   if ((matchesTopic(topicMatches.program) && !matchesTopic(topicMatches.requirements)) || 
       prompt.includes("what is the program about") || 
       prompt.includes("tell me about the program") ||
       prompt.includes("what's cs program") ||
-      prompt.includes("about morgan") ||
       (prompt.length < 15 && (prompt.includes("about") || prompt.includes("info")))) {
     return formatResponse(`The Computer Science Program at Morgan State University provides students with fundamental computer science knowledge and training. The program has two primary objectives:
 
