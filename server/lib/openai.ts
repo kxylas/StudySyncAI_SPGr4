@@ -450,34 +450,32 @@ This structure ensures students receive a well-rounded education with both depth
   
   // Check for graduate program questions
   if (matchesTopic(topicMatches.graduate) || prompt.includes("masters") || prompt.includes("phd program")) {
-    return formatResponse(`Morgan State University offers several graduate programs in Computer Science:
+    return formatResponse(`As a CS student, Morgan State University offers several graduate programs that could be of interest to you:
 
-MS in Advanced Computing:
-- A specialized master's program focused on cutting-edge computing research
-- Specializations in areas such as AI, machine learning, and quantum computing
-- Typically completed in 2 years (30-36 credit hours)
-- Requires completion of core courses, electives, and a thesis or capstone project
+**In the Department of Computer Science:**
 
-MS in Bioinformatics:
-- An interdisciplinary program combining computer science with biological research
-- Focuses on computational analysis of biological data
-- Prepares students for careers in biotech, pharmaceuticals, and research institutions
-- Includes coursework in algorithms, databases, and biological data analysis
+* **Master of Science (M.S.) in Advanced Computing (Online/Onsite):** This program focuses on emerging interdisciplinary areas within computer science, including **Cybersecurity, Artificial Intelligence, Data Science, and Cloud Computing.** It's offered both online and in person, with options for completing the degree through coursework only, or with a project or thesis.
+  Learn more: https://www.morgan.edu/advanced-computing-ms
 
-PhD in Computer Science:
-- Research-focused doctoral program with specializations in multiple areas
-- Typically requires 4-5 years to complete beyond the master's degree
-- Involves completion of coursework, qualifying exams, and a dissertation
-- Students work closely with faculty mentors on original research projects
+* **Doctor of Philosophy (Ph.D.) in Advanced and Equitable Computing:** This doctoral program delves into advanced areas of computer science research, including **Quantum Cryptography, Algorithms, Cybersecurity, AI/ML, and Data Analytics.** It emphasizes responsible computing innovations and can be taken on campus or fully online/remote.
+  Learn more: https://www.morgan.edu/advanced-and-equitable-computing-phd
 
-All graduate programs provide:
-- Research opportunities with experienced faculty
-- Access to modern computing facilities and laboratories
-- Potential funding through teaching and research assistantships
-- Professional development and networking opportunities
-- Preparation for careers in industry, research, and academia
+* **Master of Science (M.S.) in Bioinformatics:** This program provides coursework in computational biology methods, programming, and biostatistics. It offers flexibility through electives to specialize in life sciences and computer sciences, preparing graduates for the growing field of bioinformatics.
 
-For detailed application requirements and deadlines, prospective students should visit the official Morgan State University graduate admissions page.`);
+**Other potentially relevant graduate programs:**
+
+* **Ph.D. in Interdisciplinary Engineering, Information, and Computational Sciences:** This program, while broader than just computer science, offers opportunities for CS students interested in interdisciplinary research.
+
+* **Master of Science (M.S.) in Data Analytics and Visualization:** Offered through the Department of Mathematics, this program could be of interest if you want to focus specifically on the data science aspects of computer science.
+
+* **Master of Science (M.S.) in Electrical Engineering:** Depending on your interests within computer science (like computer architecture or embedded systems), this program in the School of Engineering might have relevant specializations.
+
+For a complete list of graduate programs and detailed information:
+* Department of Computer Science Programs: https://www.morgan.edu/computer-science/degrees-and-programs
+* School of Graduate Studies: https://www.morgan.edu/academics/graduate-studies/graduate-programs
+* Electrical and Computer Engineering: https://www.morgan.edu/electrical-and-computer-engineering/graduate-programs
+
+All graduate programs provide research opportunities with experienced faculty, access to modern computing facilities, potential funding through assistantships, and preparation for careers in industry, research, and academia.`);
   }
   
   // Check for faculty questions
@@ -633,17 +631,48 @@ The admission process evaluates your academic record, particularly your performa
 For further assistance, please contact the Morgan Computer Science Department directly.`);
   }
   
+  // Check for specific questions about graduate programs based on interests
+  if ((prompt.includes("graduate") || prompt.includes("grad")) && 
+      (prompt.includes("interest") || prompt.includes("recommend") || prompt.includes("for me") || prompt.includes("which") || prompt.includes("what") || prompt.includes("best") || prompt.includes("fit"))) {
+    return formatResponse(`As a Computer Science student at Morgan State University, there are several graduate programs that might match your interests:
+
+**In the Department of Computer Science:**
+
+* **Master of Science (M.S.) in Advanced Computing (Online/Onsite):** This program would be an excellent fit if you're interested in **Cybersecurity, Artificial Intelligence, Data Science, or Cloud Computing**. It offers flexibility with online and in-person options, as well as coursework-only, project, or thesis tracks.
+  Learn more: https://www.morgan.edu/advanced-computing-ms
+
+* **Doctor of Philosophy (Ph.D.) in Advanced and Equitable Computing:** If you're passionate about research in **Quantum Cryptography, Algorithms, Cybersecurity, AI/ML, or Data Analytics**, this doctoral program would be an excellent choice. It emphasizes responsible computing innovations and can be completed on campus or remotely.
+  Learn more: https://www.morgan.edu/advanced-and-equitable-computing-phd
+
+* **Master of Science (M.S.) in Bioinformatics:** If you're interested in the intersection of computing and biology, this program provides specialized training in computational biology methods, programming, and biostatistics.
+
+**Other options based on specific interests:**
+
+* For interdisciplinary interests: **Ph.D. in Interdisciplinary Engineering, Information, and Computational Sciences**
+* For data science focus: **M.S. in Data Analytics and Visualization** (Department of Mathematics)
+* For hardware and systems focus: **M.S. in Electrical Engineering**
+
+To explore all available programs and find the best fit for your specific interests:
+* Browse all CS programs: https://www.morgan.edu/computer-science/degrees-and-programs
+* Explore all graduate programs: https://www.morgan.edu/academics/graduate-studies/graduate-programs
+* Contact program directors to discuss your specific research interests and career goals
+
+What specific areas of computer science are you most interested in? I can provide more targeted recommendations based on your areas of focus.`);
+  }
+
   // Check for simple greetings or introductions
   if (prompt === "hello" || prompt === "hi" || prompt === "hey" || prompt.includes("how are you")) {
     return formatResponse(`Hello! I'm msuStudySyncAI, your Morgan State University Computer Science program assistant. I'm here to provide information about:
 
 - Undergraduate and graduate program details
+- MS in Advanced Computing (online/onsite) 
+- MS in Bioinformatics
+- PhD in Advanced and Equitable Computing
 - Program overview and objectives
 - Course requirements and electives
 - Graduation requirements
 - Internship opportunities
 - Faculty and advisors
-- MS and PhD programs
 - Research areas
 
 How can I help you with information about the CS program today?`);
@@ -660,8 +689,8 @@ How can I help you with information about the CS program today?`);
 I can provide you with information about the Morgan State University Computer Science program including:
 
 - Undergraduate and graduate program details
-- MS in Advanced Computing and MS in Bioinformatics
-- PhD in Computer Science program
+- MS in Advanced Computing (online/onsite) and MS in Bioinformatics
+- PhD in Advanced and Equitable Computing
 - Program overview and objectives
 - Curriculum structure and course requirements
 - Elective options in different focus areas
