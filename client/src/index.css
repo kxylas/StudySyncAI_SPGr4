@@ -68,9 +68,10 @@
   padding: 0.5rem;
   position: relative;
   z-index: 50;
-  background-color: #333;
+  background-color: #222222;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid #003366;
 }
 
 .calendar-nav {
@@ -105,7 +106,8 @@
 }
 
 .rdp-day_today {
-  color: #ff0000 !important;
+  color: #F5A623 !important;
+  background-color: rgba(0, 51, 102, 0.7) !important;
   font-weight: bold !important;
 }
 
@@ -127,7 +129,8 @@
 }
 
 .mobile-calendar-container .rdp-day_today {
-  color: #ff0000 !important;
+  color: #F5A623 !important;
+  background-color: rgba(0, 51, 102, 0.7) !important;
   font-weight: bold !important;
 }
 
