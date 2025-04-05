@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Component, ErrorInfo, ReactNode } from "react";
 import { Switch, Route } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -17,6 +17,55 @@ import Internships from "@/pages/Internships";
 import StudyGroups from "@/pages/StudyGroups";
 import CreateStudyGroup from "@/pages/CreateStudyGroup";
 import Advisors from "@/pages/Advisors";
+
+// Error boundary to catch and handle React errors
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    console.error("React Error Boundary caught an error:", error, errorInfo);
+  }
+
+  render(): ReactNode {
+    if (this.state.hasError) {
+      // You can render any custom fallback UI
+      return (
+        <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-[#222222] text-gray-200">
+          <div className="max-w-md p-6 rounded-lg bg-[#333333] shadow-lg">
+            <h2 className="text-xl font-semibold text-[#F5A623] mb-4">Something went wrong</h2>
+            <p className="mb-4">
+              The application encountered an error. You can try refreshing the page or contact support.
+            </p>
+            <button
+              onClick={() => this.setState({ hasError: false, error: null })}
+              className="px-4 py-2 bg-[#003366] text-white rounded hover:bg-[#004488] transition-colors"
+            >
+              Try again
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 function Router() {
   return (
@@ -49,18 +98,20 @@ function App() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ChatProvider>
-        {isLoading ? (
-          <LoadingScreen />
-        ) : (
-          <>
-            <Router />
-            <Toaster />
-          </>
-        )}
-      </ChatProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ChatProvider>
+          {isLoading ? (
+            <LoadingScreen />
+          ) : (
+            <>
+              <Router />
+              <Toaster />
+            </>
+          )}
+        </ChatProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 
