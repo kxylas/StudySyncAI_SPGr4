@@ -563,32 +563,37 @@ The department maintains small class sizes to ensure personalized attention and 
   if (matchesTopic(topicMatches.graduate) || 
       prompt.includes("masters program") || 
       prompt.includes("phd program") ||
+      prompt.includes("bioinformatics") ||
+      prompt.includes("advanced computing") ||
       prompt.includes("graduate programs") ||
       prompt.includes("advanced degree") ||
       prompt.includes("after bachelor")) {
-    return formatResponse(`Morgan State University offers several graduate programs in Computer Science:
+    return formatResponse(`Morgan State University offers the following graduate programs in Computer Science:
 
-MS in Advanced Computing:
-- Cutting-edge curriculum focused on emerging technologies
-- Research opportunities in AI, machine learning, quantum computing, and cybersecurity
-- Fellowship and assistantship opportunities available
-- Prepares students for technology leadership positions and doctoral studies
+1. Master of Science (M.S.) in Advanced Computing (Online/Onsite):
+   - Focus areas: Cybersecurity, Artificial Intelligence, Data Science, Cloud Computing
+   - Completion options: Coursework only, project track, or thesis track
+   - Available both online and in-person
+   - Prepares students for technology leadership positions and doctoral studies
 
-MS in Bioinformatics:
-- Interdisciplinary program combining computer science with biological sciences
-- Focus on computational analysis of biological data
-- Research in genomics, proteomics, and biological data mining
-- Collaboration opportunities with healthcare and biotechnology partners
+2. Doctor of Philosophy (Ph.D.) in Advanced Computing:
+   - Research areas: Quantum Cryptography, Algorithms, Cybersecurity, AI/ML, Data Analytics
+   - Emphasizes responsible computing innovations
+   - Available on campus or fully online/remote
+   - Development of novel solutions to complex computing problems
 
-PhD in Computer Science:
-- Rigorous research-oriented program
-- Development of novel solutions to complex computing problems
-- Dissertation focused on original contributions to computer science
-- Faculty mentorship throughout the research process
+3. Master of Science (M.S.) in Bioinformatics:
+   - Coursework in computational biology methods, programming, and biostatistics
+   - Flexible electives to specialize in life sciences and computer sciences
+   - Research in genomics, proteomics, and biological data mining
+   - Collaboration opportunities with healthcare and biotechnology partners
 
-The department has received grants from organizations like NSA, IBM, and Microsoft to support graduate students. In 2020, the department received an NSA grant providing full scholarships (tuition and stipends) for two Advanced Computing graduate students. Additionally, an MS student in the Advanced Computing Program received the prestigious IBM Masters Fellowship award with a $10,000 monetary award for research in quantum cryptography and cybersecurity.
+Other related graduate programs at Morgan State:
+- Ph.D. in Interdisciplinary Engineering, Information, and Computational Sciences
+- Master of Science (M.S.) in Data Analytics and Visualization (Mathematics Department)
+- Master of Science (M.S.) in Electrical Engineering
 
-For detailed application requirements and deadlines, prospective students should visit the official Morgan State University graduate admissions page.`);
+The department has received grants from organizations like NSA, IBM, and Microsoft to support graduate students. For detailed application requirements and deadlines, prospective students should visit the official Morgan State University Department of Computer Science website.`);
   }
   
   // If no patterns match, provide a helpful general response
@@ -730,12 +735,16 @@ function formatResponse(text: string): string {
   // If the response is very long (over 1500 characters) and doesn't appear to be 
   // specifically asking for details (no keywords 'detail', 'explain', 'tell me more'),
   // try to extract just the key points or summarize
-  if (cleaned.length > 1500) {
+  if (cleaned.length > 1500 && 
+      typeof prompt === 'string' && 
+      !prompt.includes('detail') && 
+      !prompt.includes('explain') && 
+      !prompt.includes('tell me more')) {
     const paragraphs = cleaned.split("\n\n");
     // Take first paragraph and any bullet points
     const firstPara = paragraphs[0];
     const bulletPoints = paragraphs
-      .filter(p => p.match(/^[-•*]\s/m))
+      .filter(p => typeof p === 'string' && /^[-•*]\s/m.test(p))
       .slice(0, 5)
       .join("\n\n");
     
