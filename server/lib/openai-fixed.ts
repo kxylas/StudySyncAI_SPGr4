@@ -567,6 +567,10 @@ The department maintains small class sizes to ensure personalized attention and 
       prompt.includes("advanced computing") ||
       prompt.includes("graduate programs") ||
       prompt.includes("advanced degree") ||
+      (prompt.includes("does") && prompt.includes("cs") && prompt.includes("graduate")) ||
+      (prompt.includes("does") && prompt.includes("computer science") && prompt.includes("graduate")) ||
+      (prompt.includes("cs") && prompt.includes("department") && prompt.includes("graduate")) ||
+      (prompt.includes("cs") && prompt.includes("offer") && prompt.includes("graduate")) ||
       prompt.includes("after bachelor")) {
     return formatResponse(`Morgan State University offers the following graduate programs in Computer Science:
 
