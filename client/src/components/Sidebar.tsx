@@ -92,6 +92,13 @@ export default function Sidebar() {
                 <span className="material-icons mr-3 text-sm">contact_support</span>
                 <span>Advisors</span>
               </Link>
+              <Link 
+                href="/study-schedule"
+                className="flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-neutral-100"
+              >
+                <span className="material-icons mr-3 text-sm">schedule</span>
+                <span>Study Schedule</span>
+              </Link>
             </div>
           </div>
         </nav>
