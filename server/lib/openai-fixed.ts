@@ -566,12 +566,17 @@ The department maintains small class sizes to ensure personalized attention and 
       prompt.includes("bioinformatics") ||
       prompt.includes("advanced computing") ||
       prompt.includes("graduate programs") ||
+      (prompt.includes("does") && prompt.includes("cs") && prompt.includes("department") && prompt.includes("offer") && prompt.includes("graduate")) ||
+      (prompt.includes("does") && prompt.includes("cs") && prompt.includes("department") && prompt.includes("graduate")) ||
+      (prompt.includes("does") && prompt.includes("computer science") && prompt.includes("department") && prompt.includes("graduate")) ||
       prompt.includes("advanced degree") ||
       (prompt.includes("does") && prompt.includes("cs") && prompt.includes("graduate")) ||
       (prompt.includes("does") && prompt.includes("computer science") && prompt.includes("graduate")) ||
       (prompt.includes("cs") && prompt.includes("department") && prompt.includes("graduate")) ||
       (prompt.includes("cs") && prompt.includes("offer") && prompt.includes("graduate")) ||
       prompt.includes("after bachelor")) {
+      
+      console.log("Graduate program pattern matched for: " + prompt);
     return formatResponse(`Morgan State University offers the following graduate programs in Computer Science:
 
 1. Master of Science (M.S.) in Advanced Computing (Online/Onsite):
@@ -763,4 +768,4 @@ function formatResponse(text: string): string {
   return cleaned;
 }
 
-export { queryOpenAI };
+export { queryOpenAI, generateLocalResponse };

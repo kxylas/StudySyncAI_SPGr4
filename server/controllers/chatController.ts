@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { queryOpenAI } from "../lib/openai";
+import { queryOpenAI, generateLocalResponse } from "../lib/openai";
 import { nanoid } from "nanoid";
 import { Message } from "@shared/schema";
 
@@ -54,13 +54,13 @@ export const sendMessage = async (req: Request, res: Response) => {
                           errorMessage.includes('429');
       
       if (isQuotaError) {
-        // Use our local fallback completely
+        console.log("Using direct local fallback due to quota error");
+        // Use our local fallback mechanism directly instead of through queryOpenAI
         try {
-          // We need to manually invoke the fallback here
-          const fallbackResponse = await queryOpenAI(message, formattedHistory);
+          const fallbackResponse = generateLocalResponse(message, formattedHistory);
           return res.json({ message: fallbackResponse });
         } catch (fallbackError) {
-          console.error("Even fallback failed:", fallbackError);
+          console.error("Local fallback failed:", fallbackError);
           // If even that fails, provide a generic response
           return res.json({ 
             message: "I apologize for the technical difficulties. I can still help with information about Morgan State's Computer Science program. Please ask a specific question about courses, requirements, faculty, or career opportunities." 
