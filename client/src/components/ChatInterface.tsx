@@ -50,7 +50,7 @@ export default function ChatInterface() {
               <div className="ml-3">
                 <div className="bg-[#003366] p-3 rounded-lg rounded-tl-none shadow-sm max-w-2xl">
                   <p className="text-sm text-[#F5A623] font-medium">
-                    Hello! I'm StudySyncAI, your Morgan State University Computer Science program assistant. I can help with program information, course details, requirements, and more. What would you like to know about today?
+                    Hello! I'm msuStudySyncAI, your Morgan State University Computer Science program assistant. I can help with program information, course details, requirements, and more. What would you like to know about today?
                   </p>
                 </div>
                 <span className="text-xs text-neutral-400 mt-1 inline-block">{formatTime(new Date())}</span>

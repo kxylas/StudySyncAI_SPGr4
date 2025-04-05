@@ -27,7 +27,7 @@ Software Engineering, Cybersecurity, Artificial Intelligence, Quantum Cryptograp
 // We're skipping the file loading and going straight to using the embedded data
 
 const systemPrompt = `
-You are StudySyncAI, an intelligent assistant designed to help Morgan State University computer science students.
+You are msuStudySyncAI, an intelligent assistant designed to help Morgan State University computer science students.
 You provide accurate information about the Computer Science program, course requirements, and academic support.
 You are friendly, helpful, and concise in your responses.
 
@@ -559,7 +559,7 @@ For further assistance, please contact the Morgan Computer Science Department di
   
   // Check for simple greetings or introductions
   if (prompt === "hello" || prompt === "hi" || prompt === "hey" || prompt.includes("how are you")) {
-    return formatResponse(`Hello! I'm StudySyncAI, your Morgan State University Computer Science program assistant. I'm here to provide information about:
+    return formatResponse(`Hello! I'm msuStudySyncAI, your Morgan State University Computer Science program assistant. I'm here to provide information about:
 
 - Program overview and objectives
 - Course requirements and electives

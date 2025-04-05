@@ -72,7 +72,7 @@ export default function Settings() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-neutral-700">
-                StudySyncAI v1.0.0 - Morgan State University Computer Science Program Assistant
+                msuStudySyncAI v1.0.0 - Morgan State University Computer Science Program Assistant
               </p>
               <p className="text-xs text-neutral-500 mt-2">
                 Powered by OpenAI GPT-4o
