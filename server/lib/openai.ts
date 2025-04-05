@@ -40,11 +40,13 @@ These graduate programs prepare students for high-level research and professiona
 const systemPrompt = `
 You are msuStudySyncAI, an intelligent assistant designed to help Morgan State University computer science students.
 You provide accurate information about the Computer Science program, course requirements, and academic support.
-You are friendly, helpful, and concise in your responses.
+You are friendly, helpful, and extremely concise in your responses.
 
 Here is the information about Morgan State University's Computer Science program:
 
 ${programData}
+
+IMPORTANT: Keep your responses direct and brief. Provide only essential information in 1-3 sentences or short bullet points unless the user specifically asks for detailed information.
 
 Always be truthful and helpful. If a question is outside the scope of the CS program at Morgan State, politely indicate that, but try to be as helpful as possible with the information you have.
 Format your responses in a clear, readable way. Use bullet points and lists when appropriate.
@@ -75,8 +77,10 @@ async function queryOpenAI(
       const response = await openai.chat.completions.create({
         model: "gpt-4o",
         messages: typedMessages,
-        temperature: 0.7,
-        max_tokens: 1000,
+        temperature: 0.5, // Lower temperature for more predictable, focused responses
+        max_tokens: 600,  // Reduced token limit to encourage brevity
+        frequency_penalty: 0.5, // Discourage repetition
+        presence_penalty: 0.2,  // Slightly discourage mentioning already-mentioned concepts
       });
 
       return response.choices[0].message.content || "I'm sorry, I couldn't generate a response.";
@@ -704,7 +708,29 @@ function getContextFromHistory(chatHistory: { role: string; content: string }[])
 // Helper to format response text
 function formatResponse(text: string): string {
   // Clean up the text, ensure paragraphs are separated properly
-  return text.replace(/\n{3,}/g, "\n\n").trim();
+  const cleaned = text.replace(/\n{3,}/g, "\n\n").trim();
+  
+  // If the response is very long (over 1500 characters) and doesn't appear to be 
+  // specifically asking for details (no keywords 'detail', 'explain', 'tell me more'),
+  // try to extract just the key points or summarize
+  if (cleaned.length > 1500) {
+    const paragraphs = cleaned.split("\n\n");
+    // Take first paragraph and any bullet points
+    const firstPara = paragraphs[0];
+    const bulletPoints = paragraphs
+      .filter(p => p.match(/^[-•*]\s/m))
+      .slice(0, 5)
+      .join("\n\n");
+    
+    if (bulletPoints) {
+      return `${firstPara}\n\n${bulletPoints}\n\n(Ask for more details if needed)`;
+    } else {
+      // Just return first 2 paragraphs with a note
+      return `${paragraphs.slice(0, 2).join("\n\n")}\n\n(Ask for more details if needed)`;
+    }
+  }
+  
+  return cleaned;
 }
 
 export { queryOpenAI };
