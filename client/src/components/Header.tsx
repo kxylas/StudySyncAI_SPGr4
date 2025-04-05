@@ -58,13 +58,15 @@ export default function Header({ toggleMobileMenu }: HeaderProps) {
             >
               <Moon className="h-5 w-5" />
             </Button>
-            <Button 
-              variant="secondary"
-              size="icon"
-              className="rounded-full h-8 w-8 flex items-center justify-center"
-            >
-              <User className="h-5 w-5" />
-            </Button>
+            <Link href="/profile">
+              <Button 
+                variant="secondary"
+                size="icon"
+                className="rounded-full h-8 w-8 flex items-center justify-center"
+              >
+                <User className="h-5 w-5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

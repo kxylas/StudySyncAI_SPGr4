@@ -18,6 +18,7 @@ import StudyGroups from "@/pages/StudyGroups";
 import CreateStudyGroup from "@/pages/CreateStudyGroup";
 import Advisors from "@/pages/Advisors";
 import CareerResources from "@/pages/CareerResources";
+import Profile from "@/pages/Profile";
 
 // Error boundary to catch and handle React errors
 interface ErrorBoundaryProps {
@@ -74,6 +75,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/history" component={History} />
       <Route path="/settings" component={Settings} />
+      <Route path="/profile" component={Profile} />
       <Route path="/program-overview" component={ProgramOverview} />
       <Route path="/curriculum" component={Curriculum} />
       <Route path="/requirements" component={Requirements} />
