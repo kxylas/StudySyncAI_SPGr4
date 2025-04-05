@@ -100,13 +100,13 @@ export default function StudyGroups() {
           <Card className="bg-neutral-800 border-neutral-700 shadow-md">
             <CardHeader>
               <CardTitle className="text-[#F5A623]">Find Study Groups</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-[#003366]">
                 Search for study groups by course, topic, or keyword
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="relative">
-                <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#003366]" />
                 <Input
                   placeholder="Search study groups..."
                   className="pl-10 bg-neutral-700 border-neutral-600 text-gray-200"
@@ -137,27 +137,27 @@ export default function StudyGroups() {
                           <CardTitle className="text-[#F5A623]">{group.title}</CardTitle>
                           <Badge className="bg-[#003366] text-[#F5A623]">{group.course}</Badge>
                         </div>
-                        <CardDescription className="text-gray-400">
+                        <CardDescription className="text-[#003366]">
                           {group.description}
                         </CardDescription>
                       </CardHeader>
-                      <CardContent className="text-gray-300 pt-2">
+                      <CardContent className="text-[#003366] pt-2">
                         <div className="space-y-2 text-sm">
                           <div className="flex items-center">
-                            <CalendarIcon className="mr-2 h-4 w-4 text-gray-400" />
+                            <CalendarIcon className="mr-2 h-4 w-4 text-[#003366]" />
                             <span>{group.datetime}</span>
                           </div>
                           <div className="flex items-center">
-                            <MapPinIcon className="mr-2 h-4 w-4 text-gray-400" />
+                            <MapPinIcon className="mr-2 h-4 w-4 text-[#003366]" />
                             <span>{group.location}</span>
                           </div>
                           <div className="flex items-center">
-                            <UsersIcon className="mr-2 h-4 w-4 text-gray-400" />
+                            <UsersIcon className="mr-2 h-4 w-4 text-[#003366]" />
                             <span>{group.members} / {group.maxMembers} members</span>
                           </div>
                         </div>
                         <div className="mt-4">
-                          <h4 className="text-sm font-medium text-gray-400 mb-2">Topics:</h4>
+                          <h4 className="text-sm font-medium text-[#003366] mb-2">Topics:</h4>
                           <div className="flex flex-wrap gap-1">
                             {group.topics.map(topic => (
                               <Badge key={topic} variant="outline" className="text-[#F5A623] border-[#F5A623]">
@@ -178,8 +178,8 @@ export default function StudyGroups() {
               ) : (
                 <div className="text-center py-10">
                   <BookOpenIcon className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-300 mb-2">No study groups found</h3>
-                  <p className="text-gray-400 mb-6">No study groups match your search criteria.</p>
+                  <h3 className="text-lg font-medium text-[#003366] mb-2">No study groups found</h3>
+                  <p className="text-[#003366] mb-6">No study groups match your search criteria.</p>
                   <Button 
                     className="bg-[#F5A623] text-[#003366] hover:bg-[#f6b951]"
                     onClick={() => setSearchQuery('')}
@@ -200,27 +200,27 @@ export default function StudyGroups() {
                           <CardTitle className="text-[#F5A623]">{group.title}</CardTitle>
                           <Badge className="bg-[#003366] text-[#F5A623]">{group.course}</Badge>
                         </div>
-                        <CardDescription className="text-gray-400">
+                        <CardDescription className="text-[#003366]">
                           {group.description}
                         </CardDescription>
                       </CardHeader>
-                      <CardContent className="text-gray-300 pt-2">
+                      <CardContent className="text-[#003366] pt-2">
                         <div className="space-y-2 text-sm">
                           <div className="flex items-center">
-                            <CalendarIcon className="mr-2 h-4 w-4 text-gray-400" />
+                            <CalendarIcon className="mr-2 h-4 w-4 text-[#003366]" />
                             <span>{group.datetime}</span>
                           </div>
                           <div className="flex items-center">
-                            <MapPinIcon className="mr-2 h-4 w-4 text-gray-400" />
+                            <MapPinIcon className="mr-2 h-4 w-4 text-[#003366]" />
                             <span>{group.location}</span>
                           </div>
                           <div className="flex items-center">
-                            <UsersIcon className="mr-2 h-4 w-4 text-gray-400" />
+                            <UsersIcon className="mr-2 h-4 w-4 text-[#003366]" />
                             <span>{group.members} / {group.maxMembers} members</span>
                           </div>
                         </div>
                         <div className="mt-4">
-                          <h4 className="text-sm font-medium text-gray-400 mb-2">Topics:</h4>
+                          <h4 className="text-sm font-medium text-[#003366] mb-2">Topics:</h4>
                           <div className="flex flex-wrap gap-1">
                             {group.topics.map(topic => (
                               <Badge key={topic} variant="outline" className="text-[#F5A623] border-[#F5A623]">
@@ -244,8 +244,8 @@ export default function StudyGroups() {
               ) : (
                 <div className="text-center py-10">
                   <UsersIcon className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-300 mb-2">No study groups joined</h3>
-                  <p className="text-gray-400 mb-6">You haven't joined any study groups yet.</p>
+                  <h3 className="text-lg font-medium text-[#003366] mb-2">No study groups joined</h3>
+                  <p className="text-[#003366] mb-6">You haven't joined any study groups yet.</p>
                   <Button 
                     className="bg-[#F5A623] text-[#003366] hover:bg-[#f6b951]"
                     onClick={() => navigate('/create-study-group')}
@@ -260,7 +260,7 @@ export default function StudyGroups() {
           
           <div className="mt-8 bg-neutral-800 border border-neutral-700 rounded-lg p-6 text-center">
             <h2 className="text-xl font-bold text-[#F5A623] mb-3">Can't find what you're looking for?</h2>
-            <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+            <p className="text-[#003366] mb-6 max-w-2xl mx-auto">
               Start your own study group and invite classmates to join. You can schedule meetings,
               share resources, and collaborate on assignments.
             </p>

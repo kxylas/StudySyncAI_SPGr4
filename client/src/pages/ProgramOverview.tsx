@@ -11,9 +11,9 @@ export default function ProgramOverview() {
           <Card className="bg-neutral-800 border-neutral-700 shadow-md">
             <CardHeader>
               <CardTitle className="text-[#F5A623]">About the Program</CardTitle>
-              <CardDescription className="text-gray-400">Morgan State University Computer Science</CardDescription>
+              <CardDescription className="text-[#003366]">Morgan State University Computer Science</CardDescription>
             </CardHeader>
-            <CardContent className="text-gray-300 space-y-4">
+            <CardContent className="text-[#003366] space-y-4">
               <p>
                 The Computer Science Program provides students with fundamental computer science knowledge and training, 
                 and prepares them to apply their knowledge and training to produce solutions to specific problems. 
@@ -32,9 +32,9 @@ export default function ProgramOverview() {
           <Card className="bg-neutral-800 border-neutral-700 shadow-md">
             <CardHeader>
               <CardTitle className="text-[#F5A623]">Primary Objectives</CardTitle>
-              <CardDescription className="text-gray-400">Core goals of the curriculum</CardDescription>
+              <CardDescription className="text-[#003366]">Core goals of the curriculum</CardDescription>
             </CardHeader>
-            <CardContent className="text-gray-300">
+            <CardContent className="text-[#003366]">
               <ul className="list-disc pl-6 space-y-2">
                 <li>Provide practical knowledge that will be of immediate use in the profession.</li>
                 <li>
@@ -48,9 +48,9 @@ export default function ProgramOverview() {
           <Card className="bg-neutral-800 border-neutral-700 shadow-md">
             <CardHeader>
               <CardTitle className="text-[#F5A623]">Learning Outcomes</CardTitle>
-              <CardDescription className="text-gray-400">Bachelor of Computer Science degree student learning outcomes</CardDescription>
+              <CardDescription className="text-[#003366]">Bachelor of Computer Science degree student learning outcomes</CardDescription>
             </CardHeader>
-            <CardContent className="text-gray-300">
+            <CardContent className="text-[#003366]">
               <ul className="list-disc pl-6 space-y-2">
                 <li>Analyze a complex computing problem and apply principles of computing and other relevant disciplines to identify solutions.</li>
                 <li>Design, implement, and evaluate a computing-based solution to meet a given set of computing requirements in the context of the program's discipline.</li>
@@ -65,41 +65,41 @@ export default function ProgramOverview() {
           <Card className="bg-neutral-800 border-neutral-700 shadow-md">
             <CardHeader>
               <CardTitle className="text-[#F5A623]">Areas of Learning Focus</CardTitle>
-              <CardDescription className="text-gray-400">Specialized fields within the program</CardDescription>
+              <CardDescription className="text-[#003366]">Specialized fields within the program</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-neutral-700 p-4 rounded-lg">
                   <h3 className="text-lg font-semibold text-[#F5A623] mb-2">Software Engineering</h3>
-                  <p className="text-gray-300">Design, development, and maintenance of software systems</p>
+                  <p className="text-[#003366]">Design, development, and maintenance of software systems</p>
                 </div>
                 <div className="bg-neutral-700 p-4 rounded-lg">
                   <h3 className="text-lg font-semibold text-[#F5A623] mb-2">Cybersecurity</h3>
-                  <p className="text-gray-300">Protection of computer systems, networks, and data</p>
+                  <p className="text-[#003366]">Protection of computer systems, networks, and data</p>
                 </div>
                 <div className="bg-neutral-700 p-4 rounded-lg">
                   <h3 className="text-lg font-semibold text-[#F5A623] mb-2">Artificial Intelligence</h3>
-                  <p className="text-gray-300">Creating systems that can perform tasks requiring human intelligence</p>
+                  <p className="text-[#003366]">Creating systems that can perform tasks requiring human intelligence</p>
                 </div>
                 <div className="bg-neutral-700 p-4 rounded-lg">
                   <h3 className="text-lg font-semibold text-[#F5A623] mb-2">Quantum Cryptography</h3>
-                  <p className="text-gray-300">Secure communication using quantum mechanical principles</p>
+                  <p className="text-[#003366]">Secure communication using quantum mechanical principles</p>
                 </div>
                 <div className="bg-neutral-700 p-4 rounded-lg">
                   <h3 className="text-lg font-semibold text-[#F5A623] mb-2">Data Science</h3>
-                  <p className="text-gray-300">Extracting knowledge and insights from data</p>
+                  <p className="text-[#003366]">Extracting knowledge and insights from data</p>
                 </div>
                 <div className="bg-neutral-700 p-4 rounded-lg">
                   <h3 className="text-lg font-semibold text-[#F5A623] mb-2">Game/Robotics</h3>
-                  <p className="text-gray-300">Development of interactive games and robotic systems</p>
+                  <p className="text-[#003366]">Development of interactive games and robotic systems</p>
                 </div>
                 <div className="bg-neutral-700 p-4 rounded-lg">
                   <h3 className="text-lg font-semibold text-[#F5A623] mb-2">Quantum Computing</h3>
-                  <p className="text-gray-300">Computing based on quantum-mechanical phenomena</p>
+                  <p className="text-[#003366]">Computing based on quantum-mechanical phenomena</p>
                 </div>
                 <div className="bg-neutral-700 p-4 rounded-lg">
                   <h3 className="text-lg font-semibold text-[#F5A623] mb-2">Cloud Computing</h3>
-                  <p className="text-gray-300">Delivery of computing services over the internet</p>
+                  <p className="text-[#003366]">Delivery of computing services over the internet</p>
                 </div>
               </div>
             </CardContent>
