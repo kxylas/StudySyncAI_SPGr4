@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Mail, Phone, Award, Clock, Calendar, BookOpen, Building } from 'lucide-react';
+import { User, Mail, Phone, Award, Clock, Calendar, BookOpen, Building, Send, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -8,12 +8,18 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
 import AppContainer from '@/components/AppContainer';
 
 export default function Profile() {
   // State for edit profile dialog
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  
+  // State for contact advisor dialog
+  const [isContactDialogOpen, setIsContactDialogOpen] = useState(false);
+  const [contactMessage, setContactMessage] = useState('');
+  const [isSending, setIsSending] = useState(false);
   
   // Profile data state
   const [userProfile, setUserProfile] = useState({
@@ -122,6 +128,45 @@ export default function Profile() {
     });
   };
 
+  // Handle sending a message to advisor
+  const handleSendMessage = async () => {
+    if (!contactMessage.trim()) {
+      toast({
+        title: "Message Required",
+        description: "Please enter a message to send to your advisor.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSending(true);
+    
+    try {
+      // Simulate API call to send message
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Clear form and close dialog
+      setContactMessage('');
+      setIsContactDialogOpen(false);
+      
+      // Show success message
+      toast({
+        title: "Message Sent",
+        description: `Your message has been sent to ${userProfile.advisor}.`,
+        variant: "default",
+      });
+    } catch (error) {
+      // Show error message
+      toast({
+        title: "Failed to Send Message",
+        description: "There was an error sending your message. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   // Calculate progress towards degree
   const progressPercentage = (userProfile.completedCredits / userProfile.requiredCredits) * 100;
 
@@ -164,9 +209,19 @@ export default function Profile() {
                     <Phone className="mr-2 h-5 w-5 text-[#F5A623]" />
                     <span>{userProfile.phoneNumber}</span>
                   </div>
-                  <div className="flex items-center text-[#003366]">
-                    <BookOpen className="mr-2 h-5 w-5 text-[#F5A623]" />
-                    <span>Advisor: {userProfile.advisor}</span>
+                  <div className="flex items-center justify-between text-[#003366]">
+                    <div className="flex items-center">
+                      <BookOpen className="mr-2 h-5 w-5 text-[#F5A623]" />
+                      <span>Advisor: {userProfile.advisor}</span>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      className="ml-2 text-[#F5A623] hover:bg-[#003366]/10"
+                      onClick={() => setIsContactDialogOpen(true)}
+                    >
+                      <MessageSquare className="h-5 w-5" />
+                    </Button>
                   </div>
                   <div className="flex items-center text-[#003366]">
                     <Calendar className="mr-2 h-5 w-5 text-[#F5A623]" />
@@ -531,6 +586,72 @@ export default function Profile() {
             >
               Save Changes
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Contact Advisor Dialog */}
+      <Dialog open={isContactDialogOpen} onOpenChange={setIsContactDialogOpen}>
+        <DialogContent className="bg-neutral-800 border-neutral-700 text-[#F5A623] sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-[#F5A623]">Contact Your Advisor</DialogTitle>
+            <DialogDescription className="text-[#003366]">
+              Send a message directly to {userProfile.advisor}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="message" className="text-[#F5A623]">
+                Message
+              </Label>
+              <Textarea
+                id="message"
+                placeholder="Type your message here..."
+                className="min-h-[120px] bg-neutral-700 border-neutral-600 text-[#003366]"
+                value={contactMessage}
+                onChange={(e) => setContactMessage(e.target.value)}
+              />
+              <p className="text-sm text-[#003366]">
+                Your advisor typically responds within 24-48 hours during office hours ({userProfile.officeHours})
+              </p>
+            </div>
+          </div>
+          
+          <DialogFooter className="sm:justify-between">
+            <div className="flex items-center text-sm text-[#003366]">
+              <Mail className="mr-2 h-4 w-4 text-[#F5A623]" />
+              <span>Copy will be sent to your email</span>
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setIsContactDialogOpen(false)}
+                className="border-[#F5A623] text-[#F5A623] hover:bg-neutral-700"
+              >
+                Cancel
+              </Button>
+              <Button 
+                className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]"
+                onClick={handleSendMessage}
+                disabled={isSending}
+              >
+                {isSending ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-[#F5A623]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send className="mr-2 h-4 w-4" />
+                    Send Message
+                  </>
+                )}
+              </Button>
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>
