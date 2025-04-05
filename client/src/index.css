@@ -66,6 +66,11 @@
 /* Custom styles for the calendar */
 .calendar-wrapper {
   padding: 0.5rem;
+  position: relative;
+  z-index: 50;
+  background-color: #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .calendar-nav {
@@ -84,6 +89,30 @@
   color: #F5A623;
 }
 
+/* Fix calendar positioning issues */
+[data-radix-popper-content-wrapper] {
+  z-index: 9999 !important; /* Ensure popovers appear above other content */
+}
+
+/* Calendar day styling */
+.rdp-day {
+  color: #F5A623;
+}
+
+.rdp-button:hover:not([disabled]),
+.rdp-button:focus-visible:not([disabled]) {
+  background-color: rgba(245, 166, 35, 0.2) !important;
+}
+
+.rdp-day_today {
+  border-color: #F5A623 !important;
+}
+
+/* Fix modal dialog z-index */
+[role="dialog"] {
+  z-index: 9999 !important;
+}
+
 /* Calendar popup positioning for mobile */
 @media (max-width: 640px) {
   .calendar-wrapper {
@@ -92,6 +121,13 @@
   
   [data-side="right"] .calendar-wrapper {
     transform: translateX(-15%);
+  }
+  
+  /* Ensure calendar doesn't overlap with other UI elements in mobile view */
+  .rdp {
+    position: relative;
+    z-index: 50;
+    margin: 0;
   }
 }
 

@@ -145,7 +145,7 @@ Please create a day-by-day schedule that breaks down study sessions by subject, 
                                 </span>
                               </div>
                             </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0" align="start" side="right" sideOffset={5} alignOffset={5}>
+                            <PopoverContent className="w-auto p-0" align="center" side="bottom" sideOffset={5}>
                               <div className="calendar-wrapper">
                                 <Calendar
                                   mode="single"
