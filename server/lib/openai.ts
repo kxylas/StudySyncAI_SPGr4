@@ -494,6 +494,10 @@ This structure ensures students receive a well-rounded education with both depth
       prompt.includes("advanced computing") ||
       (prompt.includes("morgan") && prompt.includes("offer") && prompt.includes("graduate")) ||
       (prompt.includes("does") && prompt.includes("morgan") && prompt.includes("graduate")) ||
+      (prompt.includes("does") && prompt.includes("cs") && prompt.includes("graduate")) ||
+      (prompt.includes("does") && prompt.includes("computer science") && prompt.includes("graduate")) ||
+      (prompt.includes("cs") && prompt.includes("department") && prompt.includes("graduate")) ||
+      (prompt.includes("cs") && prompt.includes("offer") && prompt.includes("graduate")) ||
       prompt.includes("what graduate programs")) {
     return formatResponse(`Morgan State University offers the following graduate programs in Computer Science:
 
