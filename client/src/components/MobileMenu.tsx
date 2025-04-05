@@ -66,7 +66,10 @@ export default function MobileMenu({ isOpen }: MobileMenuProps) {
               mode="single"
               selected={date}
               onSelect={setDate}
-              className="mobile-calendar"
+              className="mobile-calendar bg-[#222222] text-white"
+              modifiersStyles={{
+                today: { backgroundColor: "#F5A623", color: "#003366", fontWeight: "bold" }
+              }}
             />
           </div>
         </div>
