@@ -45,15 +45,11 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: () => (
-          <div className="calendar-nav flex items-center justify-center">
-            <ChevronLeft className="h-4 w-4" />
-          </div>
+        IconLeft: ({ ...props }) => (
+          <ChevronLeft className="h-4 w-4" />
         ),
-        IconRight: () => (
-          <div className="calendar-nav flex items-center justify-center">
-            <ChevronRight className="h-4 w-4" />
-          </div>
+        IconRight: ({ ...props }) => (
+          <ChevronRight className="h-4 w-4" />
         ),
       }}
       {...props}
