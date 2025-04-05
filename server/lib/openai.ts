@@ -695,6 +695,108 @@ How can I help you today?`);
     return formatResponse(`You're welcome! Feel free to ask if you have any other questions about Morgan State's CS program.`);
   }
   
+  // Check for study schedule requests
+  if ((prompt.includes("study schedule") || prompt.includes("schedule for") || prompt.includes("create a schedule") || 
+      prompt.includes("plan my study") || prompt.includes("study plan") || prompt.includes("study time")) ||
+      (prompt.includes("courses") && prompt.includes("deadline") && prompt.includes("study"))) {
+    
+    // Attempt to extract course information
+    const courseMatches = prompt.match(/[-•*]\s*(.*?):\s*due\s*on\s*(.*?)(\(specific topics:\s*(.*?)\))?($|\n)/gi);
+    const timeMatch = prompt.match(/available\s*study\s*time:\s*(.*?)($|\n)/i);
+    
+    const currentDate = new Date();
+    const courseInfo = courseMatches ? courseMatches.map(match => {
+      const courseParts = match.match(/[-•*]\s*(.*?):\s*due\s*on\s*(.*?)(?:\(specific topics:\s*(.*?)\))?($|\n)/i);
+      if (courseParts) {
+        return {
+          course: courseParts[1].trim(),
+          deadline: courseParts[2].trim(),
+          topics: courseParts[3] ? courseParts[3].trim() : ''
+        };
+      }
+      return null;
+    }).filter(Boolean) : [];
+    
+    const availableTime = timeMatch ? timeMatch[1].trim() : '';
+    
+    if (courseInfo.length > 0 && availableTime) {
+      // Format a sample study schedule response
+      let scheduleResponse = `# Personalized Study Schedule\n\n`;
+      
+      // Basic scheduling logic
+      const daysUntilDeadlines: Record<string, number> = {};
+      const today = new Date();
+      
+      for (const course of courseInfo) {
+        if (course && course.course && course.deadline) {
+          const deadlineDate = new Date(course.deadline);
+          const diffTime = Math.abs(deadlineDate.getTime() - today.getTime());
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          daysUntilDeadlines[course.course] = diffDays;
+        }
+      }
+      
+      // Create a 5-day schedule starting from tomorrow
+      const schedule = [];
+      for (let i = 1; i <= 5; i++) {
+        const day = new Date(today);
+        day.setDate(today.getDate() + i);
+        
+        const formattedDate = day.toLocaleDateString('en-US', { 
+          weekday: 'long', 
+          month: 'long', 
+          day: 'numeric',
+          year: 'numeric'
+        });
+        
+        schedule.push(`## ${formattedDate}\n`);
+        
+        // Assign study sessions based on deadline proximity
+        for (const course of courseInfo) {
+          if (course && course.course) {
+            let studyDuration = '';
+            
+            if (availableTime.includes('hour')) {
+              const hourMatch = availableTime.match(/(\d+)\s*hours?/i);
+              if (hourMatch) {
+                const totalHours = parseInt(hourMatch[1]);
+                studyDuration = Math.max(1, Math.min(2, Math.floor(totalHours / courseInfo.length))) + ' hours';
+              } else {
+                studyDuration = '1 hour';
+              }
+            } else {
+              studyDuration = '1 hour';
+            }
+            
+            schedule.push(`- **${course.course}** (${studyDuration})\n  - Focus: ${course.topics || 'General review'}\n  - Take a 10-minute break after this session\n`);
+          }
+        }
+        
+        schedule.push('\n');
+      }
+      
+      scheduleResponse += schedule.join('');
+      scheduleResponse += `\n## Study Tips:\n- Break large topics into smaller, manageable chunks\n- Use active recall techniques (flashcards, practice problems)\n- Review material regularly to reinforce learning\n- Get enough sleep before deadlines\n\nThis schedule prioritizes your course work based on deadline proximity. Adjust as needed based on your progress and energy levels.`;
+      
+      return formatResponse(scheduleResponse);
+    } else {
+      // If we don't have enough information, ask for it
+      return formatResponse(`I'd be happy to create a personalized study schedule for you. To make it effective, please provide:
+
+1. Course names/subjects and their deadlines (e.g., "Algorithms: due on April 25")
+2. Any specific topics you need to focus on for each course
+3. Your available study time (e.g., "3 hours on weekdays after 6pm")
+
+Format your request like this:
+"Please create a study schedule for:
+- Course 1: due on [date] (specific topics: topic1, topic2)
+- Course 2: due on [date] (specific topics: topic3, topic4)
+My available study time: [your available hours]"
+
+Once you provide this information, I'll create a day-by-day schedule that balances your subjects and includes appropriate breaks.`);
+    }
+  }
+  
   // If no patterns match, provide a more helpful general response
   return formatResponse(`I can provide information about MSU's Computer Science program:
 
