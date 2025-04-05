@@ -93,64 +93,77 @@ Please create a day-by-day schedule that breaks down study sessions by subject, 
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="px-3 py-1 text-xs rounded-full bg-[#003366] text-[#F5A623] hover:bg-[#002855] hover:text-[#F5A623] flex items-center gap-1"
+          className="px-2 sm:px-3 py-1 text-[10px] sm:text-xs rounded-full bg-[#003366] text-[#F5A623] hover:bg-[#002855] hover:text-[#F5A623] flex items-center gap-1"
         >
-          <Calendar className="h-3 w-3" />
-          Create Study Schedule
+          <Calendar className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+          <span className="whitespace-nowrap">Study Schedule</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>Create Study Schedule</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto p-3 sm:p-6">
+        <DialogHeader className="space-y-1">
+          <DialogTitle className="text-lg sm:text-xl font-semibold text-[#F5A623]">Create Study Schedule</DialogTitle>
+          <DialogDescription className="text-xs sm:text-sm">
             Enter your courses, deadlines, and available study time to generate a personalized study schedule.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <h3 className="font-medium">Courses and Deadlines</h3>
+            <h3 className="text-sm sm:text-base font-medium">Courses and Deadlines</h3>
             {courses.map((course, index) => (
               <Card key={course.id} className="p-2">
-                <div className="flex items-center gap-2">
+                <div className="flex items-start gap-2">
                   <div className="flex-1 space-y-2">
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <div>
-                        <Label htmlFor={`course-${index}`}>Course Name</Label>
+                        <Label htmlFor={`course-${index}`} className="text-xs sm:text-sm">Course Name</Label>
                         <Input 
                           id={`course-${index}`}
                           value={course.courseName} 
                           onChange={(e) => updateCourse(course.id, 'courseName', e.target.value)}
                           placeholder="e.g., Data Structures"
+                          className="h-8 sm:h-10 text-xs sm:text-sm"
                         />
                       </div>
                       
                       <div>
-                        <Label htmlFor={`deadline-${index}`}>Deadline</Label>
+                        <Label htmlFor={`deadline-${index}`} className="text-xs sm:text-sm">Deadline</Label>
                         <Popover>
                           <PopoverTrigger asChild>
                             <div 
                               className={cn(
-                                "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background cursor-pointer",
+                                "flex h-8 sm:h-10 w-full rounded-md border border-input bg-background px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm ring-offset-background cursor-pointer",
                                 !course.deadline && "text-muted-foreground"
                               )}
                             >
-                              <span className="flex items-center">
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {course.deadline ? format(course.deadline, "PPP") : <span>Pick a date</span>}
+                              <span className="flex items-center truncate">
+                                <CalendarIcon className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                                <span className="truncate">
+                                  {course.deadline ? format(course.deadline, "PPP") : <span>Pick a date</span>}
+                                </span>
                               </span>
                             </div>
                           </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0">
+                          <PopoverContent className="w-auto p-0" align="start" side="right" sideOffset={5} alignOffset={5}>
                             <div className="calendar-wrapper">
                               <Calendar
                                 mode="single"
                                 selected={course.deadline}
-                                onSelect={(date) => updateCourse(course.id, 'deadline', date)}
+                                onSelect={(date) => {
+                                  updateCourse(course.id, 'deadline', date);
+                                  // Close the popover after selection on mobile
+                                  if (window.innerWidth < 640) {
+                                    const closeEvent = new MouseEvent('click', {
+                                      bubbles: true,
+                                      cancelable: true,
+                                    });
+                                    document.dispatchEvent(closeEvent);
+                                  }
+                                }}
                                 initialFocus
                                 components={{
-                                  IconLeft: () => <span className="calendar-nav">←</span>,
-                                  IconRight: () => <span className="calendar-nav">→</span>,
+                                  IconLeft: () => <div className="calendar-nav">←</div>,
+                                  IconRight: () => <div className="calendar-nav">→</div>,
                                 }}
                               />
                             </div>
@@ -160,12 +173,13 @@ Please create a day-by-day schedule that breaks down study sessions by subject, 
                     </div>
                     
                     <div>
-                      <Label htmlFor={`topics-${index}`}>Challenging Topics (Optional)</Label>
+                      <Label htmlFor={`topics-${index}`} className="text-xs sm:text-sm">Challenging Topics (Optional)</Label>
                       <Input 
                         id={`topics-${index}`}
                         value={course.topics} 
                         onChange={(e) => updateCourse(course.id, 'topics', e.target.value)}
                         placeholder="e.g., Trees, Sorting Algorithms"
+                        className="h-8 sm:h-10 text-xs sm:text-sm"
                       />
                     </div>
                   </div>
@@ -174,36 +188,36 @@ Please create a day-by-day schedule that breaks down study sessions by subject, 
                     variant="ghost" 
                     size="sm" 
                     onClick={() => removeCourse(course.id)}
-                    className="mt-auto"
+                    className="mt-2 p-1 h-7 w-7"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </Button>
                 </div>
               </Card>
             ))}
             
-            <Button variant="outline" size="sm" onClick={addCourse} className="mt-2">
-              <PlusCircle className="mr-2 h-4 w-4" />
+            <Button variant="outline" size="sm" onClick={addCourse} className="mt-2 h-8 sm:h-9 text-xs sm:text-sm">
+              <PlusCircle className="mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Add Course
             </Button>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="available-time">Available Study Time</Label>
+          <div className="space-y-1 sm:space-y-2">
+            <Label htmlFor="available-time" className="text-xs sm:text-sm">Available Study Time</Label>
             <Textarea 
               id="available-time" 
               value={availableTime}
               onChange={(e) => setAvailableTime(e.target.value)}
               placeholder="e.g., 3 hours on weekdays after 6pm, 6 hours on weekends"
-              className="min-h-[80px]"
+              className="min-h-[60px] sm:min-h-[80px] text-xs sm:text-sm"
             />
           </div>
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={handleSubmit}>
-            <Clock className="mr-2 h-4 w-4" />
+        <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-0">
+          <Button variant="outline" onClick={() => setOpen(false)} className="text-xs sm:text-sm h-8 sm:h-10 w-full sm:w-auto">Cancel</Button>
+          <Button onClick={handleSubmit} className="text-xs sm:text-sm h-8 sm:h-10 w-full sm:w-auto">
+            <Clock className="mr-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
             Generate Schedule
           </Button>
         </DialogFooter>
