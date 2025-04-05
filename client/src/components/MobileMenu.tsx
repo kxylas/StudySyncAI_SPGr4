@@ -18,6 +18,18 @@ export default function MobileMenu({ isOpen }: MobileMenuProps) {
             Home
           </span>
         </Link>
+        <Link href="/internships" className="text-primary block px-3 py-2 rounded-md text-base font-medium hover:bg-neutral-100">
+          <span className="flex items-center">
+            <span className="material-icons mr-2 text-sm">work</span>
+            Internships
+          </span>
+        </Link>
+        <Link href="/career-resources" className="text-primary block px-3 py-2 rounded-md text-base font-medium hover:bg-neutral-100">
+          <span className="flex items-center">
+            <span className="material-icons mr-2 text-sm">business_center</span>
+            Career Resources
+          </span>
+        </Link>
         <Link href="/history" className="text-primary block px-3 py-2 rounded-md text-base font-medium hover:bg-neutral-100">
           <span className="flex items-center">
             <span className="material-icons mr-2 text-sm">history</span>

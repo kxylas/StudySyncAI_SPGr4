@@ -38,7 +38,7 @@ export default function Internships() {
           </Card>
           
           <Tabs defaultValue="current" className="w-full">
-            <TabsList className="grid grid-cols-3 mb-4 bg-neutral-700">
+            <TabsList className="grid grid-cols-4 mb-4 bg-neutral-700">
               <TabsTrigger value="current" className="data-[state=active]:bg-[#003366] data-[state=active]:text-[#F5A623]">
                 Current Opportunities
               </TabsTrigger>
@@ -47,6 +47,9 @@ export default function Internships() {
               </TabsTrigger>
               <TabsTrigger value="past" className="data-[state=active]:bg-[#003366] data-[state=active]:text-[#F5A623]">
                 Past Students
+              </TabsTrigger>
+              <TabsTrigger value="resources" className="data-[state=active]:bg-[#003366] data-[state=active]:text-[#F5A623]">
+                Resources
               </TabsTrigger>
             </TabsList>
             
@@ -377,6 +380,70 @@ export default function Internships() {
                         </div>
                       </div>
                     </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="resources">
+              <Card className="bg-neutral-800 border-neutral-700 shadow-md mb-6">
+                <CardHeader>
+                  <CardTitle className="text-[#F5A623]">Job Search Tips</CardTitle>
+                  <CardDescription className="text-[#003366]">
+                    Strategies for finding and securing internships
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="text-[#003366]">
+                  <p className="mb-4">
+                    The Computer Science department offers resume reviews, interview preparation, and application 
+                    assistance to help you secure internships at top tech companies.
+                  </p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div className="bg-neutral-700 p-4 rounded-lg">
+                      <h3 className="text-[#F5A623] font-medium mb-2">Application Timeline</h3>
+                      <ul className="space-y-2 text-[#003366]">
+                        <li className="flex items-start">
+                          <span className="mr-2">•</span>
+                          <span><strong>Summer Internships:</strong> Apply August-February (big tech companies recruit early!)</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="mr-2">•</span>
+                          <span><strong>Fall Internships:</strong> Apply April-July</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="mr-2">•</span>
+                          <span><strong>Spring Internships:</strong> Apply August-November</span>
+                        </li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-neutral-700 p-4 rounded-lg">
+                      <h3 className="text-[#F5A623] font-medium mb-2">Application Strategy</h3>
+                      <ul className="space-y-2 text-[#003366]">
+                        <li className="flex items-start">
+                          <span className="mr-2">•</span>
+                          <span>Apply to at least 20-30 positions (tech hiring is competitive)</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="mr-2">•</span>
+                          <span>Mix of large companies, startups, and government opportunities</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="mr-2">•</span>
+                          <span>Follow up within 1-2 weeks after applying</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 flex flex-col md:flex-row gap-4">
+                    <Button className="flex-1 bg-[#003366] text-[#F5A623] hover:bg-[#004488]" onClick={() => window.open('https://www.morgan.edu/career-center/students/appointment', '_blank')}>
+                      Schedule Resume Review
+                    </Button>
+                    <Button className="flex-1 bg-[#003366] text-[#F5A623] hover:bg-[#004488]" onClick={() => window.open('/career-resources', '_self')}>
+                      Career Resources Center
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

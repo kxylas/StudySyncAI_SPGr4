@@ -65,6 +65,13 @@ export default function Sidebar() {
                 <span>Internships</span>
               </Link>
               <Link 
+                href="/career-resources"
+                className="flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-neutral-100"
+              >
+                <span className="material-icons mr-3 text-sm">business_center</span>
+                <span>Career Resources</span>
+              </Link>
+              <Link 
                 href="/study-groups"
                 className="flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-neutral-100"
               >
