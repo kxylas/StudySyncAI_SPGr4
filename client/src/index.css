@@ -40,7 +40,7 @@
   }
 
   body {
-    @apply font-sans antialiased bg-[#232323] text-foreground;
+    @apply font-sans antialiased bg-[#222222] text-foreground;
   }
 }
 
