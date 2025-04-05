@@ -1,11 +1,68 @@
+import { useState } from 'react';
 import AppContainer from '@/components/AppContainer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { MailIcon, PhoneIcon, MapPinIcon, CalendarIcon } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { MailIcon, PhoneIcon, MapPinIcon, CalendarIcon, MessageSquare, Send } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { toast } from '@/hooks/use-toast';
 
 export default function Advisors() {
+  // State for contact dialog
+  const [isContactDialogOpen, setIsContactDialogOpen] = useState(false);
+  const [contactMessage, setContactMessage] = useState('');
+  const [isSending, setIsSending] = useState(false);
+  const [selectedAdvisor, setSelectedAdvisor] = useState<typeof facultyAdvisors[0] | null>(null);
+
+  // Handle opening the contact dialog
+  const handleContactAdvisor = (advisor: typeof facultyAdvisors[0]) => {
+    setSelectedAdvisor(advisor);
+    setContactMessage('');
+    setIsContactDialogOpen(true);
+  };
+
+  // Handle sending a message to advisor
+  const handleSendMessage = async () => {
+    if (!contactMessage.trim() || !selectedAdvisor) {
+      toast({
+        title: "Message Required",
+        description: "Please enter a message to send to your advisor.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSending(true);
+    
+    try {
+      // Simulate API call to send message
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Clear form and close dialog
+      setContactMessage('');
+      setIsContactDialogOpen(false);
+      
+      // Show success message
+      toast({
+        title: "Message Sent",
+        description: `Your message has been sent to ${selectedAdvisor.name}.`,
+        variant: "default",
+      });
+    } catch (error) {
+      // Show error message
+      toast({
+        title: "Failed to Send Message",
+        description: "There was an error sending your message. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   // Faculty data based on the Morgan State University website
   const facultyAdvisors = [
     {
@@ -271,9 +328,19 @@ export default function Advisors() {
                             </div>
                           </div>
                           
-                          <div className="mt-4">
+                          <div className="mt-4 flex space-x-2">
                             <Button variant="outline" size="sm" className="border-[#F5A623] text-[#F5A623]" onClick={() => window.open('https://www.morgan.edu/computer-science/current-students/schedule-an-appointment', '_blank')}>
-                              Schedule Meeting
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              Schedule
+                            </Button>
+                            <Button 
+                              variant="default" 
+                              size="sm" 
+                              className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]"
+                              onClick={() => handleContactAdvisor(advisor)}
+                            >
+                              <MessageSquare className="mr-2 h-4 w-4" />
+                              Contact
                             </Button>
                           </div>
                         </div>
@@ -313,7 +380,13 @@ export default function Advisors() {
                           </div>
                           
                           <div className="mt-4">
-                            <Button variant="outline" size="sm" className="border-[#F5A623] text-[#F5A623]" onClick={() => window.open(`mailto:${staff.email}`)}>
+                            <Button 
+                              variant="default" 
+                              size="sm" 
+                              className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]"
+                              onClick={() => handleContactAdvisor(staff)}
+                            >
+                              <MessageSquare className="mr-2 h-4 w-4" />
                               Contact
                             </Button>
                           </div>
@@ -379,6 +452,82 @@ export default function Advisors() {
           </Card>
         </div>
       </main>
+
+      {/* Contact Advisor Dialog */}
+      <Dialog open={isContactDialogOpen} onOpenChange={setIsContactDialogOpen}>
+        <DialogContent className="bg-neutral-800 border-neutral-700 text-[#F5A623] sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-[#F5A623]">
+              Contact {selectedAdvisor?.name}
+            </DialogTitle>
+            <DialogDescription className="text-[#003366]">
+              Send a message directly to your advisor
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="message" className="text-[#F5A623]">
+                Message
+              </Label>
+              <Textarea
+                id="message"
+                placeholder="Type your message here..."
+                className="min-h-[120px] bg-neutral-700 border-neutral-600 text-[#003366]"
+                value={contactMessage}
+                onChange={(e) => setContactMessage(e.target.value)}
+              />
+              {selectedAdvisor && (
+                <div className="flex items-start mt-2 text-sm text-[#003366]">
+                  <MailIcon className="mr-2 h-4 w-4 mt-0.5 text-[#F5A623]" />
+                  <div>
+                    <p>Your message will be sent to:</p>
+                    <p className="font-medium">{selectedAdvisor.email}</p>
+                    <p className="mt-1">Office: {selectedAdvisor.office}</p>
+                    <p>Phone: {selectedAdvisor.phone}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <DialogFooter className="sm:justify-between">
+            <div className="hidden sm:flex items-center text-sm text-[#003366]">
+              <Mail className="mr-2 h-4 w-4 text-[#F5A623]" />
+              <span>Copy will be sent to your email</span>
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setIsContactDialogOpen(false)}
+                className="border-[#F5A623] text-[#F5A623] hover:bg-neutral-700"
+              >
+                Cancel
+              </Button>
+              <Button 
+                className="bg-[#003366] text-[#F5A623] hover:bg-[#004488]"
+                onClick={handleSendMessage}
+                disabled={isSending}
+              >
+                {isSending ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-[#F5A623]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send className="mr-2 h-4 w-4" />
+                    Send Message
+                  </>
+                )}
+              </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AppContainer>
   );
 }
