@@ -168,6 +168,10 @@ Please ask about any specific area like course requirements, faculty, internship
     faculty: [
       "faculty", "professor", "teacher", "staff", "instructor", "department", "chair",
       "head", "dean", "advisor", "director", "who teaches"
+    ],
+    electives: [
+      "elective", "group a", "group b", "group c", "concentration", "track", "focus area",
+      "specialization", "optional course", "technical elective"
     ]
   };
   
@@ -260,6 +264,81 @@ Specialized Electives in:
 - Robotics and Autonomous Systems
 
 The curriculum balances theoretical foundations with hands-on practical experience through projects, labs, and internship opportunities.`);
+  }
+  
+  // Electives information
+  if (matchesTopic(topicMatches.electives) || 
+      prompt.includes("group a") || 
+      prompt.includes("group b") || 
+      prompt.includes("group c") ||
+      prompt.includes("electives") ||
+      prompt.includes("concentration")) {
+    
+    // Check for specific groups of electives
+    if (prompt.includes("group a")) {
+      return formatResponse(`Group A Electives in the Morgan State University Computer Science program focus on advanced computing fundamentals and theoretical aspects of computer science. These courses include:
+
+1. Advanced Algorithms (COSC 440): Studies advanced algorithm design techniques including divide-and-conquer, dynamic programming, greedy algorithms, and NP-completeness.
+
+2. Theory of Computing (COSC 450): Covers formal languages, automata theory, computability, and complexity theory.
+
+3. Compiler Design (COSC 458): Introduction to the principles and techniques used in compiler construction including lexical analysis, parsing, and code generation.
+
+4. Computer Graphics (COSC 470): Focuses on 2D and 3D graphics algorithms, rendering techniques, and graphics programming.
+
+5. Artificial Intelligence (COSC 485): Introduction to AI concepts including search algorithms, knowledge representation, reasoning, and machine learning.
+
+Students typically need to complete at least two courses from Group A electives to fulfill degree requirements, providing depth in theoretical computer science foundations.`);
+    } 
+    else if (prompt.includes("group b")) {
+      return formatResponse(`Group B Electives in the Morgan State University Computer Science program focus on applied computing and specialized programming areas. These courses include:
+
+1. Web Development (COSC 461): Covers client and server-side web programming, web frameworks, and responsive design.
+
+2. Mobile Application Development (COSC 462): Focuses on developing applications for mobile platforms including UI design, data persistence, and utilizing device features.
+
+3. Cloud Computing (COSC 473): Introduction to cloud platforms, virtualization, cloud services, and distributed computing.
+
+4. Big Data Analytics (COSC 474): Techniques for processing, analyzing, and visualizing large-scale data sets.
+
+5. Game Programming (COSC 476): Game design principles, game engines, physics simulation, and interactive media development.
+
+Group B electives allow students to gain practical skills in high-demand specializations within the tech industry.`);
+    }
+    else if (prompt.includes("group c")) {
+      return formatResponse(`Group C Electives in the Morgan State University Computer Science program focus on cybersecurity, networking, and systems administration. These courses include:
+
+1. Network Security (COSC 481): Principles of network security, cryptography, secure protocols, and security policy.
+
+2. Ethical Hacking and Penetration Testing (COSC 482): Vulnerability assessment, penetration testing methodologies, and security auditing.
+
+3. Systems Administration (COSC 486): Managing and configuring operating systems, user management, and system services.
+
+4. Wireless Networks (COSC 487): Wireless protocols, mobile communications, and wireless network security.
+
+5. Digital Forensics (COSC 488): Techniques for collecting and analyzing digital evidence, incident response, and legal considerations.
+
+Group C electives are particularly valuable for students pursuing careers in cybersecurity, IT administration, or networking.`);
+    }
+    else {
+      return formatResponse(`The Morgan State University Computer Science program offers a flexible curriculum with three groups of electives that allow students to customize their degree based on their interests and career goals:
+
+Group A Electives: Focus on theoretical foundations and advanced computing concepts including advanced algorithms, theory of computing, compiler design, computer graphics, and artificial intelligence.
+
+Group B Electives: Emphasize applied computing and development skills including web development, mobile applications, cloud computing, big data analytics, and game programming.
+
+Group C Electives: Concentrate on security, networking, and systems including network security, ethical hacking, systems administration, wireless networks, and digital forensics.
+
+The elective structure requires students to complete a minimum number of credits from each group, ensuring both breadth of knowledge and depth in selected areas. This approach allows students to develop specialized expertise while maintaining a strong foundation in core computer science principles.
+
+For graduation, students typically need to complete:
+- At least two courses from Group A
+- At least two courses from Group B
+- At least one course from Group C
+- Additional electives from any group to fulfill the required elective credits
+
+Which specific group of electives would you like more information about?`);
+    }
   }
   
   // Requirements information

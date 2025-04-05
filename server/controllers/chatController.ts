@@ -16,15 +16,15 @@ export const sendMessage = async (req: Request, res: Response) => {
 
     // Check if we're receiving too many similar questions in a row
     const lastUserMessages = history
-      ?.filter((msg: any) => msg.role === "user")
+      ?.filter((msg: { role: string; content: string }) => msg.role === "user")
       ?.slice(-3)
-      ?.map((msg: any) => msg.content.toLowerCase()) || [];
+      ?.map((msg: { role: string; content: string }) => msg.content.toLowerCase()) || [];
       
     const isRepeatedQuestion = lastUserMessages.length >= 2 && 
-      lastUserMessages.some(msg => message.toLowerCase().trim() === msg.trim());
+      lastUserMessages.some((msg: string) => message.toLowerCase().trim() === msg.trim());
 
     // Convert the client history format to the format expected by OpenAI
-    const formattedHistory = history?.map((msg: any) => ({
+    const formattedHistory = history?.map((msg: { role: string; content: string }) => ({
       role: msg.role,
       content: msg.content,
     })) || [];
@@ -44,11 +44,11 @@ export const sendMessage = async (req: Request, res: Response) => {
       
       // Return the AI's response
       return res.json({ message: aiResponse });
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error in AI processing:", error);
       
       // Check if this is a rate limit or quota error
-      const errorMessage = error.toString().toLowerCase();
+      const errorMessage = String(error).toLowerCase();
       const isQuotaError = errorMessage.includes('quota') || 
                           errorMessage.includes('rate limit') || 
                           errorMessage.includes('429');
@@ -73,7 +73,7 @@ export const sendMessage = async (req: Request, res: Response) => {
         });
       }
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error in sendMessage:", error);
     return res.status(500).json({ message: "Failed to process your request. Please try again later." });
   }
@@ -88,7 +88,7 @@ export const clearChat = (req: Request, res: Response) => {
   try {
     // Clear the current chat session (would be implemented with real storage)
     return res.json({ message: "Chat cleared successfully" });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error in clearChat:", error);
     return res.status(500).json({ message: "Failed to clear chat" });
   }
