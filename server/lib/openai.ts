@@ -28,10 +28,28 @@ Areas of Learning Focus:
 Software Engineering, Cybersecurity, Artificial Intelligence, Quantum Cryptography, Data Science, Game/Robotics, Quantum Computing, Cloud Computing.
 
 Graduate Programs in Computer Science:
-The department offers several graduate programs including:
-- MS in Advanced Computing with specializations in cutting-edge research fields
-- MS in Bioinformatics combining computer science with biological research
-- PhD in Computer Science focusing on advanced research
+Morgan State University offers the following graduate programs in Computer Science:
+
+1. Master of Science (M.S.) in Advanced Computing:
+   - Available both online and onsite
+   - Focus areas: Cybersecurity, Artificial Intelligence, Data Science, Cloud Computing
+   - Completion options: Coursework only, project track, or thesis track
+   - Designed for specialization in high-demand fields
+
+2. Doctor of Philosophy (Ph.D.) in Advanced Computing:
+   - Research areas: Quantum Cryptography, Algorithms, Cybersecurity, AI/ML, Data Analytics
+   - Emphasizes responsible computing innovations
+   - Available on campus or fully online/remote
+
+3. Master of Science (M.S.) in Bioinformatics:
+   - Coursework in computational biology methods, programming, and biostatistics
+   - Flexible electives to specialize in life sciences and computer sciences
+   - Prepares graduates for the growing field of bioinformatics
+
+Other Related Graduate Programs:
+- Ph.D. in Interdisciplinary Engineering, Information, and Computational Sciences
+- Master of Science (M.S.) in Data Analytics and Visualization (Department of Mathematics)
+- Master of Science (M.S.) in Electrical Engineering (Clarence M. Mitchell, Jr. School of Engineering)
 
 These graduate programs prepare students for high-level research and professional positions in specialized computing fields. The programs emphasize research in Artificial Intelligence, Machine Learning, Quantum Computing, Cybersecurity, and Data Science. Morgan State's graduate programs in computer science have received grants and support from organizations like NSA, IBM, and Microsoft to fund scholarships, research opportunities, and specialized equipment.`;
 
@@ -469,19 +487,37 @@ This structure ensures students receive a well-rounded education with both depth
   }
   
   // Check for graduate program questions
-  if (matchesTopic(topicMatches.graduate) || prompt.includes("masters") || prompt.includes("phd program") || 
+  if (matchesTopic(topicMatches.graduate) || 
+      prompt.includes("masters") || 
+      prompt.includes("phd program") || 
+      prompt.includes("bioinformatics") ||
+      prompt.includes("advanced computing") ||
       (prompt.includes("morgan") && prompt.includes("offer") && prompt.includes("graduate")) ||
       (prompt.includes("does") && prompt.includes("morgan") && prompt.includes("graduate")) ||
       prompt.includes("what graduate programs")) {
-    return formatResponse(`Yes, Morgan State offers these graduate programs in computing:
+    return formatResponse(`Morgan State University offers the following graduate programs in Computer Science:
 
-**MS in Advanced Computing:** Cybersecurity, AI, Data Science focus (online/onsite)
-**MS in Bioinformatics:** Computing with biological research focus
-**PhD in Advanced and Equitable Computing:** Research-focused doctoral program
+1. Master of Science (M.S.) in Advanced Computing (Online/Onsite):
+   - Focus areas: Cybersecurity, Artificial Intelligence, Data Science, Cloud Computing
+   - Completion options: Coursework only, project track, or thesis track
+   - Available both online and in-person
 
-Related programs: MS in Data Analytics, MS in Electrical Engineering
+2. Doctor of Philosophy (Ph.D.) in Advanced Computing:
+   - Research areas: Quantum Cryptography, Algorithms, Cybersecurity, AI/ML, Data Analytics
+   - Emphasizes responsible computing innovations
+   - Available on campus or fully online/remote
 
-For more details: https://www.morgan.edu/computer-science/degrees-and-programs`);
+3. Master of Science (M.S.) in Bioinformatics:
+   - Coursework in computational biology methods, programming, and biostatistics
+   - Flexible electives to specialize in life sciences and computer sciences
+   - Prepares graduates for the growing bioinformatics field
+
+Other related graduate programs at Morgan State:
+- Ph.D. in Interdisciplinary Engineering, Information, and Computational Sciences
+- Master of Science (M.S.) in Data Analytics and Visualization (Mathematics Department)
+- Master of Science (M.S.) in Electrical Engineering
+
+For more details: Visit the Morgan State University Department of Computer Science website`);
   }
   
   // Check for faculty questions
