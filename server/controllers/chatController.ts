@@ -14,6 +14,15 @@ export const sendMessage = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "No message provided" });
     }
 
+    // Check if we're receiving too many similar questions in a row
+    const lastUserMessages = history
+      ?.filter((msg: any) => msg.role === "user")
+      ?.slice(-3)
+      ?.map((msg: any) => msg.content.toLowerCase()) || [];
+      
+    const isRepeatedQuestion = lastUserMessages.length >= 2 && 
+      lastUserMessages.some(msg => message.toLowerCase().trim() === msg.trim());
+
     // Convert the client history format to the format expected by OpenAI
     const formattedHistory = history?.map((msg: any) => ({
       role: msg.role,
@@ -21,6 +30,15 @@ export const sendMessage = async (req: Request, res: Response) => {
     })) || [];
 
     try {
+      // If user is repeating the same question multiple times, modify our approach
+      if (isRepeatedQuestion) {
+        // Add a hint to the formatted history to guide the fallback mechanism
+        formattedHistory.push({
+          role: "system",
+          content: "The user has asked a similar question multiple times. Provide a different response approach focusing on specific examples and details."
+        });
+      }
+      
       // Get response from OpenAI or the local fallback mechanism
       const aiResponse = await queryOpenAI(message, formattedHistory);
       
@@ -28,14 +46,36 @@ export const sendMessage = async (req: Request, res: Response) => {
       return res.json({ message: aiResponse });
     } catch (error) {
       console.error("Error in AI processing:", error);
-      // Return a friendly message instead of an error
-      return res.json({ 
-        message: "I'm having trouble accessing my knowledge base right now, but I can still help you with basic information about the Morgan State CS program. Could you please try asking a more specific question about the program, courses, requirements, or faculty?" 
-      });
+      
+      // Check if this is a rate limit or quota error
+      const errorMessage = error.toString().toLowerCase();
+      const isQuotaError = errorMessage.includes('quota') || 
+                          errorMessage.includes('rate limit') || 
+                          errorMessage.includes('429');
+      
+      if (isQuotaError) {
+        // Use our local fallback completely
+        try {
+          // We need to manually invoke the fallback here
+          const fallbackResponse = await queryOpenAI(message, formattedHistory);
+          return res.json({ message: fallbackResponse });
+        } catch (fallbackError) {
+          console.error("Even fallback failed:", fallbackError);
+          // If even that fails, provide a generic response
+          return res.json({ 
+            message: "I apologize for the technical difficulties. I can still help with information about Morgan State's Computer Science program. Please ask a specific question about courses, requirements, faculty, or career opportunities." 
+          });
+        }
+      } else {
+        // For other types of errors, give a helpful error message
+        return res.json({ 
+          message: "I'm having trouble processing your request right now. Could you please try rephrasing your question or asking about a specific aspect of the Morgan State CS program?" 
+        });
+      }
     }
   } catch (error) {
     console.error("Error in sendMessage:", error);
-    return res.status(500).json({ message: "Failed to process your request" });
+    return res.status(500).json({ message: "Failed to process your request. Please try again later." });
   }
 };
 
