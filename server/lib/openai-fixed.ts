@@ -25,7 +25,15 @@ Bachelor of Computer Science degree students learning outcomes:
 - Apply computer science theory and software development fundamentals.
 
 Areas of Learning Focus:
-Software Engineering, Cybersecurity, Artificial Intelligence, Quantum Cryptography, Data Science, Game/Robotics, Quantum Computing, Cloud Computing.`;
+Software Engineering, Cybersecurity, Artificial Intelligence, Quantum Cryptography, Data Science, Game/Robotics, Quantum Computing, Cloud Computing.
+
+Graduate Programs in Computer Science:
+The department offers several graduate programs including:
+- MS in Advanced Computing with specializations in cutting-edge research fields
+- MS in Bioinformatics combining computer science with biological research
+- PhD in Computer Science focusing on advanced research
+
+These graduate programs prepare students for high-level research and professional positions in specialized computing fields. The programs emphasize research in Artificial Intelligence, Machine Learning, Quantum Computing, Cybersecurity, and Data Science. Morgan State's graduate programs in computer science have received grants and support from organizations like NSA, IBM, and Microsoft to fund scholarships, research opportunities, and specialized equipment.`;
 
 // Parse the program data into sections for local fallback processing
 const programSections = parseProgramData(programData);
@@ -180,6 +188,10 @@ Please ask about any specific area like course requirements, faculty, internship
     electives: [
       "elective", "group a", "group b", "group c", "concentration", "track", "focus area",
       "specialization", "optional course", "technical elective"
+    ],
+    graduate: [
+      "graduate", "grad", "ms", "master", "master's", "masters", "phd", "doctorate", 
+      "doctoral", "advanced computing", "bioinformatics", "graduate school", "grad school"
     ]
   };
   
@@ -194,6 +206,7 @@ Please ask about any specific area like course requirements, faculty, internship
     return formatResponse(`Hello! I'm msuStudySyncAI, your Morgan State University Computer Science program assistant. 
 
 I'm here to help you with information about:
+- Undergraduate and graduate programs
 - Program curriculum and requirements
 - Course offerings and descriptions
 - Faculty and research areas
@@ -428,12 +441,47 @@ Our faculty regularly publish in prestigious journals and conferences, secure re
 
 The department maintains small class sizes to ensure personalized attention and mentoring opportunities for students.`);
   }
+
+  // Graduate program information
+  if (matchesTopic(topicMatches.graduate) || 
+      prompt.includes("masters program") || 
+      prompt.includes("phd program") ||
+      prompt.includes("graduate programs") ||
+      prompt.includes("advanced degree") ||
+      prompt.includes("after bachelor")) {
+    return formatResponse(`Morgan State University offers several graduate programs in Computer Science:
+
+MS in Advanced Computing:
+- Cutting-edge curriculum focused on emerging technologies
+- Research opportunities in AI, machine learning, quantum computing, and cybersecurity
+- Fellowship and assistantship opportunities available
+- Prepares students for technology leadership positions and doctoral studies
+
+MS in Bioinformatics:
+- Interdisciplinary program combining computer science with biological sciences
+- Focus on computational analysis of biological data
+- Research in genomics, proteomics, and biological data mining
+- Collaboration opportunities with healthcare and biotechnology partners
+
+PhD in Computer Science:
+- Rigorous research-oriented program
+- Development of novel solutions to complex computing problems
+- Dissertation focused on original contributions to computer science
+- Faculty mentorship throughout the research process
+
+The department has received grants from organizations like NSA, IBM, and Microsoft to support graduate students. In 2020, the department received an NSA grant providing full scholarships (tuition and stipends) for two Advanced Computing graduate students. Additionally, an MS student in the Advanced Computing Program received the prestigious IBM Masters Fellowship award with a $10,000 monetary award for research in quantum cryptography and cybersecurity.
+
+For detailed application requirements and deadlines, prospective students should visit the official Morgan State University graduate admissions page.`);
+  }
   
   // If no patterns match, provide a helpful general response
   return formatResponse(`Thank you for your question about "${userPrompt}".
 
 I can provide you with information about the Morgan State University Computer Science program including:
 
+- Undergraduate and graduate program details
+- MS in Advanced Computing and MS in Bioinformatics
+- PhD in Computer Science program
 - Program overview and objectives
 - Curriculum structure and course requirements
 - Elective options in different focus areas

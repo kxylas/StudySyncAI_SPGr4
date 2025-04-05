@@ -25,7 +25,15 @@ Bachelor of Computer Science degree students learning outcomes:
 - Apply computer science theory and software development fundamentals.
 
 Areas of Learning Focus:
-Software Engineering, Cybersecurity, Artificial Intelligence, Quantum Cryptography, Data Science, Game/Robotics, Quantum Computing, Cloud Computing.`;
+Software Engineering, Cybersecurity, Artificial Intelligence, Quantum Cryptography, Data Science, Game/Robotics, Quantum Computing, Cloud Computing.
+
+Graduate Programs in Computer Science:
+The department offers several graduate programs including:
+- MS in Advanced Computing with specializations in cutting-edge research fields
+- MS in Bioinformatics combining computer science with biological research
+- PhD in Computer Science focusing on advanced research
+
+These graduate programs prepare students for high-level research and professional positions in specialized computing fields. The programs emphasize research in Artificial Intelligence, Machine Learning, Quantum Computing, Cybersecurity, and Data Science. Morgan State's graduate programs in computer science have received grants and support from organizations like NSA, IBM, and Microsoft to fund scholarships, research opportunities, and specialized equipment.`;
 
 // We're skipping the file loading and going straight to using the embedded data
 
@@ -191,6 +199,10 @@ function generateLocalResponse(
     ],
     credits: [
       "credit", "hour", "120", "how many", "units", "total"
+    ],
+    graduate: [
+      "graduate", "grad", "ms", "master", "master's", "masters", "phd", "doctorate", 
+      "doctoral", "advanced computing", "bioinformatics", "graduate school", "grad school"
     ]
   };
   
@@ -436,6 +448,38 @@ The 65 credits for the major include:
 This structure ensures students receive a well-rounded education with both depth in computer science and breadth in related disciplines.`);
   }
   
+  // Check for graduate program questions
+  if (matchesTopic(topicMatches.graduate) || prompt.includes("masters") || prompt.includes("phd program")) {
+    return formatResponse(`Morgan State University offers several graduate programs in Computer Science:
+
+MS in Advanced Computing:
+- A specialized master's program focused on cutting-edge computing research
+- Specializations in areas such as AI, machine learning, and quantum computing
+- Typically completed in 2 years (30-36 credit hours)
+- Requires completion of core courses, electives, and a thesis or capstone project
+
+MS in Bioinformatics:
+- An interdisciplinary program combining computer science with biological research
+- Focuses on computational analysis of biological data
+- Prepares students for careers in biotech, pharmaceuticals, and research institutions
+- Includes coursework in algorithms, databases, and biological data analysis
+
+PhD in Computer Science:
+- Research-focused doctoral program with specializations in multiple areas
+- Typically requires 4-5 years to complete beyond the master's degree
+- Involves completion of coursework, qualifying exams, and a dissertation
+- Students work closely with faculty mentors on original research projects
+
+All graduate programs provide:
+- Research opportunities with experienced faculty
+- Access to modern computing facilities and laboratories
+- Potential funding through teaching and research assistantships
+- Professional development and networking opportunities
+- Preparation for careers in industry, research, and academia
+
+For detailed application requirements and deadlines, prospective students should visit the official Morgan State University graduate admissions page.`);
+  }
+  
   // Check for faculty questions
   if (matchesTopic(topicMatches.faculty) || prompt.includes("who runs") || prompt.includes("in charge")) {
     return formatResponse(`Faculty and Department Leadership:
@@ -593,11 +637,13 @@ For further assistance, please contact the Morgan Computer Science Department di
   if (prompt === "hello" || prompt === "hi" || prompt === "hey" || prompt.includes("how are you")) {
     return formatResponse(`Hello! I'm msuStudySyncAI, your Morgan State University Computer Science program assistant. I'm here to provide information about:
 
+- Undergraduate and graduate program details
 - Program overview and objectives
 - Course requirements and electives
 - Graduation requirements
 - Internship opportunities
 - Faculty and advisors
+- MS and PhD programs
 - Research areas
 
 How can I help you with information about the CS program today?`);
@@ -613,6 +659,9 @@ How can I help you with information about the CS program today?`);
 
 I can provide you with information about the Morgan State University Computer Science program including:
 
+- Undergraduate and graduate program details
+- MS in Advanced Computing and MS in Bioinformatics
+- PhD in Computer Science program
 - Program overview and objectives
 - Curriculum structure and course requirements
 - Elective options in different focus areas
@@ -629,6 +678,7 @@ Based on your question, it seems you're interested in learning more about the CS
 - What career opportunities are available to CS graduates?
 - What are the graduation requirements?
 - Who are the faculty members?
+- What graduate programs are offered?
 
 I'm here to help with any specific details you need.`);
 }
