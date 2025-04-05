@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { useChat } from '@/contexts/ChatContext';
 import { format } from 'date-fns';
 import { Send, Paperclip } from 'lucide-react';
@@ -139,11 +139,17 @@ export default function ChatInterface() {
         {/* Message input */}
         <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
           <div className="flex-1 relative">
-            <Input 
+            <Textarea 
               id="message-input" 
               value={messageText}
-              onChange={(e) => setMessageText(e.target.value)}
-              className="w-full py-2 pl-4 pr-10 rounded-full border border-neutral-600 bg-neutral-800 text-neutral-200 focus:ring-2 focus:ring-[#F5A623] focus:border-[#F5A623] focus:outline-none" 
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setMessageText(e.target.value)}
+              onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSendMessage();
+                }
+              }}
+              className="w-full py-2 pl-4 pr-10 min-h-[44px] max-h-[120px] rounded-full border border-neutral-600 bg-neutral-800 text-neutral-200 focus:ring-2 focus:ring-[#F5A623] focus:border-[#F5A623] focus:outline-none resize-none overflow-y-auto" 
               placeholder="Type a message..." 
               disabled={chatState.loading}
             />
