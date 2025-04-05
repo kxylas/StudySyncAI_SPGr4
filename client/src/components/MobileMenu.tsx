@@ -1,6 +1,8 @@
 import { Link } from 'wouter';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import StudyScheduleForm from './StudyScheduleForm';
+import { Calendar } from "lucide-react";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -48,6 +50,17 @@ export default function MobileMenu({ isOpen }: MobileMenuProps) {
             Study Schedule
           </span>
         </Link>
+        
+        {/* Study Schedule Generator button */}
+        <div className="text-primary block px-3 py-2 rounded-md text-base font-medium hover:bg-neutral-100">
+          <span className="flex items-center">
+            <Calendar className="mr-2 h-5 w-5" />
+            <div className="flex-1">
+              <StudyScheduleForm />
+            </div>
+          </span>
+        </div>
+        
         <Link href="/settings" className="text-primary block px-3 py-2 rounded-md text-base font-medium hover:bg-neutral-100">
           <span className="flex items-center">
             <span className="material-icons mr-2 text-sm">settings</span>

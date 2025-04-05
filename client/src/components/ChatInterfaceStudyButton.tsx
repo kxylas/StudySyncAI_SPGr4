@@ -20,7 +20,7 @@ interface CourseDeadline {
   topics: string;
 }
 
-export default function StudyScheduleForm() {
+export default function ChatInterfaceStudyButton() {
   const [open, setOpen] = useState(false);
   const [courses, setCourses] = useState<CourseDeadline[]>([
     { id: crypto.randomUUID(), courseName: '', deadline: undefined, topics: '' }
@@ -90,12 +90,13 @@ Please create a day-by-day schedule that breaks down study sessions by subject, 
 
   return (
     <div className="inline-block">
-      {/* Schedule button trigger - different styling in different contexts */}
+      {/* Schedule button trigger */}
       <div 
         onClick={() => setOpen(true)}
-        className="cursor-pointer w-full text-left"
+        className="px-2 sm:px-3 py-1 text-[10px] sm:text-xs rounded-full bg-[#003366] text-[#F5A623] hover:bg-[#002855] hover:text-[#F5A623] flex items-center gap-1 cursor-pointer"
       >
-        <span className="whitespace-nowrap">Generate Study Schedule</span>
+        <Calendar className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+        <span className="whitespace-nowrap">Study Schedule</span>
       </div>
       
       {/* Dialog container */}
