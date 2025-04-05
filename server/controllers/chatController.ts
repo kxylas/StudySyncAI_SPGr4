@@ -20,11 +20,19 @@ export const sendMessage = async (req: Request, res: Response) => {
       content: msg.content,
     })) || [];
 
-    // Get response from OpenAI
-    const aiResponse = await queryOpenAI(message, formattedHistory);
-
-    // Return the AI's response
-    return res.json({ message: aiResponse });
+    try {
+      // Get response from OpenAI or the local fallback mechanism
+      const aiResponse = await queryOpenAI(message, formattedHistory);
+      
+      // Return the AI's response
+      return res.json({ message: aiResponse });
+    } catch (error) {
+      console.error("Error in AI processing:", error);
+      // Return a friendly message instead of an error
+      return res.json({ 
+        message: "I'm having trouble accessing my knowledge base right now, but I can still help you with basic information about the Morgan State CS program. Could you please try asking a more specific question about the program, courses, requirements, or faculty?" 
+      });
+    }
   } catch (error) {
     console.error("Error in sendMessage:", error);
     return res.status(500).json({ message: "Failed to process your request" });
