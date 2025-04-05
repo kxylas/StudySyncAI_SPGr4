@@ -58,6 +58,13 @@ export default function Sidebar() {
             </h3>
             <div className="mt-1 space-y-1">
               <Link 
+                href="/profile"
+                className="flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-neutral-100"
+              >
+                <span className="material-icons mr-3 text-sm">person</span>
+                <span>My Profile</span>
+              </Link>
+              <Link 
                 href="/internships"
                 className="flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-neutral-100"
               >
