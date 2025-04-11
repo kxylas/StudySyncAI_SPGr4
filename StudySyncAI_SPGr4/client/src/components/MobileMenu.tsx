@@ -36,6 +36,12 @@ export default function MobileMenu({ isOpen }: MobileMenuProps) {
             Career Resources
           </span>
         </Link>
+        <Link href="/history" className="text-primary block px-3 py-2 rounded-md text-base font-medium hover:bg-neutral-100">
+          <span className="flex items-center">
+            <span className="material-icons mr-2 text-sm">history</span>
+            History
+          </span>
+        </Link>
         <Link href="/profile" className="text-primary block px-3 py-2 rounded-md text-base font-medium hover:bg-neutral-100">
           <span className="flex items-center">
             <span className="material-icons mr-2 text-sm">person</span>
