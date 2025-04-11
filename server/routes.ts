@@ -2,9 +2,11 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import * as chatController from "./controllers/chatController";
+import * as uploadController from "./controllers/uploadController";
 import { db } from "./db";
 import { courses, faculty, researchAreas, graduatePrograms } from "@shared/schema";
 import { eq } from "drizzle-orm";
+import path from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Chat endpoints
@@ -95,6 +97,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to fetch graduate programs" });
     }
   });
+  
+  // File upload routes
+  app.post('/api/uploads', uploadController.uploadSingleFile, uploadController.handleFileUpload);
+  app.get('/api/uploads/chat/:chatId', uploadController.getChatFiles);
+  app.get('/api/uploads/:id', uploadController.getFile);
+  app.delete('/api/uploads/:id', uploadController.deleteFile);
 
   // Create HTTP server
   const httpServer = createServer(app);

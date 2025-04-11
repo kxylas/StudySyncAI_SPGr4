@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, jsonb, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -85,9 +85,24 @@ export const graduatePrograms = pgTable("graduate_programs", {
   contactInfo: text("contact_info"),
 });
 
+// Table for file uploads
+export const fileUploads = pgTable("file_uploads", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  chatId: integer("chat_id").references(() => chats.id),
+  filename: text("filename").notNull(),
+  originalFilename: text("original_filename").notNull(),
+  path: text("path").notNull(),
+  mimetype: text("mimetype").notNull(),
+  size: integer("size").notNull(),
+  uploadedAt: timestamp("uploaded_at").defaultNow().notNull(),
+  contentExtracted: boolean("content_extracted").default(false),
+});
+
 // Define relations
 export const usersRelations = relations(users, ({ many }) => ({
   chats: many(chats),
+  fileUploads: many(fileUploads),
 }));
 
 export const chatsRelations = relations(chats, ({ one, many }) => ({
@@ -96,6 +111,7 @@ export const chatsRelations = relations(chats, ({ one, many }) => ({
     references: [users.id],
   }),
   messages: many(messages),
+  fileUploads: many(fileUploads),
 }));
 
 export const messagesRelations = relations(messages, ({ one }) => ({
@@ -121,6 +137,17 @@ export const facultyResearchAreasRelations = relations(facultyResearchAreas, ({ 
   researchArea: one(researchAreas, {
     fields: [facultyResearchAreas.researchAreaId],
     references: [researchAreas.id],
+  }),
+}));
+
+export const fileUploadsRelations = relations(fileUploads, ({ one }) => ({
+  user: one(users, {
+    fields: [fileUploads.userId],
+    references: [users.id],
+  }),
+  chat: one(chats, {
+    fields: [fileUploads.chatId],
+    references: [chats.id],
   }),
 }));
 
@@ -191,6 +218,16 @@ export const insertFacultyResearchAreaSchema = createInsertSchema(facultyResearc
   researchAreaId: true,
 });
 
+export const insertFileUploadSchema = createInsertSchema(fileUploads).pick({
+  userId: true,
+  chatId: true,
+  filename: true,
+  originalFilename: true,
+  path: true,
+  mimetype: true,
+  size: true,
+});
+
 // Export types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -218,3 +255,6 @@ export type GraduateProgram = typeof graduatePrograms.$inferSelect;
 
 export type InsertFacultyResearchArea = z.infer<typeof insertFacultyResearchAreaSchema>;
 export type FacultyResearchArea = typeof facultyResearchAreas.$inferSelect;
+
+export type InsertFileUpload = z.infer<typeof insertFileUploadSchema>;
+export type FileUpload = typeof fileUploads.$inferSelect;

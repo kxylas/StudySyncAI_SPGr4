@@ -23,4 +23,7 @@ export interface ChatContextType {
   sendMessage: (message: string) => Promise<void>;
   clearChat: () => void;
   loadChatHistory: (id: string) => void;
+  speakMessage: (text: string) => void;
+  stopSpeaking: () => void;
+  isSpeaking: boolean;
 }
