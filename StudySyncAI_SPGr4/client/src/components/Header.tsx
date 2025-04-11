@@ -40,6 +40,10 @@ export default function Header({ toggleMobileMenu }: HeaderProps) {
               <span className="material-icons mr-1 text-sm">home</span>
               <span>Home</span>
             </Link>
+            <Link href="/history" className={`text-white hover:text-neutral-200 flex items-center ${location === '/history' ? 'font-medium' : ''}`}>
+              <span className="material-icons mr-1 text-sm">history</span>
+              <span>History</span>
+            </Link>
             <Link href="/settings" className={`text-white hover:text-neutral-200 flex items-center ${location === '/settings' ? 'font-medium' : ''}`}>
               <span className="material-icons mr-1 text-sm">settings</span>
               <span>Settings</span>
