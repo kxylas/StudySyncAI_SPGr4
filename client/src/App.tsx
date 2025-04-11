@@ -20,6 +20,7 @@ import Advisors from "@/pages/Advisors";
 import CareerResources from "@/pages/CareerResources";
 import Profile from "@/pages/Profile";
 import StudySchedule from "@/pages/StudySchedule";
+import UserFlow from "@/pages/UserFlow";
 
 // Error boundary to catch and handle React errors
 interface ErrorBoundaryProps {
@@ -86,6 +87,7 @@ function Router() {
       <Route path="/advisors" component={Advisors} />
       <Route path="/career-resources" component={CareerResources} />
       <Route path="/study-schedule" component={StudySchedule} />
+      <Route path="/user-flow" component={UserFlow} />
       <Route component={NotFound} />
     </Switch>
   );
