@@ -78,12 +78,7 @@ export default function MobileMenu({ isOpen }: MobileMenuProps) {
           </span>
         </div>
         
-        <Link href="/user-flow" className="text-primary block px-3 py-2 rounded-md text-base font-medium hover:bg-neutral-100">
-          <span className="flex items-center">
-            <span className="material-icons mr-2 text-sm">account_tree</span>
-            User Flow Diagram
-          </span>
-        </Link>
+        {/* User Flow Link removed */}
         
         <Link href="/settings" className="text-primary block px-3 py-2 rounded-md text-base font-medium hover:bg-neutral-100">
           <span className="flex items-center">
