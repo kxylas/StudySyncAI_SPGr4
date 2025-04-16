@@ -101,21 +101,6 @@ export default function Sidebar() {
               </Link>
             </div>
           </div>
-          
-          <div className="mt-3">
-            <h3 className="px-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">
-              Documentation
-            </h3>
-            <div className="mt-1 space-y-1">
-              <Link 
-                href="/user-flow"
-                className="flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-neutral-100"
-              >
-                <span className="material-icons mr-3 text-sm">account_tree</span>
-                <span>User Flow Diagram</span>
-              </Link>
-            </div>
-          </div>
         </nav>
       </div>
     </aside>
