@@ -28,15 +28,26 @@ StudySyncAI is a comprehensive AI-powered platform designed to support Morgan St
 - **Styling**: Custom Morgan State University theme (orange, navy blue, dark mode)
 
 ## Installation and Setup Guide
-
 ### Prerequisites
 
 - Node.js (v18+ recommended)
 - PostgreSQL database
 - OpenAI API key
+- Git (for cloning the repository)
 
-### Step 1: Download and Extract
+### Step 1: Clone the Repository
 
+1. Open a terminal window
+2. Clone the repository using Git:
+```bash
+git clone https://github.com/yourusername/msuStudySyncAI.git
+```
+3. Navigate to the project directory:
+```bash
+cd msuStudySyncAI
+```
+
+Alternatively, if you've downloaded a ZIP file:
 1. Download the project ZIP file
 2. Extract the contents to your preferred location
 3. Open a terminal and navigate to the extracted project folder
@@ -66,19 +77,40 @@ OPENAI_API_KEY=your_openai_api_key
 
 ### Step 4: Set Up Database
 
-1. Create a PostgreSQL database named `studysyncai`
+1. Install PostgreSQL if you haven't already:
+   - **Windows**: Download and install from [PostgreSQL official website](https://www.postgresql.org/download/windows/)
+   - **MacOS**: Use Homebrew: `brew install postgresql` and start it with `brew services start postgresql`
+   - **Linux**: Use your distribution's package manager (e.g., `sudo apt install postgresql postgresql-contrib`)
 
-2. Run the following command to set up the database schema:
+2. Create a PostgreSQL database named `studysyncai`:
+   ```bash
+   # Login to PostgreSQL as the postgres user
+   sudo -u postgres psql
+   
+   # Inside the PostgreSQL shell, create a new database
+   CREATE DATABASE studysyncai;
+   
+   # Create a user (if you don't already have one)
+   CREATE USER your_username WITH ENCRYPTED PASSWORD 'your_password';
+   
+   # Grant privileges to the user
+   GRANT ALL PRIVILEGES ON DATABASE studysyncai TO your_username;
+   
+   # Exit the PostgreSQL shell
+   \q
+   ```
 
-```bash
-npm run db:push
-```
+3. Update the `.env` file with your database credentials.
 
-3. (Optional) If you want to populate the database with sample data:
+4. Run the database migrations to set up the schema:
+   ```bash
+   npm run db:push
+   ```
 
-```bash
-tsx server/scripts/populate-knowledge-base.ts
-```
+5. (Optional) Populate the database with sample course and faculty data:
+   ```bash
+   tsx server/scripts/populate-knowledge-base.ts
+   ```
 
 ### Step 5: Start the Application
 
@@ -112,3 +144,15 @@ To directly access and manage your PostgreSQL database:
 - **Database Connection Issues**: Verify your PostgreSQL service is running and check the credentials in your `.env` file
 - **OpenAI API Errors**: Ensure your API key is valid and has sufficient credits
 - **Port Conflicts**: If port 5000 is already in use, you can modify the port in `server/index.ts`
+
+## Documentation and Diagrams
+
+The repository contains important documentation assets that are only accessible via the file system (not in the app navigation):
+
+- **System Architecture Diagram**: View the system architecture in `attached_assets/system_architecture_diagram.svg`
+- **User Flow Diagram**: View the user flow in `attached_assets/user_flow_diagram.svg`
+- **Project Requirements**: Check hardware and software requirements in `project_requirements.txt`
+- **Training Data**: Examine the sample data in `attached_assets/training_data.txt` and `attached_assets/graduate_data.txt`
+
+These files provide technical documentation and are intentionally not included in the application navigation for end-users.
+
