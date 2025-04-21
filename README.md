@@ -35,88 +35,119 @@ StudySyncAI is a comprehensive AI-powered platform designed to support Morgan St
 - OpenAI API key
 - Git (for cloning the repository)
 
-### Step 1: Clone the Repository
+## Step 1: Install Prerequisites
 
-1. Open a terminal window
-2. Clone the repository using Git:
-```bash
-git clone https://github.com/yourusername/msuStudySyncAI.git
-```
-3. Navigate to the project directory:
-```bash
-cd msuStudySyncAI
-```
+Before starting, make sure you have these installed on your computer:
 
-Alternatively, if you've downloaded a ZIP file:
-1. Download the project ZIP file
-2. Extract the contents to your preferred location
-3. Open a terminal and navigate to the extracted project folder
+- **Git**: Download from [git-scm.com](https://git-scm.com/downloads)
+- **Node.js**: Download from [nodejs.org](https://nodejs.org/) (version 18 or higher recommended)
+- **PostgreSQL**: Download from [postgresql.org](https://www.postgresql.org/download/)
 
-### Step 2: Install Dependencies
+## Step 2: Clone the Repository
 
+1. Open your terminal or command prompt
+2. Navigate to the folder where you want to store the project
+3. Run this command to clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/msuStudySyncAI.git
+   ```
+   (Replace "yourusername" with the actual GitHub username where the project is hosted)
+4. Navigate into the project folder:
+   ```bash
+   cd msuStudySyncAI
+   ```
+
+## Step 3: Install Dependencies
+
+In the project directory, run:
 ```bash
 npm install
 ```
+This will install all the required packages defined in the package.json file.
 
-### Step 3: Set Up Environment Variables
+## Step 4: Set Up Environment Variables
 
-1. Create a `.env` file in the root directory with the following variables:
+1. Create a new file named `.env` in the root directory of the project
+2. Add the following content to the file:
+   ```
+   # Database Configuration
+   DATABASE_URL=postgresql://your_username:your_password@localhost:5432/studysyncai
+   PGHOST=localhost
+   PGPORT=5432
+   PGUSER=your_username
+   PGPASSWORD=your_password
+   PGDATABASE=studysyncai
+   
+   # OpenAI Configuration
+   OPENAI_API_KEY=your_openai_api_key
+   ```
+3. Replace `your_username`, `your_password`, and `your_openai_api_key` with your actual PostgreSQL credentials and OpenAI API key
 
-```
-# Database Configuration
-DATABASE_URL=postgresql://username:password@localhost:5432/studysyncai
-PGHOST=localhost
-PGPORT=5432
-PGUSER=your_database_username
-PGPASSWORD=your_database_password
-PGDATABASE=studysyncai
+## Step 5: Set Up the Database
 
-# OpenAI Configuration
-OPENAI_API_KEY=your_openai_api_key
-```
-
-### Step 4: Set Up Database
-
-1. Install PostgreSQL if you haven't already:
-   - **Windows**: Download and install from [PostgreSQL official website](https://www.postgresql.org/download/windows/)
-   - **MacOS**: Use Homebrew: `brew install postgresql` and start it with `brew services start postgresql`
-   - **Linux**: Use your distribution's package manager (e.g., `sudo apt install postgresql postgresql-contrib`)
-
-2. Create a PostgreSQL database named `studysyncai`:
+1. Open a new terminal window
+2. Log into PostgreSQL:
    ```bash
-   # Login to PostgreSQL as the postgres user
+   # On Windows
+   psql -U postgres
+   
+   # On Mac/Linux
    sudo -u postgres psql
-   
-   # Inside the PostgreSQL shell, create a new database
+   ```
+3. Create a new database:
+   ```sql
    CREATE DATABASE studysyncai;
-   
-   # Create a user (if you don't already have one)
+   ```
+4. Create a user (if you don't already have one):
+   ```sql
    CREATE USER your_username WITH ENCRYPTED PASSWORD 'your_password';
-   
-   # Grant privileges to the user
+   ```
+5. Grant privileges:
+   ```sql
    GRANT ALL PRIVILEGES ON DATABASE studysyncai TO your_username;
-   
-   # Exit the PostgreSQL shell
+   ```
+6. Exit PostgreSQL:
+   ```
    \q
    ```
-
-3. Update the `.env` file with your database credentials.
-
-4. Run the database migrations to set up the schema:
+7. Return to your project terminal and run the migration to set up the database schema:
    ```bash
    npm run db:push
    ```
-
-5. (Optional) Populate the database with sample course and faculty data:
+8. (Optional) Load sample data into the database:
    ```bash
    tsx server/scripts/populate-knowledge-base.ts
    ```
 
-### Step 5: Start the Application
+## Step 6: Start the Application
 
+Run the development server:
 ```bash
 npm run dev
 ```
+
+The application should now be running at http://localhost:5000
+
+## Troubleshooting Common Issues
+
+1. **"Error: connect ECONNREFUSED"**: Make sure PostgreSQL is running
+   ```bash
+   # On Windows
+   net start postgresql-x64-15 (or your version)
+   
+   # On Mac
+   brew services start postgresql
+   
+   # On Linux
+   sudo service postgresql start
+   ```
+
+2. **"Error: role 'your_username' does not exist"**: Make sure you created the database user correctly and updated the .env file
+
+3. **"Error: invalid API key"**: Make sure you have a valid OpenAI API key
+
+4. **"Port 5000 is already in use"**: Change the port in server/index.ts or kill the process using that port
+
 
 The application will start and be accessible at http://localhost:5000
 
