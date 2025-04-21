@@ -151,7 +151,7 @@ The application should now be running at http://localhost:5000
 
 The application will start and be accessible at http://localhost:5000
 
-### Step 6: Access the Database
+### Step 7: Access the Database
 
 To directly access and manage your PostgreSQL database:
 
@@ -180,8 +180,6 @@ To directly access and manage your PostgreSQL database:
 
 The repository contains important documentation assets that are only accessible via the file system (not in the app navigation):
 
-- **System Architecture Diagram**: View the system architecture in `attached_assets/system_architecture_diagram.svg`
-- **User Flow Diagram**: View the user flow in `attached_assets/user_flow_diagram.svg`
 - **Project Requirements**: Check hardware and software requirements in `project_requirements.txt`
 - **Training Data**: Examine the sample data in `attached_assets/training_data.txt` and `attached_assets/graduate_data.txt`
 
