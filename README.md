@@ -49,12 +49,12 @@ Before starting, make sure you have these installed on your computer:
 2. Navigate to the folder where you want to store the project
 3. Run this command to clone the repository:
    ```bash
-   git clone https://github.com/yourusername/msuStudySyncAI.git
+   git clone https://github.com/yourusername/StudySyncAI_SPGr4.git
    ```
    (Replace "yourusername" with the actual GitHub username where the project is hosted)
 4. Navigate into the project folder:
    ```bash
-   cd msuStudySyncAI
+   cd StudySyncAI_SPGr4
    ```
 
 ## Step 3: Install Dependencies
