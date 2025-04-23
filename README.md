@@ -6,7 +6,7 @@ StudySyncAI is a comprehensive AI-powered platform designed to support Morgan St
 
 ## Team Members and Contributions
 
-- **Kyla Abrahm**: Testing & Quality Assurance - Chatbot Logic, User Interaction, & Adjustments
+- **Kyla Abraham**: Testing & Quality Assurance - Chatbot Logic, User Interaction, & Adjustments
 - **Kayla Flanigan**: Backend Integration & Logic - API Interaction & Data Handling
 - **Carlos Mecerdes**: Frontend Development - Core Chat Interface & Basic Features
 - **Allen Mhina**: Frontend Development - Advanced Features & UI/UX Enhancements
