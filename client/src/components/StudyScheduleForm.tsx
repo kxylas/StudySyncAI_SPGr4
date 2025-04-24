@@ -76,7 +76,7 @@ ${formattedDeadlines}
 
 My available study time: ${availableTime}
 
-Please create a day-by-day schedule that breaks down study sessions by subject, balances time between subjects based on difficulty and deadline proximity, and includes short breaks between sessions.`;
+Please create a day-by-day schedule that breaks down study sessions by subject, balances time between subjects based on difficulty and deadline proximity, and includes short breaks between sessions. I'm looking for a format that allows me to clearly see what to study on which day.`;
 
     // Send the message to the AI
     sendMessage(prompt);
