@@ -35,6 +35,8 @@ StudySyncAI is a comprehensive AI-powered platform designed to support Morgan St
 - OpenAI API key
 - Git (for cloning the repository)
 
+# How to Clone the Repository and Run the Application from GitHub
+
 ## Step 1: Install Prerequisites
 
 Before starting, make sure you have these installed on your computer:
@@ -49,12 +51,12 @@ Before starting, make sure you have these installed on your computer:
 2. Navigate to the folder where you want to store the project
 3. Run this command to clone the repository:
    ```bash
-   git clone https://github.com/yourusername/StudySyncAI_SPGr4.git
+   git clone https://github.com/yourusername/msuStudySyncAI.git
    ```
    (Replace "yourusername" with the actual GitHub username where the project is hosted)
 4. Navigate into the project folder:
    ```bash
-   cd StudySyncAI_SPGr4
+   cd msuStudySyncAI
    ```
 
 ## Step 3: Install Dependencies
@@ -85,6 +87,8 @@ This will install all the required packages defined in the package.json file.
 
 ## Step 5: Set Up the Database
 
+### Option 1: Using Command Line
+
 1. Open a new terminal window
 2. Log into PostgreSQL:
    ```bash
@@ -110,13 +114,65 @@ This will install all the required packages defined in the package.json file.
    ```
    \q
    ```
-7. Return to your project terminal and run the migration to set up the database schema:
+
+### Option 2: Using VS Code Extensions (Recommended)
+
+1. Install the following VS Code extensions:
+   - SQLTools by Matheus Teixeira
+   - SQLTools PostgreSQL/Redshift Driver by Matheus Teixeira
+
+2. Open VS Code and click on the SQLTools icon in the sidebar (looks like a database symbol)
+3. Click "Add New Connection" and select "PostgreSQL"
+4. Fill in your connection details:
+   - Connection name: StudySyncAI
+   - Server Host: localhost
+   - Port: 5432
+   - Username: your_username
+   - Password: your_password
+   - Default Database: postgres
+
+5. Click "Test Connection" to verify, then "Save Connection"
+6. Create a new database by:
+   - Right-click on your connection and select "New Query"
+   - Run the following SQL query:
+   ```sql
+   CREATE DATABASE studysyncai;
+   ```
+7. Create a new connection to the studysyncai database:
+   - Click "Add New Connection" again
+   - Use the same details but set "Default Database" to studysyncai
+   - Name it "StudySyncAI DB"
+
+8. To create tables and add data:
+   - Connect to the "StudySyncAI DB" connection
+   - Right-click and select "New Query"
+   - Copy the contents of the create_tables.sql file (without the CREATE DATABASE part)
+   - Run the query
+   - Start a new query and paste the contents of insert_data.sql
+   - Run the query
+
+### Option 3: Using Other GUI Tools
+
+You can also use graphical tools to manage your PostgreSQL database:
+- **pgAdmin 4**: A comprehensive GUI for PostgreSQL (https://www.pgadmin.org/)
+- **DBeaver**: A universal database tool (https://dbeaver.io/)
+- **TablePlus**: A modern, native database client (https://tableplus.com/)
+
+### Final Steps for Any Option
+
+1. Return to your project terminal and run the migration to set up the database schema:
    ```bash
    npm run db:push
    ```
-8. (Optional) Load sample data into the database:
+2. (Optional) Load sample data into the database:
    ```bash
    tsx server/scripts/populate-knowledge-base.ts
+   ```
+   
+3. Alternatively, use the provided SQL scripts to set up the database:
+   ```bash
+   psql -f create_tables.sql
+   psql -f insert_data.sql
    ```
 
 ## Step 6: Start the Application
@@ -148,40 +204,30 @@ The application should now be running at http://localhost:5000
 
 4. **"Port 5000 is already in use"**: Change the port in server/index.ts or kill the process using that port
 
-
-The application will start and be accessible at http://localhost:5000
-
-### Step 7: Access the Database
-
-To directly access and manage your PostgreSQL database:
-
-1. **Using pgAdmin (GUI)**:
-   - Install pgAdmin from https://www.pgadmin.org/
-   - Add a new server connection using the credentials from your `.env` file
-   - Connect to the `studysyncai` database
-
-2. **Using psql (Command Line)**:
+5. **Database Schema Issues**: If you encounter problems with the database schema:
    ```bash
-   psql -U your_database_username -d studysyncai
+   # Drop the database and recreate it (Warning: this deletes all data)
+   psql -c "DROP DATABASE IF EXISTS studysyncai;" -U postgres
+   psql -c "CREATE DATABASE studysyncai;" -U postgres
+   
+   # Use the provided SQL scripts
+   psql -f create_tables.sql
+   psql -f insert_data.sql
    ```
 
-3. **Using a database connection string**:
-   ```
-   postgresql://username:password@localhost:5432/studysyncai
-   ```
-
-### Troubleshooting
-
-- **Database Connection Issues**: Verify your PostgreSQL service is running and check the credentials in your `.env` file
-- **OpenAI API Errors**: Ensure your API key is valid and has sufficient credits
-- **Port Conflicts**: If port 5000 is already in use, you can modify the port in `server/index.ts`
+6. **VS Code SQLTools Connection Error**: 
+   - Make sure PostgreSQL service is running
+   - Verify your username and password
+   - Check if the database exists
+   - Try using the default "postgres" database first, then create the studysyncai database using the SQL query tool
 
 ## Documentation and Diagrams
 
 The repository contains important documentation assets that are only accessible via the file system (not in the app navigation):
 
+- **System Architecture Diagram**: View the system architecture in `attached_assets/system_architecture_diagram.svg`
+- **User Flow Diagram**: View the user flow in `attached_assets/user_flow_diagram.svg`
 - **Project Requirements**: Check hardware and software requirements in `project_requirements.txt`
 - **Training Data**: Examine the sample data in `attached_assets/training_data.txt` and `attached_assets/graduate_data.txt`
 
 These files provide technical documentation and are intentionally not included in the application navigation for end-users.
-
