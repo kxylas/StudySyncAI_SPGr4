@@ -287,18 +287,78 @@ function generateLocalResponse(
       
       for (const course of courseInfo) {
         if (course && course.course && course.deadline) {
-          const deadlineDate = new Date(course.deadline);
-          const diffTime = Math.abs(deadlineDate.getTime() - today.getTime());
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-          daysUntilDeadlines[course.course] = diffDays;
+          // Parse availability days from the input
+      const availableDays: number[] = [];
+      if (availableTime.toLowerCase().includes('monday')) availableDays.push(1); // Monday is 1 (0 is Sunday)
+      if (availableTime.toLowerCase().includes('tuesday')) availableDays.push(2);
+      if (availableTime.toLowerCase().includes('wednesday')) availableDays.push(3);
+      if (availableTime.toLowerCase().includes('thursday')) availableDays.push(4);
+      if (availableTime.toLowerCase().includes('friday')) availableDays.push(5);
+      if (availableTime.toLowerCase().includes('saturday')) availableDays.push(6);
+      if (availableTime.toLowerCase().includes('sunday')) availableDays.push(0);
+      
+      // If no specific days mentioned, assume all days are available
+      if (availableDays.length === 0) {
+        availableDays.push(0, 1, 2, 3, 4, 5, 6); // All days of the week
+      }
+      
+      // Basic scheduling logic
+      const today = new Date();
+      
+      // Find earliest deadline to know how many days we need to schedule
+      let earliestDeadline = new Date();
+      earliestDeadline.setFullYear(earliestDeadline.getFullYear() + 1); // Default to 1 year from now
+      
+      for (const course of courseInfo) {
+        if (course && course.course && course.deadline) {
+          try {
+            const deadlineDate = new Date(course.deadline);
+            if (!isNaN(deadlineDate.getTime()) && deadlineDate < earliestDeadline) {
+              earliestDeadline = deadlineDate;
+            }
+          } catch (e) {
+            console.error("Error parsing date:", e);
+          }
         }
       }
       
-      // Create a 5-day schedule starting from tomorrow
+      // Calculate days until earliest deadline
+      const daysUntilDeadline = Math.max(0, Math.floor((earliestDeadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)));
+      
+      // Create a schedule up to the earliest deadline or 14 days max, whichever is less
+      const maxDays = Math.min(14, daysUntilDeadline);
       const schedule = [];
-      for (let i = 1; i <= 5; i++) {
+      let scheduledDays = 0;
+      let daysChecked = 0;
+      
+      // Don't schedule past the deadline
+      while (scheduledDays < 5 && daysChecked < maxDays) {
+        daysChecked++;
         const day = new Date(today);
-        day.setDate(today.getDate() + i);
+        day.setDate(today.getDate() + daysChecked);
+        
+        // Skip this day if it's not in the available days
+        if (!availableDays.includes(day.getDay())) {
+          continue;
+        }
+        
+        // Skip days that are on or after any deadline
+        let isAfterDeadline = false;
+        for (const course of courseInfo) {
+          if (course && course.deadline) {
+            const deadlineDate = new Date(course.deadline);
+            if (!isNaN(deadlineDate.getTime()) && day >= deadlineDate) {
+              isAfterDeadline = true;
+              break;
+            }
+          }
+        }
+        
+        if (isAfterDeadline) {
+          continue;
+        }
+        
+        scheduledDays++;
         
         const formattedDate = day.toLocaleDateString('en-US', { 
           weekday: 'long', 
