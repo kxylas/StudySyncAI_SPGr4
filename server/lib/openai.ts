@@ -800,7 +800,8 @@ For more details: Visit the Morgan State University Department of Computer Scien
   }
   
   // Check for department chair or faculty questions explicitly first
-  if (prompt.includes("department chair") || 
+  if (prompt.toLowerCase() === "who is the department chair of the computer science department" ||
+      prompt.includes("department chair") || 
       prompt.includes("who is the chair") || 
       prompt.includes("who chairs") || 
       prompt.includes("who is the head") || 
@@ -808,6 +809,11 @@ For more details: Visit the Morgan State University Department of Computer Scien
       prompt.includes("who leads") || 
       prompt.includes("in charge") ||
       prompt.includes("who heads") ||
+      prompt.toLowerCase().includes("dr. wang") ||
+      prompt.toLowerCase().includes("dr wang") ||
+      prompt.toLowerCase().includes("paul wang") ||
+      prompt.toLowerCase().includes("shuangbao wang") ||
+      (prompt.includes("who") && prompt.includes("cs") && prompt.includes("chair")) ||
       (prompt.includes("who") && prompt.includes("department") && (prompt.includes("chair") || prompt.includes("head")))) {
     return formatResponse(`The Department Chair of the Computer Science Department at Morgan State University is:
 
