@@ -434,7 +434,9 @@ The curriculum balances theoretical foundations with hands-on practical experien
       prompt.includes("group b") || 
       prompt.includes("group c") ||
       prompt.includes("electives") ||
-      prompt.includes("concentration")) {
+      prompt.includes("concentration")) &&
+     !(prompt.includes("study schedule") || prompt.includes("create a schedule") ||
+       prompt.includes("available study time") || prompt.includes("Please create a study schedule"))) {
     
     // Check for specific groups of electives
     if (prompt.includes("group a")) {
