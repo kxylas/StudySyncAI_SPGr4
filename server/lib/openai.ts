@@ -248,6 +248,117 @@ function generateLocalResponse(
   const matchesTopic = (topicKeywords: string[]) => {
     return topicKeywords.some(keyword => prompt.includes(keyword));
   };
+
+  // STUDY SCHEDULE DETECTION FIRST - Process before any other matchers
+  // Check for study schedule requests - higher priority pattern to intercept before electives matcher
+  if ((prompt.includes("study schedule") || prompt.includes("schedule for") || prompt.includes("create a schedule") || 
+      prompt.includes("plan my study") || prompt.includes("study plan") || prompt.includes("study time")) ||
+      prompt.includes("generate a study schedule") ||  // Added for form-generated requests
+      prompt.includes("please create a study schedule") || // Added for form-generated requests
+      (prompt.includes("courses") && prompt.includes("deadline")) || // Remove study requirement for matching
+      (prompt.includes("available study time"))) { // Specific form field from StudyScheduleForm
+    
+    // Attempt to extract course information
+    const courseMatches = prompt.match(/[-•*]\s*(.*?):\s*due\s*on\s*(.*?)(\(specific topics:\s*(.*?)\))?($|\n)/gi);
+    const timeMatch = prompt.match(/available\s*study\s*time:\s*(.*?)($|\n)/i);
+    
+    const currentDate = new Date();
+    const courseInfo = courseMatches ? courseMatches.map(match => {
+      const courseParts = match.match(/[-•*]\s*(.*?):\s*due\s*on\s*(.*?)(?:\(specific topics:\s*(.*?)\))?($|\n)/i);
+      if (courseParts) {
+        return {
+          course: courseParts[1].trim(),
+          deadline: courseParts[2].trim(),
+          topics: courseParts[3] ? courseParts[3].trim() : ''
+        };
+      }
+      return null;
+    }).filter(Boolean) : [];
+    
+    const availableTime = timeMatch ? timeMatch[1].trim() : '';
+    
+    if (courseInfo.length > 0 && availableTime) {
+      // Format a sample study schedule response
+      let scheduleResponse = `# Personalized Study Schedule\n\n`;
+      
+      // Basic scheduling logic
+      const daysUntilDeadlines: Record<string, number> = {};
+      const today = new Date();
+      
+      for (const course of courseInfo) {
+        if (course && course.course && course.deadline) {
+          const deadlineDate = new Date(course.deadline);
+          const diffTime = Math.abs(deadlineDate.getTime() - today.getTime());
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          daysUntilDeadlines[course.course] = diffDays;
+        }
+      }
+      
+      // Create a 5-day schedule starting from tomorrow
+      const schedule = [];
+      for (let i = 1; i <= 5; i++) {
+        const day = new Date(today);
+        day.setDate(today.getDate() + i);
+        
+        const formattedDate = day.toLocaleDateString('en-US', { 
+          weekday: 'long', 
+          month: 'long', 
+          day: 'numeric',
+          year: 'numeric'
+        });
+        
+        schedule.push(`## ${formattedDate}\n`);
+        
+        // Assign study sessions based on deadline proximity
+        for (const course of courseInfo) {
+          if (course && course.course) {
+            let studyDuration = '';
+            
+            if (availableTime.includes('hour')) {
+              const hourMatch = availableTime.match(/(\d+)\s*hours?/i);
+              if (hourMatch) {
+                const totalHours = parseInt(hourMatch[1]);
+                studyDuration = Math.max(1, Math.min(2, Math.floor(totalHours / courseInfo.length))) + ' hours';
+              } else {
+                studyDuration = '1 hour';
+              }
+            } else {
+              studyDuration = '1 hour';
+            }
+            
+            schedule.push(`- **${course.course}** (${studyDuration})\n  - Focus: ${course.topics || 'General review'}\n  - Take a 10-minute break after this session\n`);
+          }
+        }
+        
+        schedule.push('\n');
+      }
+      
+      scheduleResponse += schedule.join('');
+      scheduleResponse += `\n## Study Tips:\n- Break large topics into smaller, manageable chunks\n- Use active recall techniques (flashcards, practice problems)\n- Review material regularly to reinforce learning\n- Get enough sleep before deadlines\n\nThis schedule prioritizes your course work based on deadline proximity. Adjust as needed based on your progress and energy levels.`;
+      
+      return formatResponse(scheduleResponse);
+    } else {
+      // If we don't have enough information, ask for it
+      return formatResponse(`I'd be happy to create a personalized study schedule for you. To make it effective, please provide:
+
+1. Course names/subjects and their deadlines (e.g., "Algorithms: due on April 25")
+2. Any specific topics you need to focus on for each course
+3. Your available study time (e.g., "3 hours on weekdays after 6pm")
+
+Format your request like this:
+"Please create a study schedule for:
+- Course 1: due on [date] (specific topics: topic1, topic2)
+- Course 2: due on [date] (specific topics: topic3, topic4)
+My available study time: [your available hours]"
+
+Once you provide this information, I'll create a day-by-day schedule that balances your subjects and includes appropriate breaks.`);
+    }
+  }
+  
+  // Check for thank you messages
+  if (prompt.includes("thank") || prompt.includes("thanks") || prompt === "ty") {
+    return formatResponse(`You're welcome! Feel free to ask if you have any other questions about Morgan State's CS program.`);
+  }
   
   // Check for university history and info questions
   if (matchesTopic(topicMatches.university) || 
@@ -304,43 +415,34 @@ To graduate, students need to complete 120 credit hours, maintain a GPA of 2.0 o
       prompt.includes("what will i learn") ||
       prompt.includes("what's the purpose") ||
       (context.includes("objectives") && (prompt.includes("what") || prompt.includes("tell me more")))) {
-    return formatResponse(`The primary objectives of the Computer Science Program at Morgan State University are:
+    return formatResponse(`The primary objectives of the Morgan State University Computer Science program are to:
 
-1. Provide practical knowledge that will be of immediate use in the profession.
-2. Provide a solid foundation in theoretical computer science, so that graduates will have the fundamentals necessary to acquire knowledge in a rapidly evolving discipline.
+1. Develop strong problem-solving skills for analyzing complex computing problems and applying principles of computing to identify solutions.
 
-The program prepares students to:
-- Apply principles of computing to identify solutions to complex problems
-- Design, implement, and evaluate computing-based solutions
-- Communicate effectively in professional contexts
-- Make informed judgments based on legal and ethical principles
-- Function effectively in teams
-- Apply computer science theory and software development fundamentals
+2. Teach students to design, implement, and evaluate computing-based solutions for specific requirements.
 
-These objectives are designed to ensure students can work in the industry immediately upon graduation, while also having the theoretical foundation necessary to adapt to changes in technology throughout their careers.`);
-  }
-  
-  // Check for questions about focus areas
-  if (prompt.includes("focus area") || prompt.includes("specialization") || 
-      (matchesTopic(topicMatches.program) && (prompt.includes("focus") || prompt.includes("specialize")))) {
-    return formatResponse(`The Morgan State University Computer Science program offers various areas of learning focus, including:
+3. Build effective communication skills for professional contexts.
 
-1. Software Engineering - Developing and maintaining software systems
-2. Cybersecurity - Protecting computer systems and networks
-3. Artificial Intelligence - Creating systems that can perform tasks requiring human intelligence
-4. Quantum Cryptography - Applying quantum mechanics to secure communications
-5. Data Science - Extracting insights from complex data
-6. Game Development & Robotics - Creating interactive experiences and physical systems
-7. Quantum Computing - Computing using quantum mechanics principles
-8. Cloud Computing - Utilizing internet-based computing resources
+4. Foster an understanding of professional responsibilities and ethical principles in computing.
+
+5. Develop teamwork skills for functioning effectively in collaborative environments.
+
+6. Provide a solid foundation in computer science theory and software development fundamentals.
+
+7. Prepare students for careers in high-demand areas such as Software Engineering, Cybersecurity, Artificial Intelligence, Quantum Computing, Data Science, and Game Development.
+
+8. Cultivate the analytical and technical skills needed for lifelong learning in a rapidly evolving field.
 
 Students can choose electives that allow them to concentrate in these areas based on their interests and career goals.`);
   }
   
   // Enhanced checking for elective groups - check for electives generally first
+  // Make sure it doesn't match when it's actually a study schedule request
   if (matchesTopic(topicMatches.electives) && 
      !(prompt.includes("group a") || prompt.includes("group b") || 
-       prompt.includes("group c") || prompt.includes("group d"))) {
+       prompt.includes("group c") || prompt.includes("group d")) &&
+     !(prompt.includes("study schedule") || prompt.includes("create a schedule") ||
+       prompt.includes("available study time") || prompt.includes("Please create a study schedule"))) {
     return formatResponse(`The Computer Science program at Morgan State University organizes electives into four groups:
 
 Group A - Foundation courses like Object-Oriented Programming, Java, Computer Architecture, and Data Science (students take 3 courses)
@@ -569,100 +671,92 @@ For academic advising, you can find your assigned advisor on DegreeWorks or on t
       prompt.includes("advising appointment") || 
       prompt.includes("find my advisor") || 
       (prompt.includes("advisor") && prompt.includes("how"))) {
-    return formatResponse(`Finding Your Academic Advisor:
+    return formatResponse(`Academic Advising in the Computer Science Department:
 
-Your academic advisor is determined by your major and classification. Here's how to locate your advisor:
+The Computer Science Department at Morgan State University assigns academic advisors based on the first letter of your last name.
 
-1. Check DegreeWorks - Your assigned advisor should be listed there
-2. Visit the official academic advisers page at: https://www.morgan.edu/computer-science/current-students/academic-advisers
+To find your advisor:
+1. Check DegreeWorks through your Morgan State student portal
+2. Visit the CS Department website's advising section
+3. Contact the department office: (443) 885-3962
 
-Academic advisors are assigned as follows:
-- Freshmen: Usually assigned to a specific advisor for first-year students
-- Sophomores: Assigned based on program track
-- Juniors/Seniors: Assigned based on specialization area
+Scheduling an advising appointment:
+1. Email your assigned advisor directly to set up an appointment
+2. Include your name, ID number, and general topics you want to discuss
+3. For urgent matters, visit during posted office hours
 
-To schedule an advising appointment:
-1. Visit: https://www.morgan.edu/computer-science/current-students/schedule-an-appointment
-2. Contact your advisor directly via email
-3. Visit the department office in McMechen Hall
+Important advising periods are:
+- Pre-registration advising: 2-3 weeks before course registration opens
+- Add/drop period at the beginning of each semester
+- Graduation clearance: Early in your final semester
 
-Your advisor can help with course selection, degree progress tracking, and career planning. It's recommended to meet with your advisor at least once per semester.`);
+Your advisor can help with course selection, degree progress tracking, internship opportunities, career planning, and academic challenges.`);
   }
   
   // Check for research questions
-  if (matchesTopic(topicMatches.research)) {
-    return formatResponse(`Research Areas in the Computer Science Department:
+  if (matchesTopic(topicMatches.research) || prompt.includes("what kind of research")) {
+    return formatResponse(`Research Areas in the Morgan State University Computer Science Department:
 
-The department has active research in the following areas:
+The department conducts research across several cutting-edge areas of computer science:
 
-1. Artificial Intelligence / Machine Learning / Deep Learning
-   Research in AI techniques, neural networks, and intelligent systems
+1. Artificial Intelligence and Machine Learning
+   Research in neural networks, deep learning, natural language processing, and computer vision
 
-2. Quantum Computing and Quantum Cryptography
-   Exploring the next generation of computing technology and secure communications
+2. Cybersecurity and Privacy
+   Advanced methods for network security, cryptography, secure systems, and digital forensics
 
-3. Cybersecurity
-   Investigating methods to protect systems, networks, and data from attacks
+3. Data Science and Analytics
+   Big data technologies, data mining, visualization, and predictive analytics
 
-4. Data Science / Big Data Analytics
-   Developing techniques to extract insights from large and complex datasets
+4. Quantum Computing
+   Theoretical and applied research in quantum algorithms, quantum cryptography, and quantum simulation
 
-5. Human Computer Interactions
+5. Human-Computer Interaction
    Studying how people interact with computers and designing better interfaces
 
 6. Cloud Computing
    Research on distributed computing systems and services delivered over the internet
 
 7. Robotics / Gaming
-   Work on autonomous systems, game design, and interactive technologies
+   Development of autonomous systems, simulators, and interactive experiences
 
-Recent research achievements include:
-- Microsoft Award: $200,000 gift for cloud computing and emerging technologies research
-- NSF Award in Quantum Computing and Quantum Cryptography
-- Google Gift on Machine Learning and AI
-
-Students interested in research can take COSC 499 - Senior Research as a Group C elective. For the latest research activities and opportunities, follow the CS department on Twitter: @Morgan_CompSci`);
+The department has received research funding from NSF, DOD, NASA, and other agencies. Students can get involved in research through Group C electives like COSC 499 - Senior Research, or by directly contacting faculty members working in areas of interest.`);
   }
   
-  // Check for curriculum/course sequence questions
-  if (matchesTopic(topicMatches.curriculum) || prompt.includes("course order") || prompt.includes("what to take")) {
-    return formatResponse(`Suggested Curriculum Sequence for Computer Science B.S.:
+  // Check for curriculum sequence questions
+  if (matchesTopic(topicMatches.curriculum) || 
+      prompt.includes("what years") || 
+      prompt.includes("what order") || 
+      (prompt.includes("take") && prompt.includes("classes"))) {
+    return formatResponse(`Suggested Curriculum Sequence for B.S. in Computer Science at Morgan State University:
 
-First Year:
-- Semester 1: COSC 111 (Intro to CS I), ENGL 101, MATH 241 (Calculus I), General Education
-- Semester 2: COSC 112 (Intro to CS II), ENGL 102, MATH 242 (Calculus II), General Education
+FRESHMAN YEAR
+- Semester 1: COSC 112 (Intro to CS I), MATH 241 (Calculus I), ENGL 101, Gen Ed Health, Gen Ed Humanities
+- Semester 2: COSC 113 (Intro to CS II), MATH 242 (Calculus II), ENGL 102, PHYS 205 + 205L, HUMA 201
 
-Second Year:
-- Semester 1: COSC 220 (Data Structures), COSC 241 (Systems & Logic), Group A Elective, General Education
-- Semester 2: COSC 281 (Discrete Structure), Group A Electives (2 courses), MATH 312 (Linear Algebra)
+SOPHOMORE YEAR
+- Semester 1: COSC 220 (Data Structures), COSC 241 (Computer Systems), MATH 312 (Linear Algebra), Gen Ed Humanities, Gen Ed Art/Music
+- Semester 2: COSC 221 (Algorithms), COSC 230 (Web Development), MATH 331 (Probability & Stats), Gen Ed Social Science, Group A Elective
 
-Third Year:
-- Semester 1: COSC 349 (Networks), COSC 351 (Cybersecurity), COSC 352 (Programming Languages), Group B Elective
-- Semester 2: COSC 354 (Operating Systems), MATH 331 (Statistics), Group B Elective, General Education
+JUNIOR YEAR
+- Semester 1: COSC 348 (Database Design), COSC 350 (Software Engineering), Group A Electives (2), Complementary Studies
+- Semester 2: COSC 349 (Networks), COSC 351 (Cybersecurity), COSC 352 (Programming Languages), Group B Elective
 
-Fourth Year:
-- Semester 1: COSC 458 (Software Engineering), COSC 459 (Database), COSC 490 (Senior Project), Group C Elective
-- Semester 2: Group C Electives (3 courses), Group D Elective, General Education
+SENIOR YEAR
+- Semester 1: COSC 354 (Operating Systems), MATH 331 (Statistics), Group B Elective, General Education
+- Semester 2: COSC 490 (Senior Project), Group C Electives (4), Group D Elective
 
-This sequence is designed to build knowledge progressively, with foundational courses in early years and more specialized courses in later years.
-
-For the complete and most current curriculum sequence, visit: https://catalog.morgan.edu/preview_program.php?catoid=11&poid=2205`);
+This sequence may vary based on course availability and individual circumstances. Always consult with your academic advisor when planning your schedule.`);
   }
   
-  // Multiple patterns for more general questions about the CS program
-  if ((prompt.includes("what") && prompt.includes("cs")) || 
-      (prompt.includes("tell") && prompt.includes("about") && (prompt.includes("cs") || prompt.includes("computer"))) ||
-      (prompt.includes("what") && prompt.includes("computer science")) ||
-      prompt.includes("describe the program") ||
-      prompt === "cs" || 
-      prompt === "tell me more") {
-    return formatResponse(`The Computer Science Program at Morgan State University is a comprehensive bachelor's degree program that prepares students for careers in the computing industry as well as advanced study in computer science.
+  // Check for summary of program info
+  if (prompt.includes("overview") || prompt.includes("summary") || prompt.includes("outline") || 
+      prompt.includes("key points") || prompt === "cs program" || prompt === "cs department") {
+    return formatResponse(`Morgan State University Computer Science Program Overview:
 
-Key aspects of the program:
-
-1. Curriculum: A 120-credit program that combines theoretical foundations with practical skills
-   - 44 credits of general education and university requirements
-   - 11 credits of supporting courses (mathematics)
+1. Degree: Bachelor of Science (B.S.) in Computer Science requiring 120 credit hours:
+   - 44 credits of general education requirements
+   - 11 credits of supporting courses (math & physics)
    - 65 credits of computer science major requirements including electives
 
 2. Learning Focus: The program emphasizes core areas like software engineering, cybersecurity, artificial intelligence, data science, and emerging fields like quantum computing
@@ -684,163 +778,50 @@ The program provides both immediately applicable skills and a foundation for ada
   if (prompt.includes("how to apply") || prompt.includes("admission") || prompt.includes("requirements to get in")) {
     return formatResponse(`How to Apply for the Bachelor of Science (B.S.) in Computer Science:
 
-To apply to Morgan State University's Computer Science program, you should:
+Application Process:
+1. Submit an application through the Morgan State University Admissions website
+2. Provide official high school transcripts
+3. Submit SAT or ACT scores (if required)
+4. Pay the application fee
 
-1. Visit the Office of Undergraduate Admission & Recruitment website: 
-   http://www.morgan.edu/undergradadmissions
+Admission Requirements:
+- High school diploma or equivalent
+- Competitive GPA (typically 2.5 or higher)
+- Recommended high school preparation includes:
+  * 4 years of English
+  * 3-4 years of mathematics (including pre-calculus)
+  * 2-3 years of science (physics recommended)
+  * Computer science courses (if available)
 
-2. Start your application process at:
-   http://www.morgan.edu/applynow.html
+Transfer Students:
+- Official transcripts from all colleges attended
+- Minimum GPA of 2.0 from previous institutions
+- Computer science courses may be evaluated for transfer credit
 
-3. Complete the general university application requirements, which typically include:
-   - High school transcripts
-   - Standardized test scores (if required)
-   - Application essay
-   - Application fee
+International Students:
+- Additional requirements include TOEFL/IELTS scores
+- International transcript evaluation
 
-4. For specific information about Computer Science department requirements or questions, contact:
-   Computer Science Department
-   McMechen Hall 507
-   Phone: (443) 885-3962
-
-The admission process evaluates your academic record, particularly your performance in mathematics and science courses, as these are important foundations for success in computer science.
-
-For further assistance, please contact the Morgan Computer Science Department directly.`);
+For specific deadlines and detailed requirements, visit the Morgan State University Admissions website or contact the Office of Undergraduate Admission at admissions@morgan.edu or (443) 885-3000.`);
   }
   
-  // Check for specific questions about graduate programs based on interests
-  if ((prompt.includes("graduate") || prompt.includes("grad")) && 
-      (prompt.includes("interest") || prompt.includes("recommend") || prompt.includes("for me") || prompt.includes("which") || prompt.includes("what") || prompt.includes("best") || prompt.includes("fit"))) {
-    return formatResponse(`Based on your interests, Morgan State offers:
+  // Generic helpful response for new users
+  if (prompt.length < 10 && prompt.includes("hi") || prompt.includes("hello") || prompt.includes("hey") || prompt === "help") {
+    return formatResponse(`Hello! I'm here to help with information about Morgan State University's Computer Science program. I can answer questions about:
 
-Cybersecurity/AI/Data Science: MS in Advanced Computing
-Research/Quantum Computing: PhD in Advanced and Equitable Computing
-Computational Biology: MS in Bioinformatics
-Other options: MS in Data Analytics, MS in Electrical Engineering
-
-For specific program details: https://www.morgan.edu/computer-science/degrees-and-programs
-
-What CS areas interest you most?`);
-  }
-
-  // Check for simple greetings or introductions
-  if (prompt === "hello" || prompt === "hi" || prompt === "hey" || prompt.includes("how are you")) {
-    return formatResponse(`Hello! I'm msuStudySyncAI, your Morgan State University CS program assistant. I can provide information about:
-
-- Undergraduate & graduate programs
+- Program overview & objectives
+- Curriculum & courses
+- Electives & specializations
+- Graduation requirements
+- Faculty & research
+- Internships
+- Graduate programs
 - Course requirements & electives
 - Graduation requirements
 - Internships
 - Faculty & research
 
 How can I help you today?`);
-  }
-  
-  // Check for thank you messages
-  if (prompt.includes("thank") || prompt.includes("thanks") || prompt === "ty") {
-    return formatResponse(`You're welcome! Feel free to ask if you have any other questions about Morgan State's CS program.`);
-  }
-  
-  // Check for study schedule requests
-  if ((prompt.includes("study schedule") || prompt.includes("schedule for") || prompt.includes("create a schedule") || 
-      prompt.includes("plan my study") || prompt.includes("study plan") || prompt.includes("study time")) ||
-      (prompt.includes("courses") && prompt.includes("deadline") && prompt.includes("study"))) {
-    
-    // Attempt to extract course information
-    const courseMatches = prompt.match(/[-•*]\s*(.*?):\s*due\s*on\s*(.*?)(\(specific topics:\s*(.*?)\))?($|\n)/gi);
-    const timeMatch = prompt.match(/available\s*study\s*time:\s*(.*?)($|\n)/i);
-    
-    const currentDate = new Date();
-    const courseInfo = courseMatches ? courseMatches.map(match => {
-      const courseParts = match.match(/[-•*]\s*(.*?):\s*due\s*on\s*(.*?)(?:\(specific topics:\s*(.*?)\))?($|\n)/i);
-      if (courseParts) {
-        return {
-          course: courseParts[1].trim(),
-          deadline: courseParts[2].trim(),
-          topics: courseParts[3] ? courseParts[3].trim() : ''
-        };
-      }
-      return null;
-    }).filter(Boolean) : [];
-    
-    const availableTime = timeMatch ? timeMatch[1].trim() : '';
-    
-    if (courseInfo.length > 0 && availableTime) {
-      // Format a sample study schedule response
-      let scheduleResponse = `# Personalized Study Schedule\n\n`;
-      
-      // Basic scheduling logic
-      const daysUntilDeadlines: Record<string, number> = {};
-      const today = new Date();
-      
-      for (const course of courseInfo) {
-        if (course && course.course && course.deadline) {
-          const deadlineDate = new Date(course.deadline);
-          const diffTime = Math.abs(deadlineDate.getTime() - today.getTime());
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-          daysUntilDeadlines[course.course] = diffDays;
-        }
-      }
-      
-      // Create a 5-day schedule starting from tomorrow
-      const schedule = [];
-      for (let i = 1; i <= 5; i++) {
-        const day = new Date(today);
-        day.setDate(today.getDate() + i);
-        
-        const formattedDate = day.toLocaleDateString('en-US', { 
-          weekday: 'long', 
-          month: 'long', 
-          day: 'numeric',
-          year: 'numeric'
-        });
-        
-        schedule.push(`## ${formattedDate}\n`);
-        
-        // Assign study sessions based on deadline proximity
-        for (const course of courseInfo) {
-          if (course && course.course) {
-            let studyDuration = '';
-            
-            if (availableTime.includes('hour')) {
-              const hourMatch = availableTime.match(/(\d+)\s*hours?/i);
-              if (hourMatch) {
-                const totalHours = parseInt(hourMatch[1]);
-                studyDuration = Math.max(1, Math.min(2, Math.floor(totalHours / courseInfo.length))) + ' hours';
-              } else {
-                studyDuration = '1 hour';
-              }
-            } else {
-              studyDuration = '1 hour';
-            }
-            
-            schedule.push(`- **${course.course}** (${studyDuration})\n  - Focus: ${course.topics || 'General review'}\n  - Take a 10-minute break after this session\n`);
-          }
-        }
-        
-        schedule.push('\n');
-      }
-      
-      scheduleResponse += schedule.join('');
-      scheduleResponse += `\n## Study Tips:\n- Break large topics into smaller, manageable chunks\n- Use active recall techniques (flashcards, practice problems)\n- Review material regularly to reinforce learning\n- Get enough sleep before deadlines\n\nThis schedule prioritizes your course work based on deadline proximity. Adjust as needed based on your progress and energy levels.`;
-      
-      return formatResponse(scheduleResponse);
-    } else {
-      // If we don't have enough information, ask for it
-      return formatResponse(`I'd be happy to create a personalized study schedule for you. To make it effective, please provide:
-
-1. Course names/subjects and their deadlines (e.g., "Algorithms: due on April 25")
-2. Any specific topics you need to focus on for each course
-3. Your available study time (e.g., "3 hours on weekdays after 6pm")
-
-Format your request like this:
-"Please create a study schedule for:
-- Course 1: due on [date] (specific topics: topic1, topic2)
-- Course 2: due on [date] (specific topics: topic3, topic4)
-My available study time: [your available hours]"
-
-Once you provide this information, I'll create a day-by-day schedule that balances your subjects and includes appropriate breaks.`);
-    }
   }
   
   // If no patterns match, provide a more helpful general response
