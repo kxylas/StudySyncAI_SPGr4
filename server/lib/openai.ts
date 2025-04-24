@@ -216,7 +216,8 @@ function generateLocalResponse(
     ],
     faculty: [
       "faculty", "professor", "teacher", "instructor", "staff", "department chair",
-      "who teaches", "contact", "chair", "director"
+      "who teaches", "contact", "chair", "director", "head of", "department head", "lead",
+      "who is the chair", "department leader"
     ],
     advisors: [
       "adviser", "advisor", "counselor", "academic advisor", "academic adviser", 
@@ -278,18 +279,51 @@ function generateLocalResponse(
     const availableTime = timeMatch ? timeMatch[1].trim() : '';
     
     if (courseInfo.length > 0 && availableTime) {
-      // Format a sample study schedule response
-      let scheduleResponse = `# Personalized Study Schedule\n\n`;
+      // Parse study hours and days
+      const hoursByDay: {[day: string]: number} = {};
+      const weekdayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      let totalHours = 0;
       
-      // Basic scheduling logic
-      const daysUntilDeadlines: Record<string, number> = {};
-      const today = new Date();
+      // Extract hours for weekdays and weekends
+      const weekdayHoursMatch = availableTime.match(/(\d+)\s*hours?\s+(?:on|during)?\s*(?:weekdays|monday|tuesday|wednesday|thursday|friday)/i);
+      const weekendHoursMatch = availableTime.match(/(\d+)\s*hours?\s+(?:on|during)?\s*(?:weekends|saturday|sunday)/i);
       
-      for (const course of courseInfo) {
-        if (course && course.course && course.deadline) {
-          // Parse availability days from the input
+      // Extract hours for specific days
+      for (let i = 0; i < weekdayNames.length; i++) {
+        const dayName = weekdayNames[i];
+        const dayRegex = new RegExp(`(\\d+)\\s*hours?\\s+(?:on|during)?\\s*${dayName.toLowerCase()}`, 'i');
+        const match = availableTime.match(dayRegex);
+        if (match && match[1]) {
+          hoursByDay[dayName] = parseInt(match[1]);
+          totalHours += parseInt(match[1]);
+        }
+      }
+      
+      // Set hours for all weekdays if specified
+      if (weekdayHoursMatch && weekdayHoursMatch[1]) {
+        const hours = parseInt(weekdayHoursMatch[1]);
+        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].forEach(day => {
+          if (!hoursByDay[day]) {
+            hoursByDay[day] = hours;
+            totalHours += hours;
+          }
+        });
+      }
+      
+      // Set hours for weekends if specified
+      if (weekendHoursMatch && weekendHoursMatch[1]) {
+        const hours = parseInt(weekendHoursMatch[1]);
+        ['Saturday', 'Sunday'].forEach(day => {
+          if (!hoursByDay[day]) {
+            hoursByDay[day] = hours;
+            totalHours += hours;
+          }
+        });
+      }
+      
+      // Determine available days of the week
       const availableDays: number[] = [];
-      if (availableTime.toLowerCase().includes('monday')) availableDays.push(1); // Monday is 1 (0 is Sunday)
+      if (availableTime.toLowerCase().includes('monday')) availableDays.push(1);
       if (availableTime.toLowerCase().includes('tuesday')) availableDays.push(2);
       if (availableTime.toLowerCase().includes('wednesday')) availableDays.push(3);
       if (availableTime.toLowerCase().includes('thursday')) availableDays.push(4);
@@ -299,13 +333,31 @@ function generateLocalResponse(
       
       // If no specific days mentioned, assume all days are available
       if (availableDays.length === 0) {
-        availableDays.push(0, 1, 2, 3, 4, 5, 6); // All days of the week
+        availableDays.push(0, 1, 2, 3, 4, 5, 6);
       }
       
-      // Basic scheduling logic
-      const today = new Date();
+      // Get default hours per day if not specified
+      if (Object.keys(hoursByDay).length === 0) {
+        // If we have a total hours match but no specific days
+        const totalHoursMatch = availableTime.match(/(\d+)\s*hours?/i);
+        if (totalHoursMatch && totalHoursMatch[1]) {
+          const defaultHours = parseInt(totalHoursMatch[1]);
+          availableDays.forEach(dayNum => {
+            hoursByDay[weekdayNames[dayNum]] = defaultHours;
+          });
+        } else {
+          // Default to 2 hours per available day
+          availableDays.forEach(dayNum => {
+            hoursByDay[weekdayNames[dayNum]] = 2;
+          });
+        }
+      }
       
-      // Find earliest deadline to know how many days we need to schedule
+      // Start building the study schedule
+      let scheduleResponse = `# Personalized Study Schedule\n\n`;
+      
+      // Find earliest deadline
+      const today = new Date();
       let earliestDeadline = new Date();
       earliestDeadline.setFullYear(earliestDeadline.getFullYear() + 1); // Default to 1 year from now
       
@@ -326,13 +378,16 @@ function generateLocalResponse(
       const daysUntilDeadline = Math.max(0, Math.floor((earliestDeadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)));
       
       // Create a schedule up to the earliest deadline or 14 days max, whichever is less
-      const maxDays = Math.min(14, daysUntilDeadline);
+      const maxDaysToCheck = Math.min(30, daysUntilDeadline); // Look up to 30 days ahead
       const schedule = [];
       let scheduledDays = 0;
       let daysChecked = 0;
       
+      // Always include at least the days leading up to the deadline
+      const minScheduledDays = Math.min(5, daysUntilDeadline); 
+      
       // Don't schedule past the deadline
-      while (scheduledDays < 5 && daysChecked < maxDays) {
+      while (scheduledDays < minScheduledDays && daysChecked < maxDaysToCheck) {
         daysChecked++;
         const day = new Date(today);
         day.setDate(today.getDate() + daysChecked);
@@ -359,6 +414,8 @@ function generateLocalResponse(
         }
         
         scheduledDays++;
+        const dayName = weekdayNames[day.getDay()];
+        const hoursForDay = hoursByDay[dayName] || 2; // Default to 2 hours if not specified
         
         const formattedDate = day.toLocaleDateString('en-US', { 
           weekday: 'long', 
@@ -367,34 +424,84 @@ function generateLocalResponse(
           year: 'numeric'
         });
         
-        schedule.push(`## ${formattedDate}\n`);
+        schedule.push(`## ${formattedDate} (${hoursForDay} hours available)\n`);
         
-        // Assign study sessions based on deadline proximity
-        for (const course of courseInfo) {
-          if (course && course.course) {
-            let studyDuration = '';
-            
-            if (availableTime.includes('hour')) {
-              const hourMatch = availableTime.match(/(\d+)\s*hours?/i);
-              if (hourMatch) {
-                const totalHours = parseInt(hourMatch[1]);
-                studyDuration = Math.max(1, Math.min(2, Math.floor(totalHours / courseInfo.length))) + ' hours';
-              } else {
-                studyDuration = '1 hour';
-              }
-            } else {
-              studyDuration = '1 hour';
-            }
-            
-            schedule.push(`- **${course.course}** (${studyDuration})\n  - Focus: ${course.topics || 'General review'}\n  - Take a 10-minute break after this session\n`);
-          }
+        // Calculate how to distribute hours for this day
+        let remainingHours = hoursForDay;
+        const coursesForDay = [...courseInfo]; // Make a copy we can modify
+        
+        // Sort courses by deadline proximity (if multiple courses)
+        if (coursesForDay.length > 1) {
+          coursesForDay.sort((a, b) => {
+            if (!a || !a.deadline) return 1;
+            if (!b || !b.deadline) return -1;
+            const dateA = new Date(a.deadline);
+            const dateB = new Date(b.deadline);
+            return dateA.getTime() - dateB.getTime();
+          });
         }
         
-        schedule.push('\n');
+        // Distribute hours, giving more time to courses with closer deadlines
+        let hourIndex = 0;
+        while (remainingHours > 0 && coursesForDay.length > 0) {
+          // Use index to cycle through courses
+          const courseIndex = hourIndex % coursesForDay.length;
+          const course = coursesForDay[courseIndex];
+          
+          // Skip if course is null (shouldn't happen, but TypeScript safety)
+          if (!course) {
+            hourIndex++;
+            continue;
+          }
+          
+          // Assign 1-2 hours per session depending on available time
+          const sessionHours = Math.min(remainingHours, coursesForDay.length > 1 ? 1 : remainingHours);
+          remainingHours -= sessionHours;
+          
+          // Format the time (e.g., 9:00 AM - 11:00 AM)
+          const startHour = 9 + (hoursForDay - remainingHours - sessionHours);
+          const endHour = startHour + sessionHours;
+          const startTime = startHour <= 12 ? `${startHour}:00 AM` : `${startHour-12}:00 PM`;
+          const endTime = endHour <= 12 ? `${endHour}:00 AM` : `${endHour-12}:00 PM`;
+          
+          schedule.push(`### ${startTime} - ${endTime}\n`);
+          schedule.push(`- **${course.course}** (${sessionHours} hour${sessionHours > 1 ? 's' : ''})\n`);
+          schedule.push(`  - Focus: ${course.topics || 'General review'}\n`);
+          
+          // Add specific study activities based on the topic
+          if (course.topics && course.topics.toLowerCase().includes('algorithm')) {
+            schedule.push(`  - Practice implementing sorting algorithms (bubble sort, merge sort, quick sort)\n`);
+            schedule.push(`  - Analyze time and space complexity of different algorithms\n`);
+          } else if (course.topics) {
+            schedule.push(`  - Review key concepts: ${course.topics}\n`);
+            schedule.push(`  - Complete practice exercises\n`);
+          } else {
+            schedule.push(`  - Review class notes and textbook chapters\n`);
+            schedule.push(`  - Work through example problems\n`);
+          }
+          
+          // Add a break if this isn't the last session
+          if (remainingHours > 0) {
+            schedule.push(`  - Take a 10-minute break after this session\n\n`);
+          } else {
+            schedule.push(`\n`);
+          }
+          
+          hourIndex++;
+        }
+        
+        schedule.push(`\n`);
       }
       
-      scheduleResponse += schedule.join('');
-      scheduleResponse += `\n## Study Tips:\n- Break large topics into smaller, manageable chunks\n- Use active recall techniques (flashcards, practice problems)\n- Review material regularly to reinforce learning\n- Get enough sleep before deadlines\n\nThis schedule prioritizes your course work based on deadline proximity. Adjust as needed based on your progress and energy levels.`;
+      // Check if we have any scheduled days
+      if (schedule.length === 0) {
+        scheduleResponse = `# Study Schedule\n\nI notice that your deadline (${earliestDeadline.toLocaleDateString()}) may have already passed or is too close for scheduling. Please provide a future deadline, or if the deadline is correct, let me know and I can create a last-minute study plan.\n\n`;
+      } else {
+        scheduleResponse += schedule.join('');
+      }
+      
+      // Add final tips
+      scheduleResponse += `## Study Tips:\n- Break large topics into smaller, manageable chunks\n- Use active recall techniques (flashcards, practice problems)\n- Review material regularly to reinforce learning\n- Get enough sleep before deadlines\n\nThis schedule prioritizes your course work based on deadline proximity. Adjust as needed based on your progress and energy levels.`;
       
       return formatResponse(scheduleResponse);
     } else {
@@ -692,8 +799,32 @@ Other related graduate programs at Morgan State:
 For more details: Visit the Morgan State University Department of Computer Science website`);
   }
   
-  // Check for faculty questions
-  if (matchesTopic(topicMatches.faculty) || prompt.includes("who runs") || prompt.includes("in charge")) {
+  // Check for department chair or faculty questions explicitly first
+  if (prompt.includes("department chair") || 
+      prompt.includes("who is the chair") || 
+      prompt.includes("who chairs") || 
+      prompt.includes("who is the head") || 
+      prompt.includes("who runs") || 
+      prompt.includes("who leads") || 
+      prompt.includes("in charge") ||
+      prompt.includes("who heads") ||
+      (prompt.includes("who") && prompt.includes("department") && (prompt.includes("chair") || prompt.includes("head")))) {
+    return formatResponse(`The Department Chair of the Computer Science Department at Morgan State University is:
+
+Dr. Shuangbao "Paul" Wang
+Professor of Computer Science
+Office: McMechen Hall 507
+Phone: (443) 885-4503
+Email: shuangbao.wang@morgan.edu
+
+The Associate Chair is Dr. Md Rahman (Professor)
+Office: McMechen 629
+Phone: (443) 885-1056
+Email: Md.Rahman@morgan.edu`);
+  }
+  
+  // General faculty questions
+  if (matchesTopic(topicMatches.faculty)) {
     return formatResponse(`Faculty and Department Leadership:
 
 Department Chair:
