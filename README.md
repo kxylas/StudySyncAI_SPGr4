@@ -224,9 +224,8 @@ The application should now be running at http://localhost:5000
 ## Documentation and Diagrams
 
 The repository contains important documentation assets that are only accessible via the file system (not in the app navigation):
-
-- **System Architecture Diagram**: View the system architecture in `attached_assets/system_architecture_diagram.svg`
-- **User Flow Diagram**: View the user flow in `attached_assets/user_flow_diagram.svg`
+- **Project TechFlow Diagram**: View Tech Flow of project in `StudySyncAI_techflowdiagram.png`
+- **Porject Poster**: View Poster of project in `Study Sync AI.png`
 - **Project Requirements**: Check hardware and software requirements in `project_requirements.txt`
 - **Training Data**: Examine the sample data in `attached_assets/training_data.txt` and `attached_assets/graduate_data.txt`
 
